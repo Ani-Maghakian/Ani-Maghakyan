@@ -1,0 +1,5 @@
+.openai export-ignore
+.sites-runtime export-ignore
+dist export-ignore
+node_modules export-ignore
+tsconfig.tsbuildinfo export-ignore
