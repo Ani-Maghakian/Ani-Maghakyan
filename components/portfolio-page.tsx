@@ -1,7 +1,7 @@
 "use client";
 
 import { useDeferredValue, useEffect, useMemo, useState } from "react";
-import { ArrowDownRight, ArrowUpRight, Search } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight, Play, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -184,12 +184,43 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
           <div className="featured-grid">
             {featured.map((project, index) => (
               <article className={`featured-card tone-${(index % 4) + 1}`} key={project.id}>
+                {project.poster && (
+                  <a
+                    className="featured-poster-link"
+                    href={project.watchUrl ?? `#project-${project.id}`}
+                    target={project.watchUrl ? "_blank" : undefined}
+                    rel={project.watchUrl ? "noopener" : undefined}
+                    aria-label={`${project.title[locale]} — ${project.watchKind === "youtube" ? t.watchYoutube : t.openProject}`}
+                  >
+                    <img
+                      className="featured-poster"
+                      src={project.poster.startsWith("/") ? `${basePath}${project.poster}` : project.poster}
+                      alt={`${project.title[locale]} — ${project.year}`}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    {project.watchUrl && (
+                      <span className="featured-play" aria-hidden="true">
+                        <Play />
+                      </span>
+                    )}
+                  </a>
+                )}
                 <div className="featured-meta">
                   <span>{padded(index + 1)}</span>
                   <span>{project.year}</span>
                 </div>
-                <h3><a href={`#project-${project.id}`}>{project.title[locale]}</a></h3>
-                <p>{project.featuredDetail?.[locale] ?? project.credit[locale]}</p>
+                <div className="featured-copy">
+                  <h3><a href={`#project-${project.id}`}>{project.title[locale]}</a></h3>
+                  <p>{project.featuredDetail?.[locale] ?? project.credit[locale]}</p>
+                  {project.watchUrl && (
+                    <a className="project-watch" href={project.watchUrl} target="_blank" rel="noopener">
+                      <Play aria-hidden="true" />
+                      <span>{project.watchKind === "youtube" ? t.watchYoutube : t.openProject}</span>
+                      <ArrowUpRight aria-hidden="true" />
+                    </a>
+                  )}
+                </div>
                 <span className="format-mark">{t.filters[project.kind].toUpperCase()}</span>
                 <span className="card-stamp" aria-hidden="true">FILE · {padded(project.id)}</span>
               </article>
@@ -255,7 +286,23 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
                 {filteredProjects.map((project) => (
                   <tr id={`project-${project.id}`} key={project.id}>
                     <td data-label={t.table.number}>{padded(project.id)}</td>
-                    <th data-label={t.table.project} scope="row">{project.title[locale]}</th>
+                    <th data-label={t.table.project} scope="row">
+                      <span className="project-title-cell">
+                        {project.title[locale]}
+                        {project.watchUrl && (
+                          <a
+                            className="project-watch-mini"
+                            href={project.watchUrl}
+                            target="_blank"
+                            rel="noopener"
+                            aria-label={`${t.watchProject}: ${project.title[locale]}`}
+                            title={t.watchProject}
+                          >
+                            <Play aria-hidden="true" />
+                          </a>
+                        )}
+                      </span>
+                    </th>
                     <td data-label={t.table.year}>{project.year}</td>
                     <td data-label={t.table.format}>{project.credit[locale]}</td>
                   </tr>

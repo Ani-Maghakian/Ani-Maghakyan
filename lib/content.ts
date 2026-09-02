@@ -10,41 +10,44 @@ export type Project = {
   episodes?: number;
   featuredRank?: number;
   featuredDetail?: Record<Locale, string>;
+  poster?: string;
+  watchUrl?: string;
+  watchKind?: "youtube" | "platform";
 };
 
 export const updatedIso = "2026-09-02";
 
 export const projects: Project[] = [
   { id: 1, title: { hy: "Օտարը", en: "The Stranger", ru: "Чужой" }, year: "2017", credit: { hy: "99 սերիա", en: "99 episodes", ru: "99 серий" }, kind: "series", episodes: 99 },
-  { id: 2, title: { hy: "Էլենի օրագիրը", en: "Elen’s Diary", ru: "Дневник Элен" }, year: "2017–2019", credit: { hy: "197 սերիա", en: "197 episodes", ru: "197 серий" }, kind: "series", episodes: 197, featuredRank: 1, featuredDetail: { hy: "2 եթերաշրջան · 421 սերիա", en: "2 seasons · 421 episodes", ru: "2 сезона · 421 серия" } },
+  { id: 2, title: { hy: "Էլենի օրագիրը", en: "Elen’s Diary", ru: "Дневник Элен" }, year: "2017–2019", credit: { hy: "197 սերիա", en: "197 episodes", ru: "197 серий" }, kind: "series", episodes: 197, featuredRank: 1, featuredDetail: { hy: "2 եթերաշրջան · 421 սերիա", en: "2 seasons · 421 episodes", ru: "2 сезона · 421 серия" }, poster: "/posters/eleni-oragir.webp", watchUrl: "https://www.youtube.com/playlist?list=PLIdKbEnBj_B-mvF0PArmubgCmqOdv9rvT", watchKind: "youtube" },
   { id: 3, title: { hy: "Էլենի օրագիրը 2", en: "Elen’s Diary 2", ru: "Дневник Элен 2" }, year: "2018–2019", credit: { hy: "224 սերիա", en: "224 episodes", ru: "224 серии" }, kind: "series", episodes: 224 },
-  { id: 4, title: { hy: "Թղթե երազանք", en: "Paper Dream", ru: "Бумажная мечта" }, year: "2019", credit: { hy: "24 սերիա", en: "24 episodes", ru: "24 серии" }, kind: "series", episodes: 24, featuredRank: 2 },
+  { id: 4, title: { hy: "Թղթե երազանք", en: "Paper Dream", ru: "Бумажная мечта" }, year: "2019", credit: { hy: "24 սերիա", en: "24 episodes", ru: "24 серии" }, kind: "series", episodes: 24, featuredRank: 2, poster: "/posters/tghte-erazank.webp", watchUrl: "https://fastnews.am/culture/post/arsenn-vou-thghthe-erazanqy-harcazrvouyc", watchKind: "platform" },
   { id: 5, title: { hy: "Երկուսով", en: "Together", ru: "Вдвоём" }, year: "2019–2021", credit: { hy: "198 սերիա", en: "198 episodes", ru: "198 серий" }, kind: "series", episodes: 198 },
   { id: 6, title: { hy: "Խաղալիք", en: "Toy", ru: "Игрушка" }, year: "2021", credit: { hy: "24 սերիա", en: "24 episodes", ru: "24 серии" }, kind: "series", episodes: 24 },
-  { id: 7, title: { hy: "Կհանդիպենք անտառի տնակում", en: "We’ll Meet at the Forest Cottage", ru: "Встретимся в лесном домике" }, year: "2021", credit: { hy: "24 սերիա", en: "24 episodes", ru: "24 серии" }, kind: "series", episodes: 24, featuredRank: 8, featuredDetail: { hy: "2 մաս · 48 սերիա", en: "2 parts · 48 episodes", ru: "2 части · 48 серий" } },
+  { id: 7, title: { hy: "Կհանդիպենք անտառի տնակում", en: "We’ll Meet at the Forest Cottage", ru: "Встретимся в лесном домике" }, year: "2021", credit: { hy: "24 սերիա", en: "24 episodes", ru: "24 серии" }, kind: "series", episodes: 24, featuredRank: 8, featuredDetail: { hy: "2 մաս · 48 սերիա", en: "2 parts · 48 episodes", ru: "2 части · 48 серий" }, poster: "/posters/antarri-tnakum.webp", watchUrl: "https://www.youtube.com/watch?v=Q-uiVUBPy5k", watchKind: "youtube" },
   { id: 8, title: { hy: "Բեկորներ", en: "Fragments", ru: "Осколки" }, year: "2021–2022", credit: { hy: "148 սերիա", en: "148 episodes", ru: "148 серий" }, kind: "series", episodes: 148 },
   { id: 9, title: { hy: "Բռնիր ձեռքս", en: "Hold My Hand", ru: "Держи меня за руку" }, year: "2021–2022", credit: { hy: "120 սերիա", en: "120 episodes", ru: "120 серий" }, kind: "series", episodes: 120 },
   { id: 10, title: { hy: "Երկու քույր ենք", en: "We Are Two Sisters", ru: "Мы две сестры" }, year: "2022", credit: { hy: "16 սերիա", en: "16 episodes", ru: "16 серий" }, kind: "series", episodes: 16 },
-  { id: 11, title: { hy: "Հատուկ դասարան", en: "Special Class", ru: "Специальный класс" }, year: "2022", credit: { hy: "90–99 սերիա", en: "90–99 episodes", ru: "90–99 серий" }, kind: "series", featuredRank: 4, featuredDetail: { hy: "2 եթերաշրջան", en: "2 seasons", ru: "2 сезона" } },
+  { id: 11, title: { hy: "Հատուկ դասարան", en: "Special Class", ru: "Специальный класс" }, year: "2022", credit: { hy: "90–99 սերիա", en: "90–99 episodes", ru: "90–99 серий" }, kind: "series", featuredRank: 4, featuredDetail: { hy: "2 եթերաշրջան", en: "2 seasons", ru: "2 сезона" }, poster: "/posters/hatuk-dasaran.webp", watchUrl: "https://www.youtube.com/watch?v=IycLc4NiGgk", watchKind: "youtube" },
   { id: 12, title: { hy: "Հատուկ դասարան 2", en: "Special Class 2", ru: "Специальный класс 2" }, year: "2022–2023", credit: { hy: "140 սերիա", en: "140 episodes", ru: "140 серий" }, kind: "series", episodes: 140 },
   { id: 13, title: { hy: "Ապրիր ինձ հետ", en: "Live With Me", ru: "Живи со мной" }, year: "2022", credit: { hy: "24 սերիա", en: "24 episodes", ru: "24 серии" }, kind: "series", episodes: 24 },
   { id: 14, title: { hy: "Մնա ինձ հետ", en: "Stay With Me", ru: "Останься со мной" }, year: "2022", credit: { hy: "36 սերիա", en: "36 episodes", ru: "36 серий" }, kind: "series", episodes: 36 },
   { id: 15, title: { hy: "4 երազանք", en: "4 Dreams", ru: "4 мечты" }, year: "2022–2023", credit: { hy: "61 սերիա", en: "61 episodes", ru: "61 серия" }, kind: "series", episodes: 61 },
   { id: 16, title: { hy: "Կհանդիպենք անտառի տնակում 2", en: "We’ll Meet at the Forest Cottage 2", ru: "Встретимся в лесном домике 2" }, year: "2022–2023", credit: { hy: "24 սերիա", en: "24 episodes", ru: "24 серии" }, kind: "series", episodes: 24 },
-  { id: 17, title: { hy: "Hotel Grand", en: "Hotel Grand", ru: "Отель Гранд" }, year: "2023", credit: { hy: "10 սերիա", en: "10 episodes", ru: "10 серий" }, kind: "series", episodes: 10, featuredRank: 11, featuredDetail: { hy: "3 եթերաշրջան · 34 սերիա", en: "3 seasons · 34 episodes", ru: "3 сезона · 34 серии" } },
+  { id: 17, title: { hy: "Hotel Grand", en: "Hotel Grand", ru: "Отель Гранд" }, year: "2023", credit: { hy: "10 սերիա", en: "10 episodes", ru: "10 серий" }, kind: "series", episodes: 10, featuredRank: 11, featuredDetail: { hy: "3 եթերաշրջան · 34 սերիա", en: "3 seasons · 34 episodes", ru: "3 сезона · 34 серии" }, poster: "/posters/hotel-grand.webp", watchUrl: "https://www.youtube.com/watch?v=5jh6TU4tI_Y", watchKind: "youtube" },
   { id: 18, title: { hy: "Hotel Grand 2", en: "Hotel Grand 2", ru: "Отель Гранд 2" }, year: "2023", credit: { hy: "12 սերիա", en: "12 episodes", ru: "12 серий" }, kind: "series", episodes: 12 },
   { id: 19, title: { hy: "Hotel Grand 3", en: "Hotel Grand 3", ru: "Отель Гранд 3" }, year: "2023", credit: { hy: "12 սերիա", en: "12 episodes", ru: "12 серий" }, kind: "series", episodes: 12 },
   { id: 20, title: { hy: "Մենք փնտրում ենք հարսնացու", en: "We’re Looking for a Bride", ru: "Мы ищем невесту" }, year: "2023", credit: { hy: "48 սերիա", en: "48 episodes", ru: "48 серий" }, kind: "series", episodes: 48 },
   { id: 21, title: { hy: "Իրար դեմ", en: "Against Each Other", ru: "Друг против друга" }, year: "2023", credit: { hy: "114 սերիա", en: "114 episodes", ru: "114 серий" }, kind: "series", episodes: 114 },
   { id: 22, title: { hy: "Քո սիրո առաջ", en: "Before Your Love", ru: "Перед твоей любовью" }, year: "2023–2024", credit: { hy: "80 սերիա", en: "80 episodes", ru: "80 серий" }, kind: "series", episodes: 80 },
   { id: 23, title: { hy: "Մալենա", en: "Malena", ru: "Малена" }, year: "2023", credit: { hy: "16 սերիա", en: "16 episodes", ru: "16 серий" }, kind: "series", episodes: 16 },
-  { id: 24, title: { hy: "Կախվածություն", en: "Addiction", ru: "Зависимость" }, year: "2023–2024", credit: { hy: "157 սերիա", en: "157 episodes", ru: "157 серий" }, kind: "series", episodes: 157, featuredRank: 5 },
+  { id: 24, title: { hy: "Կախվածություն", en: "Addiction", ru: "Зависимость" }, year: "2023–2024", credit: { hy: "157 սերիա", en: "157 episodes", ru: "157 серий" }, kind: "series", episodes: 157, featuredRank: 5, poster: "https://i.ytimg.com/vi/me9YbbbbY3g/maxresdefault.jpg", watchUrl: "https://www.youtube.com/watch?v=me9YbbbbY3g", watchKind: "youtube" },
   { id: 25, title: { hy: "Գերիները", en: "The Captives", ru: "Пленники" }, year: "2024", credit: { hy: "24 սերիա", en: "24 episodes", ru: "24 серии" }, kind: "series", episodes: 24 },
-  { id: 26, title: { hy: "Սիրելի Սահմի", en: "Dear Sahmi", ru: "Дорогая Сахми" }, year: "2024", credit: { hy: "10 սերիա", en: "10 episodes", ru: "10 серий" }, kind: "series", episodes: 10, featuredRank: 3 },
+  { id: 26, title: { hy: "Սիրելի Սահմի", en: "Dear Sahmi", ru: "Дорогая Сахми" }, year: "2024", credit: { hy: "10 սերիա", en: "10 episodes", ru: "10 серий" }, kind: "series", episodes: 10, featuredRank: 3, poster: "https://i.ytimg.com/vi/J6vJnfkutFM/maxresdefault.jpg", watchUrl: "https://www.youtube.com/watch?v=J6vJnfkutFM", watchKind: "youtube" },
   { id: 27, title: { hy: "Լոս խնամախոս", en: "Los Khnamakhos", ru: "Лос Хнамахос" }, year: "2024", credit: { hy: "16 սերիա", en: "16 episodes", ru: "16 серий" }, kind: "series", episodes: 16 },
-  { id: 28, title: { hy: "84-ի ամառը", en: "Summer of ’84", ru: "Лето ’84" }, year: "2024", credit: { hy: "12 սերիա", en: "12 episodes", ru: "12 серий" }, kind: "series", episodes: 12, featuredRank: 6, featuredDetail: { hy: "Գաղափար · սցենար · շոուռանինգ · պրոդյուսինգ", en: "Creator · writer · showrunner · producer", ru: "Идея · сценарий · шоураннинг · продюсирование" } },
+  { id: 28, title: { hy: "84-ի ամառը", en: "Summer of ’84", ru: "Лето ’84" }, year: "2024", credit: { hy: "12 սերիա", en: "12 episodes", ru: "12 серий" }, kind: "series", episodes: 12, featuredRank: 6, featuredDetail: { hy: "Գաղափար · սցենար · շոուռանինգ · պրոդյուսինգ", en: "Creator · writer · showrunner · producer", ru: "Идея · сценарий · шоураннинг · продюсирование" }, poster: "https://i.ytimg.com/vi/gfTGgGXczIE/maxresdefault.jpg", watchUrl: "https://www.youtube.com/watch?v=gfTGgGXczIE", watchKind: "youtube" },
   { id: 29, title: { hy: "Մտմտիկ և Պրպտիկ", en: "Mtmtik & Prptik", ru: "Мтмтик и Прптик" }, year: "2024", credit: { hy: "Մանկական ֆիլմաշար", en: "Children’s series", ru: "Детский цикл" }, kind: "children" },
-  { id: 30, title: { hy: "Եթե ես կրկին պարեի", en: "If I Danced Again", ru: "Если бы я снова танцевала" }, year: "2024–2025", credit: { hy: "26 սերիա", en: "26 episodes", ru: "26 серий" }, kind: "series", episodes: 26, featuredRank: 9 },
+  { id: 30, title: { hy: "Եթե ես կրկին պարեի", en: "If I Danced Again", ru: "Если бы я снова танцевала" }, year: "2024–2025", credit: { hy: "26 սերիա", en: "26 episodes", ru: "26 серий" }, kind: "series", episodes: 26, featuredRank: 9, poster: "https://vhx.imgix.net/usatvmax/assets/c8926f74-be03-41c8-8390-2ad705428767.jpg?auto=format%2Ccompress&fit=crop&h=720&w=1280", watchUrl: "https://www.armflix.com/videos/ete-es-krkin-parem-1", watchKind: "platform" },
   { id: 31, title: { hy: "Սոս Անջելես", en: "Sos Angeles", ru: "Сос Анджелес" }, year: "2024", credit: { hy: "16 սերիա", en: "16 episodes", ru: "16 серий" }, kind: "series", episodes: 16 },
   { id: 32, title: { hy: "OKI", en: "OKI", ru: "OKI" }, year: "2024", credit: { hy: "12 սերիա", en: "12 episodes", ru: "12 серий" }, kind: "series", episodes: 12 },
   { id: 33, title: { hy: "OKI. Ամանորյա գաղտնիք", en: "OKI: New Year’s Secret", ru: "OKI: Новогодний секрет" }, year: "2024", credit: { hy: "Ֆիլմ", en: "Film", ru: "Фильм" }, kind: "film" },
@@ -58,9 +61,9 @@ export const projects: Project[] = [
   { id: 41, title: { hy: "OKI 2", en: "OKI 2", ru: "OKI 2" }, year: "2025–2026", credit: { hy: "12 սերիա", en: "12 episodes", ru: "12 серий" }, kind: "series", episodes: 12 },
   { id: 42, title: { hy: "Պատերազմից հետո կյանք կա", en: "Life After War", ru: "После войны есть жизнь" }, year: "2026", credit: { hy: "Ներկայացում", en: "Stage play", ru: "Спектакль" }, kind: "stage" },
   { id: 43, title: { hy: "Ճերմակ շապիկ", en: "White Shirt", ru: "Белая рубашка" }, year: "2026", credit: { hy: "Ֆիլմ", en: "Film", ru: "Фильм" }, kind: "film" },
-  { id: 44, title: { hy: "Բլոկադա", en: "Blockade", ru: "Блокада" }, year: "2026", credit: { hy: "Ներկայացում", en: "Stage play", ru: "Спектакль" }, kind: "stage", featuredRank: 7 },
+  { id: 44, title: { hy: "Բլոկադա", en: "Blockade", ru: "Блокада" }, year: "2026", credit: { hy: "Ներկայացում", en: "Stage play", ru: "Спектакль" }, kind: "stage", featuredRank: 7, poster: "https://i.ytimg.com/vi/yk7S5xIRs1w/maxresdefault.jpg", watchUrl: "https://www.youtube.com/watch?v=yk7S5xIRs1w", watchKind: "youtube" },
   { id: 45, title: { hy: "Օպերացիա Սոս", en: "Operation Sos", ru: "Операция Сос" }, year: "2026", credit: { hy: "16 սերիա", en: "16 episodes", ru: "16 серий" }, kind: "series", episodes: 16 },
-  { id: 46, title: { hy: "Se.La.Vi", en: "Se.La.Vi", ru: "Se.La.Vi" }, year: "2026", credit: { hy: "10 մաս", en: "10 parts", ru: "10 частей" }, kind: "series", episodes: 10, featuredRank: 10 },
+  { id: 46, title: { hy: "Se.La.Vi", en: "Se.La.Vi", ru: "Se.La.Vi" }, year: "2026", credit: { hy: "10 մաս", en: "10 parts", ru: "10 частей" }, kind: "series", episodes: 10, featuredRank: 10, poster: "https://i.ytimg.com/vi/CkbtuC2HHi8/maxresdefault.jpg", watchUrl: "https://www.youtube.com/watch?v=CkbtuC2HHi8", watchKind: "youtube" },
 ];
 
 export const locales: Record<Locale, { short: string; label: string; href: string; hrefLang: string }> = {
@@ -93,6 +96,9 @@ export const copy = {
     selectedKicker: "FEATURED / 01",
     selectedTitle: "Ընտրված գործեր",
     selectedIntro: "Կարիերան և հեղինակային դերը լավագույնս ներկայացնող առանցքային նախագծերը։",
+    watchYoutube: "Դիտել YouTube-ում",
+    openProject: "Բացել նախագծի էջը",
+    watchProject: "Դիտել նախագիծը",
     archiveKicker: "ARCHIVE / 02",
     archiveTitle: "Ամբողջական ֆիլմագրություն",
     archiveIntro: "Փնտրեք վերնագրով, տարեթվով կամ ընտրեք ձևաչափը։",
@@ -161,6 +167,9 @@ export const copy = {
     selectedKicker: "FEATURED / 01",
     selectedTitle: "Selected work",
     selectedIntro: "The defining projects that best represent her career and authorship.",
+    watchYoutube: "Watch on YouTube",
+    openProject: "Open project page",
+    watchProject: "Watch project",
     archiveKicker: "ARCHIVE / 02",
     archiveTitle: "Complete filmography",
     archiveIntro: "Search by title or year, or filter the archive by format.",
@@ -229,6 +238,9 @@ export const copy = {
     selectedKicker: "FEATURED / 01",
     selectedTitle: "Избранные работы",
     selectedIntro: "Ключевые проекты, наиболее полно представляющие её карьеру и авторский вклад.",
+    watchYoutube: "Смотреть на YouTube",
+    openProject: "Открыть страницу проекта",
+    watchProject: "Смотреть проект",
     archiveKicker: "ARCHIVE / 02",
     archiveTitle: "Полная фильмография",
     archiveIntro: "Ищите по названию или году либо выберите нужный формат.",
