@@ -1781,3 +1781,52 @@ body::before {
   .featured-card:nth-child(n),
   .hero-art-crop { transform: none; }
 }
+/* Final mobile hero fix */
+@media (max-width: 760px) {
+  .hero-copy {
+    min-height: auto;
+    justify-content: flex-start;
+    padding: 48px 22px 64px;
+  }
+
+  .hero h1 {
+    max-width: 100%;
+    margin: 0;
+    font-size: clamp(2.9rem, 13vw, 4.25rem);
+    line-height: 1;
+    letter-spacing: -0.045em;
+    text-wrap: balance;
+  }
+
+  .eyebrow {
+    margin-bottom: 24px;
+  }
+
+  .name-aliases {
+    margin-top: 16px;
+    line-height: 1.55;
+    letter-spacing: 0.12em;
+  }
+
+  .hero-statement {
+    max-width: 15ch;
+    margin-top: 28px;
+    font-size: clamp(1.5rem, 6.3vw, 2rem);
+    line-height: 1.14;
+  }
+
+  .roles {
+    margin-top: 28px;
+    line-height: 1.75;
+  }
+
+  .hero-intro {
+    max-width: 100%;
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+
+  .hero-actions {
+    margin-top: 34px;
+  }
+}
