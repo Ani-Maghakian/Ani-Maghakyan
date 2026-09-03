@@ -1,7 +1,7 @@
 "use client";
 
-import { useDeferredValue, useEffect, useMemo, useRef, useState, type MouseEvent } from "react";
-import { ArrowDownRight, ArrowUpRight, Menu, Play, Search, X } from "lucide-react";
+import { useDeferredValue, useEffect, useMemo, useState } from "react";
+import { ArrowDownRight, ArrowUpRight, Play, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -35,76 +35,11 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
   const t = copy[locale];
   const [filter, setFilter] = useState<Filter>("all");
   const [query, setQuery] = useState("");
-  const [menuOpen, setMenuOpen] = useState(false);
-  const heroRef = useRef<HTMLElement>(null);
   const deferredQuery = useDeferredValue(query);
 
   useEffect(() => {
     document.documentElement.lang = locale === "hy" ? "hy-AM" : locale;
   }, [locale]);
-
-  useEffect(() => {
-    const hero = heroRef.current;
-    if (!hero) return;
-
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let frame = 0;
-
-    const updateScene = () => {
-      frame = 0;
-      const rect = hero.getBoundingClientRect();
-      const travel = Math.max(hero.offsetHeight - window.innerHeight, 1);
-      const progress = reducedMotion.matches ? 0 : Math.min(1, Math.max(0, -rect.top / travel));
-      const isMobile = window.innerWidth <= 760;
-      const motion = isMobile ? 0.42 : 1;
-      const titleFade = Math.max(0, 1 - Math.max(0, progress - 0.34) / 0.42);
-
-      hero.style.setProperty("--scene-scale", String(1 + progress * 0.1 * motion));
-      hero.style.setProperty("--scene-y", `${progress * -6 * motion}vh`);
-      hero.style.setProperty("--title-y", `${progress * -24 * motion}vh`);
-      hero.style.setProperty("--title-opacity", String(titleFade));
-      hero.style.setProperty("--frame-a-x", `${-12 + progress * 40 * motion}vw`);
-      hero.style.setProperty("--frame-a-y", `${48 - progress * 104 * motion}vh`);
-      hero.style.setProperty("--frame-b-x", `${12 - progress * 37 * motion}vw`);
-      hero.style.setProperty("--frame-b-y", `${70 - progress * 120 * motion}vh`);
-      hero.style.setProperty("--frame-c-x", `${progress * 10 * motion}vw`);
-      hero.style.setProperty("--frame-c-y", `${96 - progress * 143 * motion}vh`);
-      hero.style.setProperty("--script-x", `${progress * 25 * motion}vw`);
-      hero.style.setProperty("--script-y", `${76 - progress * 118 * motion}vh`);
-    };
-
-    const requestUpdate = () => {
-      if (!frame) frame = window.requestAnimationFrame(updateScene);
-    };
-
-    updateScene();
-    window.addEventListener("scroll", requestUpdate, { passive: true });
-    window.addEventListener("resize", requestUpdate);
-    reducedMotion.addEventListener("change", requestUpdate);
-
-    return () => {
-      if (frame) window.cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", requestUpdate);
-      window.removeEventListener("resize", requestUpdate);
-      reducedMotion.removeEventListener("change", requestUpdate);
-    };
-  }, []);
-
-  const jumpToSection = (event: MouseEvent<HTMLAnchorElement>, sectionId: string) => {
-    event.preventDefault();
-    const target = document.getElementById(sectionId);
-    if (!target) return;
-
-    setMenuOpen(false);
-    const header = document.querySelector<HTMLElement>(".site-header");
-    const headerOffset = (header?.offsetHeight ?? 72) + 18;
-    const top = sectionId === "top"
-      ? 0
-      : target.getBoundingClientRect().top + window.scrollY - headerOffset;
-
-    window.history.replaceState(null, "", sectionId === "top" ? "#top" : `#${sectionId}`);
-    window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
-  };
 
   const filteredProjects = useMemo(() => {
     const normalized = deferredQuery.trim().toLocaleLowerCase(locale);
@@ -133,7 +68,6 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
   const featured = projects
     .filter((project) => project.featuredRank)
     .sort((a, b) => (a.featuredRank ?? 0) - (b.featuredRank ?? 0));
-  const heroFrames = [2, 4, 11].map((id) => projects.find((project) => project.id === id)!);
   const filters = Object.keys(t.filters) as Filter[];
 
   return (
@@ -146,17 +80,16 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
       </div>
 
       <header className="site-header">
-        <a className="wordmark" href="#top" aria-label={t.title} onClick={(event) => jumpToSection(event, "top")}>
-          <span className="brand-mark">A</span>
-          <b>MAGHAKYAN</b>
+        <a className="wordmark" href="#top" aria-label={t.title}>
+          <span>A.</span> MAGHAKYAN
         </a>
 
         <nav className="primary-nav" aria-label={t.primaryNavLabel}>
-          <a href="#selected" onClick={(event) => jumpToSection(event, "selected")}>{t.nav.work}</a>
-          <a href="#filmography" onClick={(event) => jumpToSection(event, "filmography")}>{t.nav.filmography}</a>
-          <a href="#about" onClick={(event) => jumpToSection(event, "about")}>{t.nav.about}</a>
-          <a href="#sources" onClick={(event) => jumpToSection(event, "sources")}>{t.nav.sources}</a>
-          <a href="#contact" onClick={(event) => jumpToSection(event, "contact")}>{t.nav.contact}</a>
+          <a href="#selected">{t.nav.work}</a>
+          <a href="#filmography">{t.nav.filmography}</a>
+          <a href="#about">{t.nav.about}</a>
+          <a href="#sources">{t.nav.sources}</a>
+          <a href="#contact">{t.nav.contact}</a>
         </nav>
 
         <nav className="language-nav" aria-label={t.languageNavLabel}>
@@ -172,106 +105,60 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
             </a>
           ))}
         </nav>
-
-        <button
-          className="mobile-menu-toggle"
-          type="button"
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={menuOpen}
-          onClick={() => setMenuOpen((open) => !open)}
-        >
-          {menuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
-        </button>
       </header>
 
-      <div className={`mobile-menu-panel${menuOpen ? " is-open" : ""}`} aria-hidden={!menuOpen}>
-        <nav aria-label={t.primaryNavLabel}>
-          {[
-            ["selected", t.nav.work],
-            ["filmography", t.nav.filmography],
-            ["about", t.nav.about],
-            ["sources", t.nav.sources],
-            ["contact", t.nav.contact],
-          ].map(([id, label], index) => (
-            <a key={id} href={`#${id}`} onClick={(event) => jumpToSection(event, id)}>
-              <span>{padded(index + 1)}</span>{label}
-            </a>
-          ))}
-        </nav>
-        <div className="mobile-language-row" aria-label={t.languageNavLabel}>
-          {(Object.keys(locales) as Locale[]).map((code) => (
-            <a key={code} href={`${basePath}${locales[code].href}`} aria-current={code === locale ? "page" : undefined}>
-              {locales[code].short}
-            </a>
-          ))}
-        </div>
-      </div>
-
       <main>
-        <section className="cinematic-hero" ref={heroRef} aria-labelledby="hero-title">
-          <div className="cinematic-stage">
-            <img
-              className="cinematic-backdrop"
-              src={`${basePath}/cinematic-hero-v1.png`}
-              alt=""
-              width="1536"
-              height="1024"
-              fetchPriority="high"
-              decoding="async"
-            />
-            <div className="cinematic-shade" aria-hidden="true" />
-
-            <div className="cinematic-title-block">
-              <p className="scene-label">SCREENPLAY / FILM / SERIES</p>
-              <h1 id="hero-title">{t.title}</h1>
-              <p>{t.aliases}</p>
-            </div>
-
-            {heroFrames.map((project, index) => (
-              <article className={`parallax-frame frame-${index + 1}`} key={project.id} aria-hidden="true">
-                <img
-                  src={`${basePath}${project.poster}`}
-                  alt=""
-                  width="720"
-                  height="960"
-                  decoding="async"
-                />
-                <div>
-                  <span>0{index + 1}</span>
-                  <strong>{project.title[locale]}</strong>
-                  <small>{project.year}</small>
-                </div>
-              </article>
-            ))}
-
-            <div className="floating-script" aria-hidden="true">
+        <section className="hero section-frame" aria-labelledby="hero-title">
+          <div className="hero-copy">
+            <div className="script-note" aria-hidden="true">
               <span>FADE IN:</span>
-              <b>INT. WRITER&apos;S ROOM — NIGHT</b>
-              <i>A story becomes a world.</i>
+              <span>INT. WRITER&apos;S ROOM — DAY</span>
+              <span>A story waits on paper.</span>
             </div>
-
-            <div className="cinematic-scroll-cue" aria-hidden="true">
-              <span>SCROLL TO ENTER</span>
-              <i />
-            </div>
-          </div>
-        </section>
-
-        <section className="hero-epilogue section-frame" aria-label={t.roles}>
-          <p className="eyebrow">INTRO / 01</p>
-          <h2>{t.hero}</h2>
-          <div className="hero-epilogue-grid">
+            <p className="eyebrow">{t.eyebrow}</p>
+            <h1 id="hero-title">{t.title}</h1>
+            <p className="name-aliases">{t.aliases}</p>
+            <p className="hero-statement">{t.hero}</p>
             <p className="roles">{t.roles}</p>
             <p className="hero-intro">{t.intro}</p>
+
             <div className="hero-actions">
               <Button asChild className="primary-action">
-                <a href="#selected" onClick={(event) => jumpToSection(event, "selected")}>
-                  {t.nav.work}
+                <a href="#filmography">
+                  {t.explore}
                   <ArrowDownRight aria-hidden="true" />
                 </a>
               </Button>
               <ExternalLink href={siteLinks.imdb}>{t.imdb}</ExternalLink>
             </div>
+          </div>
+
+          <figure className="hero-art">
+            <div className="hero-art-crop">
+              <picture>
+                <source srcSet={`${basePath}/hero.webp`} type="image/webp" />
+                {/* A direct fallback keeps the static GitHub Pages export independent of an image server. */}
+                <img
+                  src={`${basePath}/og.png`}
+                  alt={t.imageAlt}
+                  width="1200"
+                  height="630"
+                  fetchPriority="high"
+                  decoding="async"
+                />
+              </picture>
+            </div>
+            <figcaption>PORTFOLIO · 2026</figcaption>
+            <span className="edge-number" aria-hidden="true">01 / 07</span>
+          </figure>
+
+          <div className="archive-flap" aria-hidden="true">
+            <span>A WRITER&apos;S ARCHIVE</span>
+          </div>
+
+          <div className="hero-scroll" aria-hidden="true">
+            <span>SCROLL</span>
+            <i />
           </div>
         </section>
 
@@ -539,7 +426,7 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
         </div>
         <div className="footer-meta">
           <time dateTime={updatedIso}>{t.updated}</time>
-          <a href="#top" onClick={(event) => jumpToSection(event, "top")}>{t.backTop} ↑</a>
+          <a href="#top">{t.backTop} ↑</a>
         </div>
       </footer>
     </div>
