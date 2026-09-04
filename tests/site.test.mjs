@@ -86,6 +86,44 @@ test("keeps the approved key-project selection and Summer of ’84 authorship", 
   assert.doesNotMatch(selected, /Մալենա|Գերիները|Բեկորներ|Երկուսով/);
 });
 
+test("exports repaired project media, links and OKE naming", async () => {
+  const hy = await readFile("dist/client/index.html", "utf8");
+  const en = await readFile("dist/client/en/index.html", "utf8");
+
+  assert.match(hy, /<a class="hero-art-crop" href="#selected"/);
+  assert.match(hy, /featured-poster-backdrop/);
+  assert.doesNotMatch(hy, /fastnews\.am\/culture\/post\/arsenn-vou-thghthe-erazanqy-harcazrvouyc/);
+
+  assert.match(en, /id="project-32"[\s\S]{0,500}>OKE</);
+  assert.match(en, /id="project-41"[\s\S]{0,500}>OKE 2</);
+
+  for (const path of [
+    "projects/elens-diary/",
+    "projects/paper-dream/",
+    "projects/dear-sahmi/",
+    "projects/summer-of-84/",
+    "projects/blockade/",
+    "projects/mi-gexecik-or/",
+  ]) {
+    assert.match(en, new RegExp(path.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+  }
+
+  for (const verifiedUrlPart of [
+    "watch?v=iIn9qu4Phls",
+    "watch?v=TTRAx2ID01c",
+    "watch?v=sNbNHBkiCpU",
+    "watch?v=DDosY4yJooE",
+    "armflix.com/kay",
+    "armflix.com/soscali",
+    "watch?v=QRCSe3vD3cM",
+  ]) {
+    assert.match(en, new RegExp(verifiedUrlPart.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+  }
+
+  const watchButtons = en.match(/class="project-watch-mini"/g) ?? [];
+  assert.ok(watchButtons.length >= 45, `expected at least 45 project watch links, got ${watchButtons.length}`);
+});
+
 test("builds a valid IndexNow payload for a GitHub project site", () => {
   const payload = buildIndexNowPayload(
     "https://example.github.io/ani-maghakyan/",

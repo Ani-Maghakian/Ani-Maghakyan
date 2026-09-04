@@ -22,6 +22,17 @@ function padded(value: number) {
   return String(value).padStart(2, "0");
 }
 
+function projectPageHref(locale: Locale, slug?: string) {
+  if (!slug) return null;
+  const localeRoot = `${basePath}${locales[locale].href}`;
+  return `${localeRoot}${localeRoot.endsWith("/") ? "" : "/"}projects/${slug}/`;
+}
+
+function posterSource(poster?: string) {
+  if (!poster) return null;
+  return poster.startsWith("/") ? `${basePath}${poster}` : poster;
+}
+
 function ExternalLink({ href, children, className = "" }: { href: string; children: React.ReactNode; className?: string }) {
   return (
     <a className={`external-link ${className}`} href={href} target="_blank" rel="noopener">
@@ -134,7 +145,7 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
           </div>
 
           <figure className="hero-art">
-            <div className="hero-art-crop">
+            <a className="hero-art-crop" href="#selected" aria-label={`${t.selectedTitle}: ${t.title}`}>
               <picture>
                 <source srcSet={`${basePath}/hero.webp`} type="image/webp" />
                 {/* A direct fallback keeps the static GitHub Pages export independent of an image server. */}
@@ -147,7 +158,7 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
                   decoding="async"
                 />
               </picture>
-            </div>
+            </a>
             <figcaption>PORTFOLIO · 2026</figcaption>
             <span className="edge-number" aria-hidden="true">01 / 07</span>
           </figure>
@@ -182,49 +193,63 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
           </div>
 
           <div className="featured-grid">
-            {featured.map((project, index) => (
-              <article className={`featured-card tone-${(index % 4) + 1}`} key={project.id}>
-                {project.poster && (
-                  <a
-                    className="featured-poster-link"
-                    href={project.watchUrl ?? `#project-${project.id}`}
-                    target={project.watchUrl ? "_blank" : undefined}
-                    rel={project.watchUrl ? "noopener" : undefined}
-                    aria-label={`${project.title[locale]} — ${project.watchKind === "youtube" ? t.watchYoutube : t.openProject}`}
-                  >
-                    <img
-                      className="featured-poster"
-                      src={project.poster.startsWith("/") ? `${basePath}${project.poster}` : project.poster}
-                      alt={`${project.title[locale]} — ${project.year}`}
-                      loading="lazy"
-                      decoding="async"
-                    />
-                    {project.watchUrl && (
-                      <span className="featured-play" aria-hidden="true">
-                        <Play />
-                      </span>
-                    )}
-                  </a>
-                )}
-                <div className="featured-meta">
-                  <span>{padded(index + 1)}</span>
-                  <span>{project.year}</span>
-                </div>
-                <div className="featured-copy">
-                  <h3><a href={`#project-${project.id}`}>{project.title[locale]}</a></h3>
-                  <p>{project.featuredDetail?.[locale] ?? project.credit[locale]}</p>
-                  {project.watchUrl && (
-                    <a className="project-watch" href={project.watchUrl} target="_blank" rel="noopener">
-                      <Play aria-hidden="true" />
-                      <span>{project.watchKind === "youtube" ? t.watchYoutube : t.openProject}</span>
-                      <ArrowUpRight aria-hidden="true" />
+            {featured.map((project, index) => {
+              const internalHref = projectPageHref(locale, project.seoSlug) ?? `#project-${project.id}`;
+              const posterSrc = posterSource(project.poster);
+
+              return (
+                <article className={`featured-card tone-${(index % 4) + 1}`} key={project.id}>
+                  {posterSrc && (
+                    <a
+                      className="featured-poster-link"
+                      href={project.watchUrl ?? internalHref}
+                      target={project.watchUrl ? "_blank" : undefined}
+                      rel={project.watchUrl ? "noopener" : undefined}
+                      aria-label={`${project.title[locale]} — ${project.watchKind === "youtube" ? t.watchYoutube : t.openProject}`}
+                    >
+                      <span
+                        className="featured-poster-backdrop"
+                        aria-hidden="true"
+                        style={{ backgroundImage: `url("${posterSrc}")` }}
+                      />
+                      <img
+                        className="featured-poster"
+                        src={posterSrc}
+                        alt={`${project.title[locale]} — ${project.year}`}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                      {project.watchUrl && (
+                        <span className="featured-play" aria-hidden="true">
+                          <Play />
+                        </span>
+                      )}
                     </a>
                   )}
-                </div>
-                <span className="format-mark">{t.filters[project.kind].toUpperCase()}</span>
-                <span className="card-stamp" aria-hidden="true">FILE · {padded(project.id)}</span>
-              </article>
-            ))}
+                  <div className="featured-meta">
+                    <span>{padded(index + 1)}</span>
+                    <span>{project.year}</span>
+                  </div>
+                  <div className="featured-copy">
+                    <h3>
+                      <a className="project-title-link" href={internalHref}>
+                        {project.title[locale]}
+                      </a>
+                    </h3>
+                    <p>{project.featuredDetail?.[locale] ?? project.credit[locale]}</p>
+                    {project.watchUrl && (
+                      <a className="project-watch" href={project.watchUrl} target="_blank" rel="noopener">
+                        <Play aria-hidden="true" />
+                        <span>{project.watchKind === "youtube" ? t.watchYoutube : t.openProject}</span>
+                        <ArrowUpRight aria-hidden="true" />
+                      </a>
+                    )}
+                  </div>
+                  <span className="format-mark">{t.filters[project.kind].toUpperCase()}</span>
+                  <span className="card-stamp" aria-hidden="true">FILE · {padded(project.id)}</span>
+                </article>
+              );
+            })}
           </div>
           <span className="section-tab" aria-hidden="true">02 / 07</span>
         </section>
@@ -283,30 +308,40 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
                 </tr>
               </thead>
               <tbody>
-                {filteredProjects.map((project) => (
-                  <tr id={`project-${project.id}`} key={project.id}>
-                    <td data-label={t.table.number}>{padded(project.id)}</td>
-                    <th data-label={t.table.project} scope="row">
-                      <span className="project-title-cell">
-                        {project.title[locale]}
-                        {project.watchUrl && (
-                          <a
-                            className="project-watch-mini"
-                            href={project.watchUrl}
-                            target="_blank"
-                            rel="noopener"
-                            aria-label={`${t.watchProject}: ${project.title[locale]}`}
-                            title={t.watchProject}
-                          >
-                            <Play aria-hidden="true" />
-                          </a>
-                        )}
-                      </span>
-                    </th>
-                    <td data-label={t.table.year}>{project.year}</td>
-                    <td data-label={t.table.format}>{project.credit[locale]}</td>
-                  </tr>
-                ))}
+                {filteredProjects.map((project) => {
+                  const internalHref = projectPageHref(locale, project.seoSlug);
+
+                  return (
+                    <tr id={`project-${project.id}`} key={project.id}>
+                      <td data-label={t.table.number}>{padded(project.id)}</td>
+                      <th data-label={t.table.project} scope="row">
+                        <span className="project-title-cell">
+                          {internalHref ? (
+                            <a className="project-title-link" href={internalHref}>
+                              {project.title[locale]}
+                            </a>
+                          ) : (
+                            <span>{project.title[locale]}</span>
+                          )}
+                          {project.watchUrl && (
+                            <a
+                              className="project-watch-mini"
+                              href={project.watchUrl}
+                              target="_blank"
+                              rel="noopener"
+                              aria-label={`${t.watchProject}: ${project.title[locale]}`}
+                              title={t.watchProject}
+                            >
+                              <Play aria-hidden="true" />
+                            </a>
+                          )}
+                        </span>
+                      </th>
+                      <td data-label={t.table.year}>{project.year}</td>
+                      <td data-label={t.table.format}>{project.credit[locale]}</td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
 
