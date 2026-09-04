@@ -124,6 +124,23 @@ test("exports repaired project media, links and OKE naming", async () => {
   assert.ok(watchButtons.length >= 45, `expected at least 45 project watch links, got ${watchButtons.length}`);
 });
 
+
+test("keeps anchor navigation stable and Hotel Grand artwork loadable", async () => {
+  const html = await readFile("dist/client/en/index.html", "utf8");
+  const css = await readFile("app/globals.css", "utf8");
+  const content = await readFile("lib/content.ts", "utf8");
+  const component = await readFile("components/portfolio-page.tsx", "utf8");
+
+  assert.match(content, /TTRAx2ID01c\/hqdefault\.jpg/);
+  assert.doesNotMatch(content, /TTRAx2ID01c\/maxresdefault\.jpg/);
+  assert.match(component, /function stableAnchorJump/);
+  assert.match(component, /window\.history\.pushState/);
+  assert.match(component, /window\.scrollTo\(\{ top, left: 0, behavior: "auto" \}\)/);
+  assert.match(css, /overflow-anchor:\s*none/);
+  assert.match(css, /backdrop-filter:\s*none/);
+  assert.match(html, /Hotel Grand/);
+});
+
 test("builds a valid IndexNow payload for a GitHub project site", () => {
   const payload = buildIndexNowPayload(
     "https://example.github.io/ani-maghakyan/",

@@ -33,6 +33,25 @@ function posterSource(poster?: string) {
   return poster.startsWith("/") ? `${basePath}${poster}` : poster;
 }
 
+
+function stableAnchorJump(event: React.MouseEvent<HTMLAnchorElement>, targetId: string) {
+  event.preventDefault();
+
+  const target = document.getElementById(targetId);
+  if (!target) return;
+
+  const header = document.querySelector<HTMLElement>(".site-header");
+  const headerOffset = (header?.getBoundingClientRect().height ?? 64) + 28;
+  const top =
+    targetId === "top"
+      ? 0
+      : Math.max(0, window.scrollY + target.getBoundingClientRect().top - headerOffset);
+
+  // Update the URL without triggering the browser's native repeated anchor re-alignment.
+  window.history.pushState(null, "", `#${targetId}`);
+  window.scrollTo({ top, left: 0, behavior: "auto" });
+}
+
 function ExternalLink({ href, children, className = "" }: { href: string; children: React.ReactNode; className?: string }) {
   return (
     <a className={`external-link ${className}`} href={href} target="_blank" rel="noopener">
@@ -91,16 +110,16 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
       </div>
 
       <header className="site-header">
-        <a className="wordmark" href="#top" aria-label={t.title}>
+        <a className="wordmark" href="#top" aria-label={t.title} onClick={(event) => stableAnchorJump(event, "top")}>
           <span>A.</span> MAGHAKYAN
         </a>
 
         <nav className="primary-nav" aria-label={t.primaryNavLabel}>
-          <a href="#selected">{t.nav.work}</a>
-          <a href="#filmography">{t.nav.filmography}</a>
-          <a href="#about">{t.nav.about}</a>
-          <a href="#sources">{t.nav.sources}</a>
-          <a href="#contact">{t.nav.contact}</a>
+          <a href="#selected" onClick={(event) => stableAnchorJump(event, "selected")}>{t.nav.work}</a>
+          <a href="#filmography" onClick={(event) => stableAnchorJump(event, "filmography")}>{t.nav.filmography}</a>
+          <a href="#about" onClick={(event) => stableAnchorJump(event, "about")}>{t.nav.about}</a>
+          <a href="#sources" onClick={(event) => stableAnchorJump(event, "sources")}>{t.nav.sources}</a>
+          <a href="#contact" onClick={(event) => stableAnchorJump(event, "contact")}>{t.nav.contact}</a>
         </nav>
 
         <nav className="language-nav" aria-label={t.languageNavLabel}>
@@ -135,7 +154,7 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
 
             <div className="hero-actions">
               <Button asChild className="primary-action">
-                <a href="#filmography">
+                <a href="#filmography" onClick={(event) => stableAnchorJump(event, "filmography")}>
                   {t.explore}
                   <ArrowDownRight aria-hidden="true" />
                 </a>
@@ -145,7 +164,7 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
           </div>
 
           <figure className="hero-art">
-            <a className="hero-art-crop" href="#selected" aria-label={`${t.selectedTitle}: ${t.title}`}>
+            <a className="hero-art-crop" href="#selected" aria-label={`${t.selectedTitle}: ${t.title}`} onClick={(event) => stableAnchorJump(event, "selected")}>
               <picture>
                 <source srcSet={`${basePath}/hero.webp`} type="image/webp" />
                 {/* A direct fallback keeps the static GitHub Pages export independent of an image server. */}
@@ -232,7 +251,15 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
                   </div>
                   <div className="featured-copy">
                     <h3>
-                      <a className="project-title-link" href={internalHref}>
+                      <a
+                        className="project-title-link"
+                        href={internalHref}
+                        onClick={
+                          internalHref.startsWith("#")
+                            ? (event) => stableAnchorJump(event, `project-${project.id}`)
+                            : undefined
+                        }
+                      >
                         {project.title[locale]}
                       </a>
                     </h3>
@@ -461,7 +488,7 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
         </div>
         <div className="footer-meta">
           <time dateTime={updatedIso}>{t.updated}</time>
-          <a href="#top">{t.backTop} ↑</a>
+          <a href="#top" onClick={(event) => stableAnchorJump(event, "top")}>{t.backTop} ↑</a>
         </div>
       </footer>
     </div>
