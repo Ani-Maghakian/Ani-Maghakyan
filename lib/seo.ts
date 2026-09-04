@@ -215,7 +215,7 @@ export function structuredData(locale: Locale) {
         url: pageUrl,
         name: titles[locale],
         description: descriptions[locale],
-        dateModified: updatedIso,
+        dateModified: `${updatedIso}T00:00:00Z`,
         inLanguage: languageTags[locale],
         ...(websiteId ? { isPartOf: { "@id": websiteId } } : {}),
         mainEntity: personId ? { "@id": personId } : { "@type": "Person", name: "Անի Մաղաքյան" },
