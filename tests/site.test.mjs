@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { buildIndexNowPayload } from "../scripts/submit-indexnow.mjs";
 import { projects as seoProjects, hubs as seoHubs, localizedPath } from "../scripts/seo-page-data.mjs";
+import { buildSeoIndexNowPayload, collectSeoUrls } from "../scripts/submit-indexnow-seo.mjs";
 
 const pages = [
   { path: "dist/client/index.html", lang: "hy-AM" },
@@ -199,4 +200,19 @@ test("builds a valid IndexNow payload for a GitHub project site", () => {
     "https://example.github.io/ani-maghakyan/en/",
     "https://example.github.io/ani-maghakyan/ru/",
   ]);
+});
+
+test("distributes all standalone SEO URLs through IndexNow with a GitHub Pages key location", () => {
+  const site = "https://example.github.io/ani-maghakyan";
+  const key = "a70efe4a27d13ce5562b6b907877cf88";
+  const urls = collectSeoUrls(site);
+  const payload = buildSeoIndexNowPayload(site, key);
+
+  assert.equal(urls.length, 156);
+  assert.equal(payload.host, "example.github.io");
+  assert.equal(payload.keyLocation, `${site}/indexnow-key.txt`);
+  assert.equal(payload.urlList.length, 156);
+  assert.ok(payload.urlList.includes(`${site}/projects/the-stranger/`));
+  assert.ok(payload.urlList.includes(`${site}/en/projects/hotel-grand/`));
+  assert.ok(payload.urlList.includes(`${site}/ru/projects/mi-gexecik-or/`));
 });
