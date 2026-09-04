@@ -14,7 +14,7 @@ test("exports all localized pages with valid structured data", async () => {
     const html = await readFile(page.path, "utf8");
     assert.match(html, new RegExp(`<html[^>]+lang=["']${page.lang}["']`));
     assert.match(html, /<meta[^>]+name=["']description["']/);
-    assert.match(html, /46/);
+    assert.match(html, /47/);
     assert.match(html, /#filmography/);
     assert.match(html, /#sources/);
     assert.match(html, /hero\.webp/);
@@ -29,7 +29,7 @@ test("exports all localized pages with valid structured data", async () => {
     for (const [, source] of scripts) {
       const data = JSON.parse(source);
       const types = data["@graph"].map((item) => item["@type"]);
-      assert.deepEqual(types, ["WebSite", "Person", "Organization", "ProfilePage", "ItemList"]);
+      assert.deepEqual(types, ["WebSite", "Person", "Organization", "ProfilePage", "Book", "Book", "FAQPage", "ItemList"]);
     }
   }
 });
@@ -43,13 +43,16 @@ test("exports crawl and sharing assets", async () => {
     "dist/client/hero.webp",
     "dist/client/indexnow-key.txt",
     "dist/client/og.png",
+    "dist/client/llms.txt",
   ]) {
     const file = await readFile(path);
     assert.ok(file.length > 0, `${path} should not be empty`);
   }
 
   const sitemap = await readFile("dist/client/sitemap.xml", "utf8");
-  assert.match(sitemap, /2026-09-01/);
+  assert.match(sitemap, /2026-09-03/);
+  assert.match(sitemap, /xmlns:image=/);
+  assert.match(sitemap, /hero\.webp/);
 
   const indexNowKey = (await readFile("dist/client/indexnow-key.txt", "utf8")).trim();
   assert.match(indexNowKey, /^[a-f0-9]{32}$/);

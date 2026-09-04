@@ -15,7 +15,7 @@ export type Project = {
   watchKind?: "youtube" | "platform";
 };
 
-export const updatedIso = "2026-09-02";
+export const updatedIso = "2026-09-03";
 
 export const projects: Project[] = [
   { id: 1, title: { hy: "Օտարը", en: "The Stranger", ru: "Чужой" }, year: "2017", credit: { hy: "99 սերիա", en: "99 episodes", ru: "99 серий" }, kind: "series", episodes: 99 },
@@ -64,6 +64,7 @@ export const projects: Project[] = [
   { id: 44, title: { hy: "Բլոկադա", en: "Blockade", ru: "Блокада" }, year: "2026", credit: { hy: "Ներկայացում", en: "Stage play", ru: "Спектакль" }, kind: "stage", featuredRank: 7, poster: "https://i.ytimg.com/vi/yk7S5xIRs1w/maxresdefault.jpg", watchUrl: "https://www.youtube.com/watch?v=yk7S5xIRs1w", watchKind: "youtube" },
   { id: 45, title: { hy: "Օպերացիա Սոս", en: "Operation Sos", ru: "Операция Сос" }, year: "2026", credit: { hy: "16 սերիա", en: "16 episodes", ru: "16 серий" }, kind: "series", episodes: 16 },
   { id: 46, title: { hy: "Se.La.Vi", en: "Se.La.Vi", ru: "Se.La.Vi" }, year: "2026", credit: { hy: "10 մաս", en: "10 parts", ru: "10 частей" }, kind: "series", episodes: 10, featuredRank: 10, poster: "https://i.ytimg.com/vi/CkbtuC2HHi8/maxresdefault.jpg", watchUrl: "https://www.youtube.com/watch?v=CkbtuC2HHi8", watchKind: "youtube" },
+  { id: 47, title: { hy: "Մի գեղեցիկ օր", en: "Mi Gexecik Or", ru: "Ми Гехецик Ор" }, year: "2026", credit: { hy: "50+ սերիա", en: "50+ episodes", ru: "50+ серий" }, kind: "series" },
 ];
 
 export const locales: Record<Locale, { short: string; label: string; href: string; hrefLang: string }> = {
@@ -83,13 +84,13 @@ export const copy = {
     aliases: "ANI MAGHAKYAN · АНИ МАГАКЯН",
     hero: "Պատմություններ, որոնք կյանք են առնում էկրանին։",
     roles: "Սցենարիստ · Շոուռաներ · Պրոդյուսեր · Գրող",
-    intro: "Անի Մաղաքյանը հայ սցենարիստ, շոուռաներ, պրոդյուսեր և գրող է։ Նրա առանցքային նախագծերից են «Էլենի օրագիրը», «Թղթե երազանք», «Սիրելի Սահմի», «Հատուկ դասարան», «Կախվածություն», «84-ի ամառը», «Բլոկադա», «Կհանդիպենք անտառի տնակում», «Եթե ես կրկին պարեի», «Se.La.Vi» և «Hotel Grand»։ «84-ի ամառը» նախագծում նա նաև գաղափարի ու սցենարի հեղինակն է, շոուռաները և պրոդյուսերը։ Պաշտոնական ֆիլմագրությունն ընդգրկում է 46 նախագիծ և ավելի քան 2,250 սերիա։",
+    intro: "Անի Մաղաքյանը հայ սցենարիստ, շոուռաներ, պրոդյուսեր և գրող է։ Նրա առանցքային նախագծերից են «Էլենի օրագիրը», «Թղթե երազանք», «Սիրելի Սահմի», «Հատուկ դասարան», «Կախվածություն», «84-ի ամառը», «Բլոկադա», «Կհանդիպենք անտառի տնակում», «Եթե ես կրկին պարեի», «Se.La.Vi», «Hotel Grand» և «Մի գեղեցիկ օր»։ «84-ի ամառը» նախագծում նա նաև գաղափարի ու սցենարի հեղինակն է, շոուռաները և պրոդյուսերը։ Պաշտոնական ֆիլմագրությունն ընդգրկում է 47 նախագիծ և ավելի քան 2,300 սերիա։",
     imageAlt: "Անի Մաղաքյան՝ հայ սցենարիստ, շոուռաներ և պրոդյուսեր",
     explore: "Բացահայտել ֆիլմագրությունը",
     imdb: "Դիտել IMDb-ում",
     stats: [
-      { value: "46", label: "նախագիծ" },
-      { value: "2,250+", label: "սերիա" },
+      { value: "47", label: "նախագիծ" },
+      { value: "2,300+", label: "սերիա" },
       { value: "2016—", label: "սցենարիստական գործունեություն" },
       { value: "4", label: "ձևաչափ" },
     ],
@@ -132,8 +133,8 @@ export const copy = {
     faqTitle: "Հաճախ տրվող հարցեր",
     faqs: [
       { q: "Ո՞վ է Անի Մաղաքյանը։", a: "Անի Մաղաքյանը հայ սցենարիստ, շոուռաներ, պրոդյուսեր, արձակագիր և լրագրող է, որը 2016 թվականից ստեղծում է հեռուստասերիալներ, ֆիլմեր, պիեսներ ու մանկական նախագծեր։" },
-      { q: "Քանի՞ նախագիծ է ներառում ֆիլմագրությունը։", a: "Պաշտոնական ֆիլմագրությունն ընդգրկում է 46 նախագիծ և ավելի քան 2,250 սերիա, ինչպես նաև ֆիլմեր, ներկայացումներ ու մանկական աշխատանքներ։" },
-      { q: "Որո՞նք են Անի Մաղաքյանի առանցքային նախագծերը։", a: "«Էլենի օրագիր», «Թղթե երազանք», «Սիրելի Սահմի», «Հատուկ դասարան», «Կախվածություն», «84-ի ամառը», «Բլոկադա», «Կհանդիպենք անտառի տնակում», «Եթե ես կրկին պարեի», «Se.La.Vi» և «Hotel Grand»։" },
+      { q: "Քանի՞ նախագիծ է ներառում ֆիլմագրությունը։", a: "Պաշտոնական ֆիլմագրությունն ընդգրկում է 47 նախագիծ և ավելի քան 2,300 սերիա, ինչպես նաև ֆիլմեր, ներկայացումներ ու մանկական աշխատանքներ։" },
+      { q: "Որո՞նք են Անի Մաղաքյանի առանցքային նախագծերը։", a: "«Էլենի օրագիր», «Թղթե երազանք», «Սիրելի Սահմի», «Հատուկ դասարան», «Կախվածություն», «84-ի ամառը», «Բլոկադա», «Կհանդիպենք անտառի տնակում», «Եթե ես կրկին պարեի», «Se.La.Vi», «Hotel Grand» և «Մի գեղեցիկ օր»։" },
       { q: "Ի՞նչ դեր է ունեցել Անին «84-ի ամառը» նախագծում։", a: "«84-ի ամառը» Անի Մաղաքյանի հեղինակային նախագիծն է․ նա գաղափարի ու սցենարի հեղինակն է, շոուռաները և պրոդյուսերը։ Նախագիծն ամբողջությամբ արտադրվել է նրա թիմի կողմից՝ որպես այլ հարթակի համար իրականացված աութսորս արտադրություն։" },
     ],
     contactKicker: "CONTACT / 06",
@@ -141,7 +142,7 @@ export const copy = {
     contactText: "Համագործակցություն, սցենարի մշակում, շոուռաներական աշխատանք կամ ստեղծագործական պրոդյուսինգ։",
     contactButton: "Կապվել Maghakian Scripts-ի հետ",
     sources: "Աղբյուրներ և պրոֆիլներ",
-    updated: "Թարմացված՝ 2 սեպտեմբերի, 2026",
+    updated: "Թարմացված՝ 3 սեպտեմբերի, 2026",
     backTop: "Վերև",
   },
   en: {
@@ -154,13 +155,13 @@ export const copy = {
     aliases: "ԱՆԻ ՄԱՂԱՔՅԱՆ · АНИ МАГАКЯН",
     hero: "Stories built to live on screen.",
     roles: "Screenwriter · Showrunner · Producer · Author",
-    intro: "Ani Maghakyan is an Armenian screenwriter, showrunner and producer whose credits include Elen’s Diary, Paper Dream, Special Class, Addiction and Summer of ’84. Her official archive lists 46 projects and more than 2,250 identified episodes.",
+    intro: "Ani Maghakyan is an Armenian screenwriter, showrunner and producer whose credits include Elen’s Diary, Paper Dream, Special Class, Addiction, Summer of ’84 and Mi Gexecik Or («Մի գեղեցիկ օր»). Her official archive lists 47 projects and more than 2,300 identified episodes.",
     imageAlt: "Ani Maghakyan — official filmography of the Armenian screenwriter",
     explore: "Explore the filmography",
     imdb: "View on IMDb",
     stats: [
-      { value: "46", label: "projects" },
-      { value: "2,250+", label: "listed episodes" },
+      { value: "47", label: "projects" },
+      { value: "2,300+", label: "listed episodes" },
       { value: "2016—", label: "screenwriting career" },
       { value: "4", label: "formats" },
     ],
@@ -203,8 +204,8 @@ export const copy = {
     faqTitle: "Frequently asked questions",
     faqs: [
       { q: "Who is Ani Maghakyan?", a: "An Armenian screenwriter, showrunner, producer, prose writer and journalist creating television series, films, plays and children’s projects since 2016." },
-      { q: "How many projects are in the filmography?", a: "This archive lists 46 projects and more than 2,250 identified episodes, alongside films, stage plays and children’s work." },
-      { q: "Which are Ani Maghakyan’s key projects?", a: "Elen’s Diary, Paper Dream, Dear Sahmi, Special Class, Addiction, Summer of ’84, Blockade, We’ll Meet at the Forest Cottage, If I Danced Again, Se.La.Vi and Hotel Grand." },
+      { q: "How many projects are in the filmography?", a: "This archive lists 47 projects and more than 2,300 identified episodes, alongside films, stage plays and children’s work." },
+      { q: "Which are Ani Maghakyan’s key projects?", a: "Elen’s Diary, Paper Dream, Dear Sahmi, Special Class, Addiction, Summer of ’84, Blockade, We’ll Meet at the Forest Cottage, If I Danced Again, Se.La.Vi, Hotel Grand and Mi Gexecik Or («Մի գեղեցիկ օր»)." },
       { q: "What was Ani Maghakyan’s role in Summer of ’84?", a: "Summer of ’84 is an Ani Maghakyan creator-led project: she originated the idea, wrote the screenplay, and served as showrunner and producer while delivering the production as an outsourced project for another platform." },
     ],
     contactKicker: "CONTACT / 06",
@@ -212,7 +213,7 @@ export const copy = {
     contactText: "For collaboration, story development, showrunning or creative production.",
     contactButton: "Contact Maghakian Scripts",
     sources: "Sources & profiles",
-    updated: "Updated September 1, 2026",
+    updated: "Updated September 3, 2026",
     backTop: "Back to top",
   },
   ru: {
@@ -225,13 +226,13 @@ export const copy = {
     aliases: "ԱՆԻ ՄԱՂԱՔՅԱՆ · ANI MAGHAKYAN",
     hero: "Истории, созданные для экрана.",
     roles: "Сценарист · Шоураннер · Продюсер · Писатель",
-    intro: "Ани Магакян — армянский сценарист, шоураннер и продюсер, автор проектов «Дневник Элен», «Бумажная мечта», «Специальный класс», «Зависимость» и «Лето ’84». Официальный архив включает 46 проектов и более 2 250 указанных серий.",
+    intro: "Ани Магакян — армянский сценарист, шоураннер и продюсер, автор проектов «Дневник Элен», «Бумажная мечта», «Специальный класс», «Зависимость», «Лето ’84» и Mi Gexecik Or («Մի գեղեցիկ օր»). Официальный архив включает 47 проектов и более 2 300 указанных серий.",
     imageAlt: "Ани Магакян — официальная фильмография армянского сценариста",
     explore: "Открыть фильмографию",
     imdb: "Смотреть на IMDb",
     stats: [
-      { value: "46", label: "проектов" },
-      { value: "2 250+", label: "указанных серий" },
+      { value: "47", label: "проектов" },
+      { value: "2 300+", label: "указанных серий" },
       { value: "2016—", label: "сценарная карьера" },
       { value: "4", label: "формата" },
     ],
@@ -274,8 +275,8 @@ export const copy = {
     faqTitle: "Частые вопросы",
     faqs: [
       { q: "Кто такая Ани Магакян?", a: "Армянский сценарист, шоураннер, продюсер, прозаик и журналист, создающая телесериалы, фильмы, пьесы и детские проекты с 2016 года." },
-      { q: "Сколько проектов входит в фильмографию?", a: "Архив включает 46 проектов и более 2 250 указанных серий, а также фильмы, спектакли и детские работы." },
-      { q: "Какие проекты Ани Магакян являются ключевыми?", a: "«Дневник Элен», «Бумажная мечта», «Дорогая Сахми», «Специальный класс», «Зависимость», «Лето ’84», «Блокада», «Встретимся в лесном домике», «Если бы я снова танцевала», Se.La.Vi и «Отель Гранд»." },
+      { q: "Сколько проектов входит в фильмографию?", a: "Архив включает 47 проектов и более 2 300 указанных серий, а также фильмы, спектакли и детские работы." },
+      { q: "Какие проекты Ани Магакян являются ключевыми?", a: "«Дневник Элен», «Бумажная мечта», «Дорогая Сахми», «Специальный класс», «Зависимость», «Лето ’84», «Блокада», «Встретимся в лесном домике», «Если бы я снова танцевала», Se.La.Vi, «Отель Гранд» и Mi Gexecik Or («Մի գեղեցիկ օր»)." },
       { q: "Какую роль Ани Магакян выполняла в проекте «Лето ’84»?", a: "«Лето ’84» — авторский проект Ани Магакян: ей принадлежат идея и сценарий; в производстве она также выступила шоураннером и продюсером, реализовав проект в формате аутсорсинга для другой платформы." },
     ],
     contactKicker: "CONTACT / 06",
@@ -283,7 +284,7 @@ export const copy = {
     contactText: "Для сотрудничества, разработки сценария, шоураннинга и креативного продюсирования.",
     contactButton: "Связаться с Maghakian Scripts",
     sources: "Источники и профили",
-    updated: "Обновлено 1 сентября 2026",
+    updated: "Обновлено 3 сентября 2026",
     backTop: "Наверх",
   },
 } satisfies Record<Locale, Record<string, unknown>>;
@@ -293,6 +294,8 @@ export const siteLinks = {
   instagram: "https://www.instagram.com/maghakianscripts/",
   personalInstagram: "https://www.instagram.com/ani_maghaqia/",
   interview: "https://style.news.am/arm/news/70076/ete-uzum-eq-stextsagortsel-eleni-oragiry-erkusov-ev-ayl-haytni-serialneri-scenarist-ani-maxaqyany-tchisht-patmutyun-yntrelu-ev-ayn-hetaqrqir-pahelu-masin.html",
+  kinopoisk: "https://www.kinopoisk.ru/name/5444828/",
+  elcinema: "https://elcinema.com/en/person/2161108/",
 };
 
 export const sourceLinks = [
@@ -337,5 +340,33 @@ export const sourceLinks = [
     href: "https://okko.tv/media/selections/sitkomy-i-dramy-samye-zametnye-armyanskie-serialy",
     kind: { hy: "Ոլորտային ընտրանի", en: "Industry editorial", ru: "Отраслевая подборка" },
     note: { hy: "«84-ի ամառը» և «Էլենի օրագիր» աշխատանքների հիշատակում", en: "Coverage of Summer of ’84 and Elen’s Diary", ru: "Упоминание «Лета ’84» и «Дневника Элен»" },
+  },
+  {
+    id: 7,
+    label: "Oragir News",
+    href: "https://oragir.news/hy/material/2026/06/28/200446",
+    kind: { hy: "2026 հարցազրույց", en: "2026 editorial interview", ru: "Интервью 2026" },
+    note: { hy: "Անի Մաղաքյանի կարիերան, «Էլենի օրագիրը», Se.La.Vi և նոր «Մի գեղեցիկ օր» նախագիծը", en: "Ani Maghakyan's career, Elen's Diary, Se.La.Vi and the 2026 series Mi Gexecik Or", ru: "Карьера Ани Магакян, «Дневник Элен», Se.La.Vi и сериал 2026 года «Մի գեղեցիկ օր»" },
+  },
+  {
+    id: 8,
+    label: "SHANT TV Armenia",
+    href: "https://www.youtube.com/watch?v=TanQYxqlKQ0",
+    kind: { hy: "Պաշտոնական հեռուստաալիք", en: "Official broadcaster", ru: "Официальный телеканал" },
+    note: { hy: "«Մի գեղեցիկ օր» նախագծի ստեղծման և թեմաների ներկայացում՝ սցենարիստի մասնակցությամբ", en: "Official broadcaster coverage of Mi Gexecik Or with the screenwriter participating", ru: "Материал официального телеканала о «Մի գեղեցիկ օր» с участием сценариста" },
+  },
+  {
+    id: 9,
+    label: "KinoPoisk",
+    href: siteLinks.kinopoisk,
+    kind: { hy: "Կինոյի մասնագիտական շտեմարան", en: "Film industry database", ru: "Кинобаза" },
+    note: { hy: "Անի Մաղաքյանի մասնագիտական էջ և ընտրված ֆիլմագրություն", en: "Ani Maghakyan profile and selected screen credits", ru: "Профиль Ани Магакян и избранная фильмография" },
+  },
+  {
+    id: 10,
+    label: "elCinema",
+    href: siteLinks.elcinema,
+    kind: { hy: "Միջազգային կինոշտեմարան", en: "International film database", ru: "Международная кинобаза" },
+    note: { hy: "Միջազգային պրոֆիլ և «Թղթե երազանք» նախագծի հեղինակային կապ", en: "International profile and writer credit for Paper Dream", ru: "Международный профиль и сценарный титр «Бумажной мечты»" },
   },
 ] as const;
