@@ -82,7 +82,7 @@ test("keeps the approved key-project selection and Summer of ’84 authorship", 
     previousIndex = index;
   }
 
-  assert.match(selected, /Գաղափար · սցենար · շոուրանինգ · պրոդյուսինգ/);
+  assert.match(selected, /Գաղափար · սցենար · շոուռանինգ · պրոդյուսինգ/);
   assert.doesNotMatch(selected, /Մալենա|Գերիները|Բեկորներ|Երկուսով/);
 });
 

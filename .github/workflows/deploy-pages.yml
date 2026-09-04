@@ -62,7 +62,9 @@ jobs:
 
       - name: Notify IndexNow of updated URLs
         continue-on-error: true
-        run: node scripts/submit-indexnow.mjs
+        run: |
+          node scripts/submit-indexnow.mjs
+          node scripts/submit-indexnow-seo.mjs
         env:
           SITE_URL: ${{ vars.SITE_URL || steps.deployment.outputs.page_url }}
           INDEXNOW_KEY: a70efe4a27d13ce5562b6b907877cf88
