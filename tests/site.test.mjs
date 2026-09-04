@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { buildIndexNowPayload } from "../scripts/submit-indexnow.mjs";
+import { projects as seoProjects, hubs as seoHubs, localizedPath } from "../scripts/seo-page-data.mjs";
 
 const pages = [
   { path: "dist/client/index.html", lang: "hy-AM" },
@@ -50,7 +51,7 @@ test("exports crawl and sharing assets", async () => {
   }
 
   const sitemap = await readFile("dist/client/sitemap.xml", "utf8");
-  assert.match(sitemap, /2026-09-03/);
+  assert.match(sitemap, /2026-09-04/);
   assert.match(sitemap, /xmlns:image=/);
   assert.match(sitemap, /hero\.webp/);
 
@@ -121,9 +122,53 @@ test("exports repaired project media, links and OKE naming", async () => {
   }
 
   const watchButtons = en.match(/class="project-watch-mini"/g) ?? [];
-  assert.ok(watchButtons.length >= 45, `expected at least 45 project watch links, got ${watchButtons.length}`);
+  assert.ok(watchButtons.length >= 47, `expected all 47 project watch links, got ${watchButtons.length}`);
 });
 
+
+
+test("exports a crawlable dedicated page for every project in all three languages", async () => {
+  const localeCodes = ["hy", "en", "ru"];
+
+  assert.equal(seoProjects.length, 47);
+  assert.ok(seoHubs.some((hub) => hub.slug === "projects"));
+
+  for (const locale of localeCodes) {
+    for (const project of seoProjects) {
+      const relative = localizedPath(locale, `projects/${project.slug}`);
+      const path = `dist/client/${relative}/index.html`;
+      const html = await readFile(path, "utf8");
+
+      assert.match(html, /<link rel="canonical"/, `${path} needs a canonical`);
+      assert.match(html, /hreflang="hy-AM"/, `${path} needs HY hreflang`);
+      assert.match(html, /hreflang="en"/, `${path} needs EN hreflang`);
+      assert.match(html, /hreflang="ru"/, `${path} needs RU hreflang`);
+      assert.match(html, /BreadcrumbList/, `${path} needs breadcrumb schema`);
+      assert.match(html, /Ani Maghakyan|Անի Մաղաքյան|Ани Магакян/, `${path} needs Ani entity text`);
+
+      const h1s = html.match(/<h1(?:\s[^>]*)?>/g) ?? [];
+      assert.equal(h1s.length, 1, `${path} should include exactly one H1`);
+    }
+
+    const projectIndex = localizedPath(locale, "projects");
+    const indexHtml = await readFile(`dist/client/${projectIndex}/index.html`, "utf8");
+    assert.match(indexHtml, /47/);
+  }
+
+  const enHome = await readFile("dist/client/en/index.html", "utf8");
+  for (const project of seoProjects) {
+    assert.match(
+      enHome,
+      new RegExp(`projects/${project.slug}/`),
+      `English filmography should link to ${project.slug}`,
+    );
+  }
+
+  const sitemap = await readFile("dist/client/sitemap.xml", "utf8");
+  for (const project of seoProjects) {
+    assert.match(sitemap, new RegExp(`projects/${project.slug}/`));
+  }
+});
 
 test("keeps anchor navigation stable and Hotel Grand artwork loadable", async () => {
   const html = await readFile("dist/client/en/index.html", "utf8");
