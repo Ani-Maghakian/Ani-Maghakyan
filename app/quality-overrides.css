@@ -1,0 +1,16 @@
+/* Measured accessibility corrections from the Lighthouse quality gate.
+   Keep these selectors explicit so later visual passes cannot silently regress WCAG contrast. */
+.format-mark {
+  color: #5f5b54;
+  font-weight: 650;
+}
+.featured-card:nth-child(7) .format-mark {
+  color: #c8c1b6;
+}
+.archive-section .section-heading > div > p {
+  color: #504b43;
+}
+.faq-section .section-heading .eyebrow,
+.faq-list summary > span {
+  color: #634b27;
+}
