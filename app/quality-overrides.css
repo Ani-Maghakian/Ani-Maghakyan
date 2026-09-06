@@ -14,3 +14,17 @@
 .faq-list summary > span {
   color: #634b27;
 }
+
+/* Keep below-the-fold editorial chapters out of the initial rendering cost.
+   The browser still exposes the complete semantic DOM to crawlers/accessibility APIs,
+   while rendering each chapter when it approaches the viewport. */
+#selected,
+.archive-section,
+.about-section,
+.sources-section,
+.faq-section,
+.contact-section,
+.site-footer {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
+}
