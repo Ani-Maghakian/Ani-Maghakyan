@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { basePath, siteUrl } from "@/lib/seo";
 import "./globals.css";
+import "./cinematic.css";
 
 export const metadata: Metadata = {
   metadataBase: siteUrl ? new URL(`${siteUrl}/`) : undefined,
@@ -14,8 +15,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  colorScheme: "light",
-  themeColor: "#f1eadf",
+  colorScheme: "dark light",
+  themeColor: "#0b0b0a",
 };
 
 export default function RootLayout({
@@ -28,11 +29,9 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* This root layout is the App Router equivalent of a shared document head. */}
-        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Noto+Sans+Armenian:wght@300;400;500;600;700;800&family=Noto+Serif+Armenian:wght@400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Manrope:wght@400;500;600;700&family=Noto+Sans+Armenian:wght@300;400;500;600;700;800&family=Noto+Serif+Armenian:wght@400;500;600;700&display=swap"
         />
         <link rel="preload" as="image" href={`${basePath}/hero.webp`} type="image/webp" />
       </head>
