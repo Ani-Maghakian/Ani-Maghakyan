@@ -50,6 +50,8 @@ img { max-width: 100%; }
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
 }
 .wordmark { white-space: nowrap; }
 .primary-nav,
