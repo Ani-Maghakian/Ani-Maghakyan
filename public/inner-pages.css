@@ -84,3 +84,16 @@ h1{font-size:clamp(3.7rem,7.5vw,8.4rem);line-height:.86;letter-spacing:-.055em;f
   .dek{font-size:.94rem}
   .brand{max-width:112px;overflow:hidden;white-space:nowrap}
 }
+
+/* Shared reading sizes and a stable image fallback for the editorial layout. */
+:root{--serif:"Noto Serif Armenian","Noto Serif",Georgia,serif;--sans:"Noto Sans Armenian","Noto Sans",system-ui,sans-serif}
+h1{font-size:clamp(2.6rem,5vw,5.25rem);line-height:1.15;letter-spacing:-.035em;overflow-wrap:normal}
+.prose>h2:first-child,.sources h2,.related h2{line-height:1.2}
+.topnav a,.languages a,.cta a{font-size:.875rem;letter-spacing:.02em}
+.kicker{color:#75613d}
+.kicker,.crumbs,.aliases,.meta dt,.footer-info{font-size:.8125rem;line-height:1.6;letter-spacing:.025em}
+.aliases,.meta dt{color:#625b50}
+.dek,.meta dd{font-size:1rem;line-height:1.65}
+.hero-media:has(img[hidden]){min-height:220px;aspect-ratio:16/10}
+.hero-media:has(img[hidden]) .media-fallback{position:relative;min-height:220px}
+@media(max-width:760px){h1{font-size:clamp(2rem,8.5vw,3.4rem);line-height:1.18}.brand{font-size:.75rem}.hero-media{width:100%;margin-inline:0}.languages a{min-height:44px}.mobile-menu nav{z-index:10}}

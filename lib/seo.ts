@@ -172,7 +172,7 @@ export function structuredData(locale: Locale) {
         birthPlace: { "@type": "Place", name: "Vanadzor, Armenia" },
         jobTitle: ["Screenwriter", "Showrunner", "Producer", "Author"],
         description: localized.intro,
-        ...(siteUrl ? { image: `${siteUrl}/hero.webp` } : {}),
+        ...(siteUrl ? { image: `${siteUrl}/ani-3180-web.jpg` } : {}),
         nationality: { "@type": "Country", name: "Armenia" },
         hasOccupation: [
           { "@type": "Occupation", name: "Screenwriter" },

@@ -21,7 +21,7 @@ html, body { overflow-x: clip; }
     min-height: 58px;
     padding-inline: 10px;
   }
-  .mobile-menu { position: relative; z-index: 120; }
+  .mobile-menu { position: static; z-index: 120; }
   .mobile-menu[open] nav {
     max-height: calc(100dvh - 66px);
     overflow-y: auto;
@@ -29,7 +29,7 @@ html, body { overflow-x: clip; }
     -webkit-overflow-scrolling: touch;
   }
 
-  /* Mobile hero: use Ani's actual IMG_3180 JPEG directly and bypass the WebP/picture source. */
+  /* Explicit placement prevents inherited desktop columns from collapsing the portrait. */
   .hero.section-frame {
     width: 100%;
     max-width: none;
@@ -50,6 +50,7 @@ html, body { overflow-x: clip; }
   .hero-art {
     position: relative;
     inset: auto;
+    grid-column: 1 / -1;
     grid-row: 1;
     width: 100%;
     height: auto;
@@ -69,21 +70,22 @@ html, body { overflow-x: clip; }
     display: block;
     width: 100%;
     height: auto;
-    aspect-ratio: 2 / 3;
+    aspect-ratio: 3 / 2;
     overflow: hidden;
     border-radius: 0;
     background-color: #090908 !important;
-    background-image: url("/Ani-Maghakyan/ani-3180-web.jpg?v=20260906-3") !important;
-    background-position: 50% 23% !important;
-    background-repeat: no-repeat !important;
-    background-size: cover !important;
+    background-image: none;
   }
   .hero-art-crop::after {
     background: linear-gradient(0deg, rgba(9,9,8,.10) 0%, rgba(9,9,8,.02) 20%, transparent 44%);
   }
   .hero-art-crop picture,
   .hero-art-crop img {
-    display: none !important;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 0;
   }
   .hero-art figcaption,
   .edge-number { display: none; }
@@ -91,6 +93,7 @@ html, body { overflow-x: clip; }
   .hero-copy {
     position: relative;
     inset: auto;
+    grid-column: 1 / -1;
     grid-row: 2;
     z-index: 5;
     padding: 20px 16px 22px;
@@ -99,7 +102,7 @@ html, body { overflow-x: clip; }
   }
   .hero .eyebrow {
     margin-bottom: 8px;
-    font-size: .64rem;
+    font-size: .75rem;
     letter-spacing: .09em;
   }
   .hero h1 {
@@ -107,7 +110,7 @@ html, body { overflow-x: clip; }
     max-width: none;
     margin: 0;
     font-size: clamp(2.25rem, 10.2vw, 3.2rem);
-    line-height: .94;
+    line-height: 1.12;
     letter-spacing: -.035em;
     overflow-wrap: normal !important;
     word-break: normal !important;
@@ -122,9 +125,9 @@ html, body { overflow-x: clip; }
   .roles {
     max-width: 100%;
     margin-top: 11px;
-    font-size: .66rem;
+    font-size: .875rem;
     line-height: 1.45;
-    letter-spacing: .065em;
+    letter-spacing: .015em;
     overflow-wrap: normal;
     word-break: normal;
   }
@@ -142,7 +145,7 @@ html, body { overflow-x: clip; }
     background: transparent;
     backdrop-filter: none;
   }
-  .hero .secondary-action { display: none; }
+  .hero .secondary-action { display: inline-flex; width: 100%; min-height: 44px; font-size: .875rem; }
 
   .stats-strip {
     width: 100%;
@@ -156,12 +159,12 @@ html, body { overflow-x: clip; }
     padding: 14px;
   }
   .stat strong {
-    font-size: clamp(1.55rem, 7.6vw, 2.2rem);
+    font-size: clamp(2.5rem, 10vw, 3.25rem);
     overflow-wrap: normal;
     word-break: normal;
   }
   .stat > span:last-child {
-    font-size: .61rem;
+    font-size: .8125rem;
     letter-spacing: .06em;
     overflow-wrap: normal;
     word-break: normal;
@@ -189,7 +192,7 @@ html, body { overflow-x: clip; }
   .contact-section h2 {
     max-width: 100%;
     font-size: clamp(1.9rem, 8.8vw, 2.8rem);
-    line-height: 1;
+    line-height: 1.15;
     letter-spacing: -.025em;
     overflow-wrap: normal !important;
     word-break: normal !important;
@@ -198,7 +201,7 @@ html, body { overflow-x: clip; }
   }
   .section-heading > div > p {
     margin-top: 16px;
-    font-size: .92rem;
+    font-size: 1rem;
     line-height: 1.6;
   }
 
@@ -255,7 +258,7 @@ html, body { overflow-x: clip; }
   .featured-copy h3 {
     max-width: 100%;
     font-size: clamp(1.8rem, 8.4vw, 2.55rem);
-    line-height: .98;
+    line-height: 1.12;
     letter-spacing: -.02em;
     overflow-wrap: normal !important;
     word-break: normal !important;
@@ -263,10 +266,10 @@ html, body { overflow-x: clip; }
     text-wrap: balance;
   }
   .featured-copy p {
-    font-size: .9rem;
+    font-size: 1rem;
     line-height: 1.55;
   }
-  .featured-meta { font-size: .68rem; }
+  .featured-meta { font-size: .8125rem; }
   .featured-play { right: 12px; bottom: 12px; }
 
   .archive-controls,
@@ -304,9 +307,12 @@ html, body { overflow-x: clip; }
 
 @media (max-width: 380px) {
   .hero h1 { font-size: clamp(2.08rem, 9.7vw, 2.85rem); }
-  .roles { font-size: .62rem; }
+  .roles { font-size: .875rem; }
   .wordmark { max-width: 110px; overflow: hidden; white-space: nowrap; }
   .section-heading h2,
   .about-intro h2,
   .contact-section h2 { font-size: clamp(1.75rem, 8.4vw, 2.45rem); }
 }
+
+.featured-poster[hidden] { display: none !important; }
+.featured-poster-link:has(.featured-poster[hidden]) { min-height: 220px; aspect-ratio: 16 / 10; }

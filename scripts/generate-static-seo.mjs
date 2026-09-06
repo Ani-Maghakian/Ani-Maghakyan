@@ -44,7 +44,7 @@ ${urls.map(({ loc, priority }) => `  <url>
     <xhtml:link rel="alternate" hreflang="ru" href="${siteUrl}/ru/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="${siteUrl}/" />
     <image:image>
-      <image:loc>${siteUrl}/hero.webp</image:loc>
+      <image:loc>${siteUrl}/ani-3180-web.jpg</image:loc>
     </image:image>
   </url>`).join("\n")}
 </urlset>
