@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { basePath, siteUrl } from "@/lib/seo";
 import "./globals.css";
 import "./cinematic-10.css";
-import "./mobile-hero-fix.css";
 import "./mobile-visual-qa.css";
 
 export const metadata: Metadata = {
