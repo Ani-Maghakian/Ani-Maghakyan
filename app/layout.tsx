@@ -1,9 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { basePath, siteUrl } from "@/lib/seo";
 import "./globals.css";
-import "./cinematic.css";
 import "./cinematic-10.css";
-import "./mobile-hotfix.css";
 
 export const metadata: Metadata = {
   metadataBase: siteUrl ? new URL(`${siteUrl}/`) : undefined,
@@ -18,7 +16,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   colorScheme: "dark light",
-  themeColor: "#090908",
+  themeColor: "#080807",
 };
 
 export default function RootLayout({
