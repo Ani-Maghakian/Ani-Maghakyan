@@ -33,9 +33,9 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Handjet:wght@400;500;600&family=Noto+Sans:wght@400;500;600;700&family=Noto+Sans+Armenian:wght@400;500;600;700&family=Noto+Serif:wght@400;500;600&family=Noto+Serif+Armenian:wght@400;500;600&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&family=Noto+Sans+Armenian:wght@400;500;600;700&family=Noto+Serif:wght@400;500;600&family=Noto+Serif+Armenian:wght@400;500;600&display=swap"
         />
-        <link rel="preload" as="image" href={`${basePath}/hero.webp`} type="image/webp" />
+        <link rel="preload" as="image" href={`${basePath}/ani-3180-web.jpg`} type="image/jpeg" />
       </head>
       <body>{children}</body>
     </html>

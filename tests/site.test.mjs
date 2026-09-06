@@ -20,7 +20,7 @@ test("exports all localized pages with valid structured data", async () => {
     assert.match(html, /47/);
     assert.match(html, /#filmography/);
     assert.match(html, /#sources/);
-    assert.match(html, /hero\.webp/);
+    assert.match(html, /ani-3180-web\.jpg/);
     assert.match(html, /Armenian Museum of Moscow/);
     assert.doesNotMatch(html, /\/_vinext\/image\?/);
 
@@ -43,7 +43,7 @@ test("exports crawl and sharing assets", async () => {
     "dist/client/sitemap.xml",
     "dist/client/manifest.webmanifest",
     "dist/client/favicon.svg",
-    "dist/client/hero.webp",
+    "dist/client/ani-3180-web.jpg",
     "dist/client/indexnow-key.txt",
     "dist/client/og.png",
     "dist/client/llms.txt",
@@ -55,7 +55,7 @@ test("exports crawl and sharing assets", async () => {
   const sitemap = await readFile("dist/client/sitemap.xml", "utf8");
   assert.ok(sitemap.includes(`<lastmod>${updatedIso}</lastmod>`));
   assert.match(sitemap, /xmlns:image=/);
-  assert.match(sitemap, /hero\.webp/);
+  assert.match(sitemap, /ani-3180-web\.jpg/);
 
   const indexNowKey = (await readFile("dist/client/indexnow-key.txt", "utf8")).trim();
   assert.match(indexNowKey, /^[a-f0-9]{32}$/);

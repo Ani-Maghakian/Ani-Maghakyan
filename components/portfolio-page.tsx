@@ -178,7 +178,7 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
 
             <div className="hero-actions">
               <Button asChild className="primary-action">
-                <a href="#filmography" onClick={(event) => stableAnchorJump(event, "filmography")}>
+                <a href="#selected" onClick={(event) => stableAnchorJump(event, "selected")}>
                   {ui.work}
                   <ArrowDownRight aria-hidden="true" />
                 </a>
@@ -190,20 +190,19 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
           <figure className="hero-art">
             <a className="hero-art-crop" href="#selected" aria-label={`${t.selectedTitle}: ${t.title}`} onClick={(event) => stableAnchorJump(event, "selected")}>
               <picture>
-                <source srcSet={`${basePath}/hero.webp`} type="image/webp" />
-                {/* A direct fallback keeps the static GitHub Pages export independent of an image server. */}
+                {/* Use the supplied JPEG directly; the uploaded WebP is incomplete. */}
                 <img
-                  src={`${basePath}/og.png`}
+                  src={`${basePath}/ani-3180-web.jpg`}
                   alt={t.imageAlt}
                   width="1200"
-                  height="630"
+                  height="1799"
                   fetchPriority="high"
                   decoding="async"
                 />
               </picture>
             </a>
             <figcaption>PORTFOLIO · 2026</figcaption>
-            <span className="edge-number" aria-hidden="true">01 / 07</span>
+            <span className="edge-number" aria-hidden="true">01 / 11</span>
           </figure>
 
           <div className="archive-flap" aria-hidden="true">

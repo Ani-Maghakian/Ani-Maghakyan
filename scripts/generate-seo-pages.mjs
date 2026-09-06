@@ -48,7 +48,7 @@ function sourceList(locale, sources) {
 function projectImage(project) {
   if (project.poster) return project.poster.startsWith('/') ? `${siteUrl}${project.poster}` : project.poster;
   const id = project.watchUrl?.match(/[?&]v=([^&]+)/)?.[1];
-  return id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : `${siteUrl}/hero.webp`;
+  return id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : `${siteUrl}/og.png`;
 }
 function projectMediaSrc(project) {
   return project.poster?.startsWith('/') ? `${basePath}${project.poster}` : projectImage(project);
@@ -78,7 +78,7 @@ ${Object.keys(locales).map((code) => `<link rel="alternate" hreflang="${locales[
 <meta property="og:locale" content="${{hy:'hy_AM',en:'en_US',ru:'ru_RU'}[locale]}"><meta property="og:image" content="${esc(image || `${siteUrl}/og.png`)}">
 <meta name="twitter:card" content="summary_large_image"><link rel="icon" href="${basePath}/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Armenian:wght@400;500;600;700;800&family=Noto+Serif+Armenian:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&family=Noto+Sans+Armenian:wght@400;500;600;700&family=Noto+Serif:wght@400;500;600&family=Noto+Serif+Armenian:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="${basePath}/inner-pages.css"><script src="${basePath}/site-interactions.js" defer></script>
 <script type="application/ld+json">${JSON.stringify(jsonLd).replaceAll('<', '\\u003c')}</script>
 </head><body><a class="skip-link" href="#main-content">${esc(ui.skip)}</a><div class="shell">

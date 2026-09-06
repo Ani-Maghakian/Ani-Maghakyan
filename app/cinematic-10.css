@@ -1,4 +1,4 @@
-/* 10/10 cinematic pass — stronger identity, first-fold authority, mobile art direction. */
+/* Cinematic identity, multilingual typography and progressive motion. */
 :root {
   --cine-black: #090908;
   --cine-black-soft: #11110f;
@@ -11,7 +11,7 @@
   --cine-line-light: rgba(23,23,19,.17);
   --font-display: "Noto Serif Armenian", "Noto Serif", Georgia, serif;
   --font-ui: "Noto Sans Armenian", "Noto Sans", Arial, sans-serif;
-  --font-index: "Handjet", "Noto Sans Armenian", "Noto Sans", sans-serif;
+  --font-index: "Noto Sans Armenian", "Noto Sans", sans-serif;
 }
 
 html, body, .site-shell { background: var(--cine-black); }
@@ -102,7 +102,7 @@ body { font-family: var(--font-ui); }
   font-family: var(--font-display);
   font-size: clamp(5.1rem, 10.6vw, 11.7rem);
   font-weight: 500;
-  line-height: .77;
+  line-height: 1.03;
   letter-spacing: -.068em;
   text-transform: uppercase;
   text-wrap: balance;
@@ -354,15 +354,15 @@ body { font-family: var(--font-ui); }
   }
 }
 @keyframes cine-card-in {
-  from { opacity: .25; transform: translate3d(-26px,54px,0); }
+  from { opacity: 1; transform: translate3d(-12px,20px,0); }
   to { opacity: 1; transform: translate3d(0,0,0); }
 }
 @keyframes cine-card-in-right {
-  from { opacity: .25; transform: translate3d(26px,54px,0); }
+  from { opacity: 1; transform: translate3d(12px,20px,0); }
   to { opacity: 1; transform: translate3d(0,0,0); }
 }
 @keyframes cine-copy-in {
-  from { opacity: .25; transform: translateY(28px); }
+  from { opacity: 1; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
 }
 @keyframes cine-image-drift {
@@ -528,4 +528,49 @@ body { font-family: var(--font-ui); }
     animation: none !important;
     transform: none !important;
   }
+}
+
+/* Keep the editorial treatment readable in every script and color section. */
+.primary-nav a, .language-nav a, .primary-action, .hero .secondary-action,
+.filter-button, .project-watch, .external-link { font-size: .875rem; letter-spacing: .02em; }
+.language-nav a { min-width: 40px; min-height: 44px; }
+.hero h1 { max-width: 100%; font-size: clamp(4.5rem, 9vw, 9rem); letter-spacing: -.045em; }
+.roles { font-size: 1rem; line-height: 1.6; letter-spacing: .025em; text-transform: none; }
+.hero .secondary-action { color: var(--cine-ivory); }
+.hero-art { grid-column: 7 / 13; height: auto; aspect-ratio: 3 / 2; }
+.hero-art-crop { height: 100%; }
+.hero-art-crop img { object-fit: cover; object-position: 50% 0; animation: none; transform: none; }
+.hero-art:hover img { transform: none; }
+.hero-art figcaption { bottom: -28px; font-size: .75rem; color: #b1ab9f; }
+.stat-index { display: none; }
+.stat strong { font-family: var(--font-display); font-size: clamp(2.75rem, 4vw, 4.25rem); }
+.stat > span:last-child { font-size: .8125rem; color: #b1ab9f; letter-spacing: .03em; line-height: 1.5; }
+.eyebrow, .hero .eyebrow, .featured-meta, .source-kind, .format-mark,
+.result-count, .filmography-table thead th { font-size: .8125rem; letter-spacing: .06em; }
+.section-heading h2, .about-intro h2, .contact-section h2 {
+  font-size: clamp(2.75rem, 5vw, 5.5rem);
+  line-height: 1.13;
+  max-width: 100%;
+  letter-spacing: -.035em;
+  overflow-wrap: normal;
+}
+.featured-copy h3 { line-height: 1.12; letter-spacing: -.03em; }
+.about-columns h3, .source-grid h3 { line-height: 1.2; }
+.section-heading p, .featured-copy p, .source-grid p, .source-method,
+.about-columns li { font-size: 1rem; line-height: 1.65; }
+.archive-section .section-heading > div > p, .filmography-table tbody td,
+.filmography-table thead th, .result-count { color: #625b50; }
+.filmography-table tbody th { color: var(--cine-ink); line-height: 1.4; }
+.filmography-table tbody td { font-size: .875rem; }
+.project-watch-mini { color: #42511c; }
+.contact-hint { color: #b6b0a5 !important; }
+.site-footer span, .site-footer time { color: #b1ab9f; }
+.filter-button { min-height: 44px; }
+.search-field input::placeholder { color: #625b50; opacity: 1; }
+.mobile-menu { position: static; }
+.mobile-menu[open] nav { left: 12px; right: 12px; width: auto; }
+@media (min-width: 681px) and (max-width: 980px) {
+  .mobile-menu summary, .mobile-menu nav a { color: var(--cine-ivory); }
+  .mobile-menu[open] nav { background: var(--cine-black-soft); border-color: var(--cine-line-dark); }
+  .hero h1 { font-size: clamp(3.75rem, 10vw, 6rem); line-height: 1.03; }
 }
