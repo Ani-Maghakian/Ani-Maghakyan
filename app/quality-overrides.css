@@ -15,14 +15,19 @@
   color: #634b27;
 }
 
-/* The archive owns an explicit light paint surface. This prevents skipped/offscreen
-   table rows from ever being evaluated against the following dark About chapter. */
+/* The archive and every table cell own an explicit light paint surface. This keeps
+   offscreen rows accessible even while the archive uses content-visibility. */
 .archive-section,
 .archive-controls,
 .filmography-table-wrap,
 .filmography-table,
+.filmography-table thead,
 .filmography-table tbody,
-.filmography-table tbody tr {
+.filmography-table thead tr,
+.filmography-table tbody tr,
+.filmography-table thead th,
+.filmography-table tbody th,
+.filmography-table tbody td {
   background: var(--cine-paper, #e8e0d4);
 }
 .filmography-table tbody th,
@@ -36,8 +41,7 @@
   color: #4b391c;
 }
 
-/* Keep below-the-fold editorial chapters out of the initial rendering cost.
-   The archive can safely use containment now that its own paint/text contrast is explicit. */
+/* Keep below-the-fold editorial chapters out of the initial rendering cost. */
 #selected,
 .archive-section,
 .about-section,
