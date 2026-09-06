@@ -15,11 +15,32 @@
   color: #634b27;
 }
 
-/* Keep below-the-fold editorial chapters out of the initial rendering cost.
-   The browser still exposes the complete semantic DOM to crawlers/accessibility APIs,
-   while rendering each chapter when it approaches the viewport. */
-#selected,
+/* Keep the archive paint layer self-contained and explicitly light. Lighthouse exposed
+   a containment edge case where the final filmography rows inherited the following dark
+   chapter's painted background. The table now owns its surface and contrast. */
 .archive-section,
+.archive-controls,
+.filmography-table-wrap,
+.filmography-table,
+.filmography-table tbody,
+.filmography-table tbody tr {
+  background: var(--cine-paper, #e8e0d4);
+}
+.filmography-table tbody th,
+.filmography-table tbody th a {
+  color: var(--cine-ink, #171713);
+}
+.filmography-table tbody td {
+  color: #3f3a33;
+}
+.filmography-table tbody td:first-child {
+  color: #4b391c;
+}
+
+/* Keep below-the-fold editorial chapters out of the initial rendering cost.
+   The archive itself stays fully painted because its long table must never share a
+   containment surface with the dark About chapter below it. */
+#selected,
 .about-section,
 .sources-section,
 .faq-section,
