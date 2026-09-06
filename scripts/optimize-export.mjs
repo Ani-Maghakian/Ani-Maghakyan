@@ -31,7 +31,6 @@ const homeQualityStyle = `<style id="homepage-quality-overrides">
 .filmography-table tbody th,.filmography-table tbody th a{color:var(--cine-ink,#171713)!important}
 .filmography-table tbody td{color:#3f3a33!important}
 .filmography-table tbody td:first-child{color:#4b391c!important}
-.hero-art-crop{background-image:none!important}
 </style>`;
 
 function stripRemoteFonts(html) {
