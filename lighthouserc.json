@@ -1,13 +1,13 @@
 {
   "ci": {
     "collect": {
-      "startServerCommand": "python3 -m http.server 4173 --directory dist/client",
-      "startServerReadyPattern": "Serving HTTP on",
+      "startServerCommand": "node scripts/lighthouse-server.mjs",
+      "startServerReadyPattern": "Lighthouse compressed server ready",
       "url": [
-        "http://localhost:4173/",
-        "http://localhost:4173/en/",
-        "http://localhost:4173/services/screenwriting/",
-        "http://localhost:4173/projects/elens-diary/"
+        "http://127.0.0.1:4173/",
+        "http://127.0.0.1:4173/en/",
+        "http://127.0.0.1:4173/services/screenwriting/",
+        "http://127.0.0.1:4173/projects/elens-diary/"
       ],
       "numberOfRuns": 1,
       "settings": {
