@@ -3,6 +3,7 @@ import { readFile, access } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import test from 'node:test';
 import { projects, hubs, localizedPath } from '../scripts/seo-page-data.mjs';
+import { services } from '../lib/services.mjs';
 import { interfaceCopy, publicContactEmail, resultLabel, updatedIso } from '../lib/site-copy.mjs';
 
 const codes = ['hy', 'en', 'ru'];
@@ -18,6 +19,7 @@ test('home navigation, project covers and book links are usable in exported HTML
     assert.match(html, /<nav[^>]*data-seo-hub="ani"/);
     assert.match(html, /books\/#temporary-stop/);
     assert.match(html, /books\/#topsy-turvy/);
+    assert.match(html, /services\//);
     const covers = [...html.matchAll(/<a\b([^>]*class="featured-poster-link"[^>]*)>/g)];
     assert.equal(covers.length, 11);
     for (const [, attributes] of covers) {
@@ -30,8 +32,9 @@ test('home navigation, project covers and book links are usable in exported HTML
 test('every sitemap URL has a unique canonical, translated navigation and valid internal links', async () => {
   const sitemap = await readFile(resolve(root, 'sitemap.xml'), 'utf8');
   const urls = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map((match) => match[1]);
-  assert.equal(urls.length, 159);
-  assert.equal(new Set(urls).size, 159);
+  const expectedCount = codes.length + ((projects.length + hubs.length + services.length + 1) * codes.length);
+  assert.equal(urls.length, expectedCount);
+  assert.equal(new Set(urls).size, expectedCount);
   const base = new URL(urls[0]);
   assert.ok([...sitemap.matchAll(/<lastmod>(.*?)<\/lastmod>/g)].every((match) => match[1] === updatedIso));
   for (const url of urls) {
@@ -47,6 +50,28 @@ test('every sitemap URL has a unique canonical, translated navigation and valid 
       assert.ok(linked.pathname.startsWith(base.pathname), `${url} links outside the project: ${href}`);
       const local = linked.pathname.slice(base.pathname.length);
       await access(resolve(root, local, local.endsWith('/') || !local ? 'index.html' : ''));
+    }
+  }
+});
+
+test('service-intent pages expose visible copy, FAQ schema and one consistent provider identity', async () => {
+  for (const code of codes) {
+    const homePerson = graph(await readPage(code)).find((node) => node['@type'] === 'Person');
+    const hub = await readPage(code, 'services');
+    const hubNodes = graph(hub);
+    assert.equal(hubNodes.find((node) => node['@type'] === 'ItemList').numberOfItems, services.length);
+    for (const service of services) {
+      const html = await readPage(code, `services/${service.slug}`);
+      assert.ok(html.includes(`<h1>${service.names[code]}</h1>`));
+      assert.ok(html.includes(service.descriptions[code].replaceAll('&', '&amp;')));
+      const nodes = graph(html);
+      const serviceNode = nodes.find((node) => node['@type'] === 'Service');
+      const faq = nodes.find((node) => node['@type'] === 'FAQPage');
+      const person = nodes.find((node) => node['@type'] === 'Person');
+      assert.equal(serviceNode.provider['@id'], homePerson['@id']);
+      assert.equal(person['@id'], homePerson['@id']);
+      assert.equal(faq.mainEntity.length, service.faqs[code].length);
+      assert.equal(serviceNode.subjectOf.length, service.related.length);
     }
   }
 });
