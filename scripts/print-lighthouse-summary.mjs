@@ -6,6 +6,20 @@ const files = readdirSync(dir).filter((file) => file.endsWith('.json') && file !
 const rows = [];
 const reports = [];
 
+function detailText(item = {}) {
+  const node = item.node ?? {};
+  return [
+    item.source,
+    item.description,
+    item.url,
+    item.requestUrl,
+    item.transferSize ? `${Math.round(item.transferSize / 1024)} KiB` : '',
+    node.selector,
+    node.snippet,
+    node.explanation,
+  ].filter(Boolean).join(' | ');
+}
+
 for (const file of files) {
   const report = JSON.parse(readFileSync(resolve(dir, file), 'utf8'));
   if (!report?.categories || !report?.finalUrl) continue;
@@ -57,6 +71,10 @@ if (!rows.length) {
       for (const { ref, audit } of failures) {
         const detail = audit.displayValue ? ` — ${audit.displayValue}` : '';
         console.log(`    - ${ref.id}: score=${audit.score} — ${audit.title}${detail}`);
+        for (const item of (audit.details?.items ?? []).slice(0, 12)) {
+          const text = detailText(item);
+          if (text) console.log(`      • ${text}`);
+        }
       }
     }
 
@@ -70,6 +88,10 @@ if (!rows.length) {
       for (const { id, audit } of opportunities) {
         const detail = audit.displayValue ? ` — ${audit.displayValue}` : '';
         console.log(`    - ${id}: ${audit.title}${detail}`);
+        for (const item of (audit.details?.items ?? []).slice(0, 8)) {
+          const text = detailText(item);
+          if (text) console.log(`      • ${text}`);
+        }
       }
     }
   }
