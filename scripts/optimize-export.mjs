@@ -6,17 +6,31 @@ const root = resolve('dist/client');
 let optimized = 0;
 const projectKinds = new Map(projects.map((project) => [String(project.id), project.kind]));
 const filterKinds = ['all', 'series', 'film', 'stage', 'children'];
-const homeLocales = new Map([
-  [resolve(root, 'index.html'), 'hy'],
-  [resolve(root, 'en/index.html'), 'en'],
-  [resolve(root, 'ru/index.html'), 'ru'],
+const homePaths = new Set([
+  resolve(root, 'index.html'),
+  resolve(root, 'en/index.html'),
+  resolve(root, 'ru/index.html'),
 ]);
+
+const repository = process.env.GITHUB_REPOSITORY ?? '';
+const [owner = '', repositoryName = ''] = repository.split('/');
+const isUserOrOrgSite = Boolean(owner) && repositoryName === `${owner}.github.io`;
+const inferredBasePath =
+  process.env.GITHUB_ACTIONS === 'true' && repositoryName && !isUserOrOrgSite
+    ? `/${repositoryName}`
+    : '';
+const basePath = process.env.SITE_BASE_PATH ?? inferredBasePath;
+const homeInteractionSrc = `${basePath}/home-interactions.js`.replace(/\/\/+/, '/');
 
 const homeQualityStyle = `<style id="homepage-quality-overrides">
 .format-mark{color:#5f5b54!important;font-weight:650!important}
 .featured-card:nth-child(7) .format-mark{color:#c8c1b6!important}
 .archive-section .section-heading>div>p{color:#504b43!important}
 .faq-section .section-heading .eyebrow,.faq-list summary>span{color:#634b27!important}
+.archive-section,.archive-controls,.filmography-table-wrap,.filmography-table,.filmography-table tbody,.filmography-table tbody tr{background:var(--cine-paper,#e8e0d4)!important}
+.filmography-table tbody th,.filmography-table tbody th a{color:var(--cine-ink,#171713)!important}
+.filmography-table tbody td{color:#3f3a33!important}
+.filmography-table tbody td:first-child{color:#4b391c!important}
 .hero-art-crop{background-image:none!important}
 </style>`;
 
@@ -58,12 +72,7 @@ function addStaticInteractionHooks(html) {
   return result;
 }
 
-function interactionScript(locale) {
-  const language = locale === 'hy' ? 'hy-AM' : locale;
-  return `<script>(()=>{const locale=${JSON.stringify(locale)},language=${JSON.stringify(language)};const label=n=>locale==='hy'?n+' արդյունք':locale==='en'?n+' '+(n===1?'result':'results'):(()=>{const a=n%10,b=n%100,c=a===1&&b!==11?'результат':a>=2&&a<=4&&(b<12||b>14)?'результата':'результатов';return n+' '+c})();const rows=[...document.querySelectorAll('.filmography-table tbody tr[id^="project-"]')],buttons=[...document.querySelectorAll('.filter-button[data-filter]')],input=document.querySelector('.search-field input[type="search"]'),count=document.querySelector('.result-count');let active='all';const apply=()=>{const q=(input?.value||'').trim().toLocaleLowerCase(language);let visible=0;for(const row of rows){const text=(row.textContent||'').toLocaleLowerCase(language),show=(active==='all'||row.dataset.kind===active)&&(!q||text.includes(q));row.hidden=!show;if(show)visible++}if(count)count.textContent=label(visible);for(const button of buttons){const on=button.dataset.filter===active;button.dataset.active=String(on);button.setAttribute('aria-pressed',String(on))}};input?.addEventListener('input',apply,{passive:true});for(const button of buttons)button.addEventListener('click',()=>{active=button.dataset.filter||'all';apply()});document.addEventListener('click',event=>{const anchor=event.target.closest?.('a[href^="#"]');if(!anchor)return;const href=anchor.getAttribute('href');if(!href||href==='#')return;const target=document.getElementById(decodeURIComponent(href.slice(1)));if(!target)return;event.preventDefault();const header=document.querySelector('.site-header'),offset=(header?.getBoundingClientRect().height||64)+28,top=href==='#top'?0:Math.max(0,window.scrollY+target.getBoundingClientRect().top-offset);history.pushState(null,'',href);window.scrollTo({top,left:0,behavior:'auto'});anchor.closest('details')?.removeAttribute('open')});document.querySelector('.mobile-menu')?.addEventListener('keydown',event=>{if(event.key==='Escape'){event.currentTarget.open=false;event.currentTarget.querySelector('summary')?.focus()}});const grid=document.getElementById('featured-projects');document.querySelectorAll('.featured-scroll-controls button').forEach((button,index)=>button.addEventListener('click',()=>{if(!grid)return;grid.scrollBy({left:(index===0?-1:1)*grid.clientWidth*.9,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})}))})();</script>`;
-}
-
-function optimizeHomepage(html, locale) {
+function optimizeHomepage(html) {
   let result = stripHydrationRuntime(html);
   result = addStaticInteractionHooks(result);
   const additions = [];
@@ -72,7 +81,10 @@ function optimizeHomepage(html, locale) {
   }
   additions.push(homeQualityStyle);
   result = result.replace('</head>', `${additions.join('\n')}\n</head>`);
-  return result.replace('</body>', `${interactionScript(locale)}\n</body>`);
+  return result.replace(
+    '</body>',
+    `<script src="${homeInteractionSrc}" defer></script>\n</body>`,
+  );
 }
 
 function walk(dir) {
@@ -96,8 +108,7 @@ function walk(dir) {
     if (!path.endsWith('.html')) continue;
     const before = readFileSync(path, 'utf8');
     let after = stripRemoteFonts(before);
-    const locale = homeLocales.get(resolve(path));
-    if (locale) after = optimizeHomepage(after, locale);
+    if (homePaths.has(resolve(path))) after = optimizeHomepage(after);
 
     if (after !== before) {
       writeFileSync(path, after);
