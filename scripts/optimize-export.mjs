@@ -12,6 +12,14 @@ const homeLocales = new Map([
   [resolve(root, 'ru/index.html'), 'ru'],
 ]);
 
+const homeQualityStyle = `<style id="homepage-quality-overrides">
+.format-mark{color:#5f5b54!important;font-weight:650!important}
+.featured-card:nth-child(7) .format-mark{color:#c8c1b6!important}
+.archive-section .section-heading>div>p{color:#504b43!important}
+.faq-section .section-heading .eyebrow,.faq-list summary>span{color:#634b27!important}
+.hero-art-crop{background-image:none!important}
+</style>`;
+
 function stripRemoteFonts(html) {
   return html.replace(/<link\b[^>]*(?:fonts\.googleapis\.com|fonts\.gstatic\.com)[^>]*>\s*/gi, '');
 }
@@ -51,9 +59,12 @@ function interactionScript(locale) {
 function optimizeHomepage(html, locale) {
   let result = stripHydrationRuntime(html);
   result = addStaticInteractionHooks(result);
+  const additions = [];
   if (!/rel=["']preconnect["'][^>]+i\.ytimg\.com/i.test(result)) {
-    result = result.replace('</head>', '<link rel="preconnect" href="https://i.ytimg.com" crossorigin>\n</head>');
+    additions.push('<link rel="preconnect" href="https://i.ytimg.com" crossorigin>');
   }
+  additions.push(homeQualityStyle);
+  result = result.replace('</head>', `${additions.join('\n')}\n</head>`);
   return result.replace('</body>', `${interactionScript(locale)}\n</body>`);
 }
 
