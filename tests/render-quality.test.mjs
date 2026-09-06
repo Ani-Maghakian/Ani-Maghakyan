@@ -39,6 +39,7 @@ test('home locales ship static HTML without the React hydration runtime', async 
     const html = await read(path);
     assert.doesNotMatch(html, /<script[^>]+src=["'][^"']*\/assets\/[^"']+\.js/i);
     assert.doesNotMatch(html, /rel=["']modulepreload["'][^>]+\.js/i);
+    assert.match(html, /<script[^>]+src=["'][^"']*home-interactions\.js["'][^>]*\bdefer\b/i);
     assert.match(html, /data-filter="all"/);
     assert.match(html, /data-filter="series"/);
     assert.match(html, /data-kind="series"/);
