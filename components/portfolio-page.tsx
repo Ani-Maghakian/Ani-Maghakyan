@@ -51,7 +51,7 @@ function interactionScript(locale: Locale) {
       if (!target) return;
       const top = targetId === 'top' ? 0 : Math.max(0, window.scrollY + target.getBoundingClientRect().top - headerOffset());
       window.history.pushState(null, '', '#' + targetId);
-      window.scrollTo({ top, left: 0, behavior: 'auto' });
+      window.scrollTo({ top, left: 0, behavior: "auto" });
     }
 
     document.addEventListener('click', (event) => {
