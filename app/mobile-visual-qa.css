@@ -6,6 +6,7 @@
   background-size: cover;
   background-position: 50% 0;
 }
+.hero-art-crop picture { background: transparent !important; }
 .hero-art-crop img {
   opacity: 0 !important;
   visibility: hidden !important;
