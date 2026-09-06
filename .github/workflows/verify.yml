@@ -22,6 +22,9 @@ jobs:
       - run: npx tsc --noEmit
       - run: npm test
 
+      - name: Build same-origin Lighthouse fixture
+        run: SITE_BASE_PATH= SITE_URL=http://localhost:4173 npm run build
+
       - name: Install Lighthouse CI
         run: npm install --global @lhci/cli@0.15.x
 
