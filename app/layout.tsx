@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { basePath, siteUrl } from "@/lib/seo";
 import "./globals.css";
 import "./cinematic-10.css";
+import "./quality-overrides.css";
 
 export const metadata: Metadata = {
   metadataBase: siteUrl ? new URL(`${siteUrl}/`) : undefined,
