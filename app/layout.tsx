@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { basePath, siteUrl } from "@/lib/seo";
 import "./globals.css";
 import "./cinematic.css";
+import "./cinematic-10.css";
 
 export const metadata: Metadata = {
   metadataBase: siteUrl ? new URL(`${siteUrl}/`) : undefined,
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   colorScheme: "dark light",
-  themeColor: "#0b0b0a",
+  themeColor: "#090908",
 };
 
 export default function RootLayout({
@@ -31,7 +32,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Manrope:wght@400;500;600;700&family=Noto+Sans+Armenian:wght@300;400;500;600;700;800&family=Noto+Serif+Armenian:wght@400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Handjet:wght@400;500;600&family=Noto+Sans:wght@400;500;600;700&family=Noto+Sans+Armenian:wght@400;500;600;700&family=Noto+Serif:wght@400;500;600&family=Noto+Serif+Armenian:wght@400;500;600&display=swap"
         />
         <link rel="preload" as="image" href={`${basePath}/hero.webp`} type="image/webp" />
       </head>
