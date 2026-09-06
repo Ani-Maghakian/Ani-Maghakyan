@@ -1,12 +1,13 @@
 {
   "ci": {
     "collect": {
-      "staticDistDir": "./dist/client",
+      "startServerCommand": "python3 -m http.server 4173 --directory dist/client",
+      "startServerReadyPattern": "Serving HTTP on",
       "url": [
-        "http://localhost/",
-        "http://localhost/en/",
-        "http://localhost/services/screenwriting/",
-        "http://localhost/projects/elens-diary/"
+        "http://localhost:4173/",
+        "http://localhost:4173/en/",
+        "http://localhost:4173/services/screenwriting/",
+        "http://localhost:4173/projects/elens-diary/"
       ],
       "numberOfRuns": 1,
       "settings": {
