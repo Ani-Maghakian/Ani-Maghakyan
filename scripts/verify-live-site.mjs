@@ -6,13 +6,21 @@ if (!siteUrl) throw new Error('SITE_URL is required for live verification.');
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+function normalizeUrl(value) {
+  try {
+    return new URL(value).href;
+  } catch {
+    return String(value || '');
+  }
+}
+
 async function get(url, attempts = 6) {
   let last;
   for (let i = 0; i < attempts; i += 1) {
     try {
       const response = await fetch(url, {
         redirect: 'follow',
-        headers: { 'cache-control': 'no-cache, no-store, max-age=0', 'user-agent': 'Ani-Maghakyan-Live-QA/1.1' },
+        headers: { 'cache-control': 'no-cache, no-store, max-age=0', 'user-agent': 'Ani-Maghakyan-Live-QA/1.2' },
       });
       if (response.ok) return response;
       last = new Error(`${response.status} ${response.statusText}`);
@@ -44,7 +52,7 @@ function expectedUrls() {
       urls.push(`${siteUrl}/${localizedPath(locale, tail)}/`);
     }
   }
-  return [...new Set(urls)];
+  return [...new Set(urls.map(normalizeUrl))];
 }
 
 function canonicalFrom(html) {
@@ -60,16 +68,16 @@ function sitemapLocs(xml) {
 async function waitForCurrentSitemap(expected, attempts = 10) {
   let lastUrls = [];
   for (let i = 0; i < attempts; i += 1) {
-    const separator = `${siteUrl}/sitemap.xml`.includes('?') ? '&' : '?';
-    const response = await get(`${siteUrl}/sitemap.xml${separator}live_qa=${Date.now()}-${i}`, 2);
+    const response = await get(`${siteUrl}/sitemap.xml?live_qa=${Date.now()}-${i}`, 2);
     const xml = await response.text();
-    const urls = sitemapLocs(xml);
+    const rawUrls = sitemapLocs(xml);
+    const urls = rawUrls.map(normalizeUrl);
     lastUrls = urls;
 
     const unique = new Set(urls);
     const complete = expected.every((url) => unique.has(url));
     if (complete && unique.size === expected.length && urls.length === expected.length) {
-      return { xml, urls };
+      return { xml, rawUrls, urls };
     }
 
     if (i < attempts - 1) await sleep(3000 * (i + 1));
@@ -83,31 +91,34 @@ async function waitForCurrentSitemap(expected, attempts = 10) {
 }
 
 const expected = expectedUrls();
-const { urls: sitemapUrls } = await waitForCurrentSitemap(expected);
+const { rawUrls: sitemapRawUrls, urls: sitemapUrls } = await waitForCurrentSitemap(expected);
 
 if (new Set(sitemapUrls).size !== sitemapUrls.length) {
-  throw new Error('Live sitemap contains duplicate <loc> URLs.');
+  throw new Error('Live sitemap contains duplicate canonical URLs after URL normalization.');
 }
 
 const robots = await (await get(`${siteUrl}/robots.txt?live_qa=${Date.now()}`)).text();
-if (!robots.includes(`${siteUrl}/sitemap.xml`)) throw new Error('robots.txt does not advertise the canonical sitemap.');
+const advertisedSitemap = robots.match(/^Sitemap:\s*(\S+)\s*$/im)?.[1] ?? '';
+if (normalizeUrl(advertisedSitemap) !== normalizeUrl(`${siteUrl}/sitemap.xml`)) {
+  throw new Error(`robots.txt sitemap mismatch: ${advertisedSitemap || 'missing'}`);
+}
 
 const failures = [];
-const queue = [...sitemapUrls];
+const queue = sitemapRawUrls.map((rawUrl, index) => ({ rawUrl, canonicalUrl: sitemapUrls[index] }));
 const workers = Array.from({ length: 10 }, async () => {
   while (queue.length) {
-    const url = queue.shift();
-    if (!url) break;
+    const item = queue.shift();
+    if (!item) break;
+    const { rawUrl, canonicalUrl } = item;
     try {
-      const separator = url.includes('?') ? '&' : '?';
-      const response = await get(`${url}${separator}live_qa=${Date.now()}`, 3);
+      const response = await get(`${rawUrl}?live_qa=${Date.now()}`, 3);
       const html = await response.text();
       const canonical = canonicalFrom(html);
-      if (canonical !== url) failures.push(`${url}: canonical=${canonical || 'missing'}`);
-      if (/fonts\.googleapis\.com|fonts\.gstatic\.com/.test(html)) failures.push(`${url}: third-party font dependency on critical path`);
-      if (!/<h1(?:\s[^>]*)?>/i.test(html)) failures.push(`${url}: missing H1`);
+      if (normalizeUrl(canonical) !== canonicalUrl) failures.push(`${rawUrl}: canonical=${canonical || 'missing'}`);
+      if (/fonts\.googleapis\.com|fonts\.gstatic\.com/.test(html)) failures.push(`${rawUrl}: third-party font dependency on critical path`);
+      if (!/<h1(?:\s[^>]*)?>/i.test(html)) failures.push(`${rawUrl}: missing H1`);
     } catch (error) {
-      failures.push(`${url}: ${error instanceof Error ? error.message : error}`);
+      failures.push(`${rawUrl}: ${error instanceof Error ? error.message : error}`);
     }
   }
 });
