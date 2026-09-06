@@ -15,9 +15,8 @@
   color: #634b27;
 }
 
-/* Keep the archive paint layer self-contained and explicitly light. Lighthouse exposed
-   a containment edge case where the final filmography rows inherited the following dark
-   chapter's painted background. The table now owns its surface and contrast. */
+/* The archive owns an explicit light paint surface. This prevents skipped/offscreen
+   table rows from ever being evaluated against the following dark About chapter. */
 .archive-section,
 .archive-controls,
 .filmography-table-wrap,
@@ -38,9 +37,9 @@
 }
 
 /* Keep below-the-fold editorial chapters out of the initial rendering cost.
-   The archive itself stays fully painted because its long table must never share a
-   containment surface with the dark About chapter below it. */
+   The archive can safely use containment now that its own paint/text contrast is explicit. */
 #selected,
+.archive-section,
 .about-section,
 .sources-section,
 .faq-section,
