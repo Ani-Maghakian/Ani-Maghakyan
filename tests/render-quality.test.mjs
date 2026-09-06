@@ -15,6 +15,19 @@ for (const path of ['', 'en', 'ru', 'services/screenwriting', 'en/services/scree
   });
 }
 
+test('home locales ship static HTML without the React hydration runtime', async () => {
+  for (const path of ['', 'en', 'ru']) {
+    const html = await read(path);
+    assert.doesNotMatch(html, /<script[^>]+src=["'][^"']*\/assets\/[^"']+\.js/i);
+    assert.doesNotMatch(html, /rel=["']modulepreload["'][^>]+\.js/i);
+    assert.match(html, /data-filter="all"/);
+    assert.match(html, /data-filter="series"/);
+    assert.match(html, /data-kind="series"/);
+    assert.match(html, /filmography-table tbody/);
+    assert.match(html, /i\.ytimg\.com/);
+  }
+});
+
 test('all home locales expose the services cluster through crawlable navigation', async () => {
   for (const path of ['', 'en', 'ru']) {
     const html = await read(path);
