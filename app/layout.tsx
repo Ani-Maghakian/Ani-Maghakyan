@@ -30,7 +30,8 @@ export default function RootLayout({
     <html lang="hy-AM" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://i.ytimg.com" crossOrigin="anonymous" />
-        <link rel="preload" as="image" href={`${basePath}/ani-3180-web.jpg`} type="image/jpeg" />
+        <style>{`:root{--hero-retina-image:url("${basePath}/ani-3180-retina.webp")}`}</style>
+        <link rel="preload" as="image" href={`${basePath}/ani-3180-retina.webp`} type="image/webp" />
       </head>
       <body>{children}</body>
     </html>
