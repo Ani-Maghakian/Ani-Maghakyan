@@ -6,6 +6,7 @@
       "url": [
         "http://127.0.0.1:4173/",
         "http://127.0.0.1:4173/en/",
+        "http://127.0.0.1:4173/ru/",
         "http://127.0.0.1:4173/services/screenwriting/",
         "http://127.0.0.1:4173/projects/elens-diary/"
       ],
@@ -17,10 +18,10 @@
     },
     "assert": {
       "assertions": {
-        "categories:performance": ["warn", { "minScore": 1 }],
-        "categories:accessibility": ["warn", { "minScore": 1 }],
-        "categories:best-practices": ["warn", { "minScore": 1 }],
-        "categories:seo": ["warn", { "minScore": 1 }]
+        "categories:performance": ["error", { "minScore": 1 }],
+        "categories:accessibility": ["error", { "minScore": 1 }],
+        "categories:best-practices": ["error", { "minScore": 1 }],
+        "categories:seo": ["error", { "minScore": 1 }]
       }
     },
     "upload": {
