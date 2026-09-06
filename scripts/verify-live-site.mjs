@@ -12,7 +12,7 @@ async function get(url, attempts = 6) {
     try {
       const response = await fetch(url, {
         redirect: 'follow',
-        headers: { 'cache-control': 'no-cache', 'user-agent': 'Ani-Maghakyan-Live-QA/1.0' },
+        headers: { 'cache-control': 'no-cache, no-store, max-age=0', 'user-agent': 'Ani-Maghakyan-Live-QA/1.1' },
       });
       if (response.ok) return response;
       last = new Error(`${response.status} ${response.statusText}`);
@@ -53,22 +53,43 @@ function canonicalFrom(html) {
     ?? '';
 }
 
-const sitemapResponse = await get(`${siteUrl}/sitemap.xml`);
-const sitemap = await sitemapResponse.text();
-const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
+function sitemapLocs(xml) {
+  return [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
+}
+
+async function waitForCurrentSitemap(expected, attempts = 10) {
+  let lastUrls = [];
+  for (let i = 0; i < attempts; i += 1) {
+    const separator = `${siteUrl}/sitemap.xml`.includes('?') ? '&' : '?';
+    const response = await get(`${siteUrl}/sitemap.xml${separator}live_qa=${Date.now()}-${i}`, 2);
+    const xml = await response.text();
+    const urls = sitemapLocs(xml);
+    lastUrls = urls;
+
+    const unique = new Set(urls);
+    const complete = expected.every((url) => unique.has(url));
+    if (complete && unique.size === expected.length && urls.length === expected.length) {
+      return { xml, urls };
+    }
+
+    if (i < attempts - 1) await sleep(3000 * (i + 1));
+  }
+
+  const missing = expected.filter((url) => !lastUrls.includes(url));
+  throw new Error(
+    `Live sitemap did not converge to the deployed ${expected.length}-URL set. `
+      + `Last count=${lastUrls.length}; missing=${missing.slice(0, 10).join(', ') || 'none'}`,
+  );
+}
+
 const expected = expectedUrls();
+const { urls: sitemapUrls } = await waitForCurrentSitemap(expected);
 
 if (new Set(sitemapUrls).size !== sitemapUrls.length) {
   throw new Error('Live sitemap contains duplicate <loc> URLs.');
 }
-for (const url of expected) {
-  if (!sitemapUrls.includes(url)) throw new Error(`Live sitemap is missing ${url}`);
-}
-if (sitemapUrls.length !== expected.length) {
-  throw new Error(`Live sitemap count mismatch: expected ${expected.length}, found ${sitemapUrls.length}.`);
-}
 
-const robots = await (await get(`${siteUrl}/robots.txt`)).text();
+const robots = await (await get(`${siteUrl}/robots.txt?live_qa=${Date.now()}`)).text();
 if (!robots.includes(`${siteUrl}/sitemap.xml`)) throw new Error('robots.txt does not advertise the canonical sitemap.');
 
 const failures = [];
@@ -78,7 +99,8 @@ const workers = Array.from({ length: 10 }, async () => {
     const url = queue.shift();
     if (!url) break;
     try {
-      const response = await get(url, 3);
+      const separator = url.includes('?') ? '&' : '?';
+      const response = await get(`${url}${separator}live_qa=${Date.now()}`, 3);
       const html = await response.text();
       const canonical = canonicalFrom(html);
       if (canonical !== url) failures.push(`${url}: canonical=${canonical || 'missing'}`);
@@ -95,7 +117,7 @@ if (failures.length) {
   throw new Error(`Live QA failed:\n${failures.slice(0, 30).join('\n')}${failures.length > 30 ? `\n… and ${failures.length - 30} more` : ''}`);
 }
 
-const home = await (await get(`${siteUrl}/`)).text();
+const home = await (await get(`${siteUrl}/?live_qa=${Date.now()}`)).text();
 if (!/href=["'][^"']*services\//i.test(home)) throw new Error('Homepage does not expose the services cluster through a crawlable link.');
 
 console.log(`Live QA passed: ${sitemapUrls.length} canonical URLs, robots.txt, service discovery and critical-render checks are healthy.`);
