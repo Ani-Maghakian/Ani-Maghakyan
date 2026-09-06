@@ -1,0 +1,531 @@
+/* 10/10 cinematic pass — stronger identity, first-fold authority, mobile art direction. */
+:root {
+  --cine-black: #090908;
+  --cine-black-soft: #11110f;
+  --cine-ivory: #f1ede4;
+  --cine-paper: #e7e0d5;
+  --cine-ink: #171713;
+  --cine-brass: #a78f63;
+  --cine-sage: #b8c46f;
+  --cine-line-dark: rgba(241,237,228,.19);
+  --cine-line-light: rgba(23,23,19,.17);
+  --font-display: "Noto Serif Armenian", "Noto Serif", Georgia, serif;
+  --font-ui: "Noto Sans Armenian", "Noto Sans", Arial, sans-serif;
+  --font-index: "Handjet", "Noto Sans Armenian", "Noto Sans", sans-serif;
+}
+
+html, body, .site-shell { background: var(--cine-black); }
+body { font-family: var(--font-ui); }
+
+/* Header: quieter, more title-sequence than product UI. */
+.site-header {
+  min-height: 68px;
+  padding-inline: max(20px, calc((100vw - 1520px) / 2));
+  background: rgba(9,9,8,.82);
+  border-bottom-color: var(--cine-line-dark);
+}
+.wordmark {
+  font-family: var(--font-ui);
+  font-weight: 650;
+  letter-spacing: .19em;
+}
+.wordmark span { color: var(--cine-brass); }
+.primary-nav a, .language-nav a {
+  font-family: var(--font-index);
+  font-size: .82rem;
+  font-weight: 560;
+  letter-spacing: .11em;
+}
+
+/* First fold: name and portrait share the same space instead of two adjacent columns. */
+.hero.section-frame {
+  width: min(calc(100% - 48px), 1520px);
+  max-width: 1520px;
+}
+.hero {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0,1fr));
+  grid-template-rows: 1fr;
+  min-height: calc(100svh - 68px - 108px);
+  padding: clamp(24px,3.5vw,52px) 0 clamp(24px,3vw,44px);
+  gap: 0;
+  align-items: center;
+  isolation: isolate;
+  overflow: hidden;
+}
+.hero::before {
+  inset: 8% auto 8% 50%;
+  background: var(--cine-line-dark);
+  opacity: .56;
+}
+.hero::after {
+  content: "47 PROJECTS  ·  2,300+ EPISODES  ·  2016—2026";
+  position: absolute;
+  z-index: 6;
+  left: 0;
+  bottom: 18px;
+  color: rgba(241,237,228,.62);
+  font-family: var(--font-index);
+  font-size: clamp(.78rem,1vw,.98rem);
+  font-weight: 560;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+[lang^="hy"] .hero::after { content: "47 ՆԱԽԱԳԻԾ  ·  2,300+ ՍԵՐԻԱ  ·  2016—2026"; }
+[lang^="ru"] .hero::after { content: "47 ПРОЕКТОВ  ·  2 300+ ЭПИЗОДОВ  ·  2016—2026"; }
+
+.hero-copy {
+  grid-column: 1 / 10;
+  grid-row: 1;
+  align-self: center;
+  z-index: 5;
+  padding: 0 0 7vh;
+  pointer-events: none;
+}
+.hero-copy a, .hero-copy button { pointer-events: auto; }
+.hero .eyebrow {
+  margin-bottom: 18px;
+  color: var(--cine-brass);
+  font-family: var(--font-index);
+  font-size: .82rem;
+  font-weight: 560;
+  letter-spacing: .18em;
+}
+.hero h1 {
+  position: relative;
+  z-index: 5;
+  width: min(9.1ch, 920px);
+  max-width: none;
+  margin: 0;
+  color: var(--cine-ivory);
+  font-family: var(--font-display);
+  font-size: clamp(5.1rem, 10.6vw, 11.7rem);
+  font-weight: 500;
+  line-height: .77;
+  letter-spacing: -.068em;
+  text-transform: uppercase;
+  text-wrap: balance;
+  overflow-wrap: normal;
+  text-shadow: 0 2px 32px rgba(0,0,0,.28);
+}
+.hero h1::after {
+  width: clamp(88px, 15vw, 210px);
+  margin-top: 26px;
+  background: var(--cine-brass);
+}
+.roles {
+  max-width: 54rem;
+  margin-top: 24px;
+  color: rgba(241,237,228,.82);
+  font-family: var(--font-index);
+  font-size: clamp(.78rem, 1.1vw, 1rem);
+  font-weight: 520;
+  letter-spacing: .16em;
+  line-height: 1.5;
+}
+.hero-actions { margin-top: 26px; }
+.primary-action {
+  min-height: 48px;
+  padding-inline: 20px;
+  border-color: rgba(241,237,228,.64);
+  font-family: var(--font-index);
+  font-size: .86rem;
+  font-weight: 580;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.hero .secondary-action {
+  min-height: 48px;
+  font-family: var(--font-index);
+  font-size: .83rem;
+}
+
+.hero-art {
+  grid-column: 6 / 13;
+  grid-row: 1;
+  z-index: 2;
+  width: 100%;
+  max-width: none;
+  height: min(72vh, 760px);
+  align-self: center;
+  justify-self: stretch;
+  margin: 0;
+}
+.hero-art::before { display: none; }
+.hero-art-crop {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+  overflow: hidden;
+  background: #0a0a09;
+}
+.hero-art-crop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background:
+    linear-gradient(90deg, rgba(9,9,8,.93) 0%, rgba(9,9,8,.58) 30%, rgba(9,9,8,.12) 58%, transparent 76%),
+    linear-gradient(0deg, rgba(9,9,8,.22), transparent 32%);
+  pointer-events: none;
+}
+.hero-art-crop picture, .hero-art-crop img { width: 100%; height: 100%; }
+.hero-art-crop img {
+  object-fit: cover;
+  object-position: 52% 43%;
+  filter: grayscale(1) contrast(1.035) brightness(.94);
+  transform: scale(1.012);
+}
+.hero-art figcaption {
+  position: absolute;
+  right: 0;
+  bottom: -24px;
+  padding: 0;
+  color: rgba(241,237,228,.45);
+  font-family: var(--font-index);
+  letter-spacing: .14em;
+}
+.edge-number {
+  right: -2px;
+  bottom: 18px;
+  z-index: 5;
+  color: var(--cine-brass);
+  font-family: var(--font-index);
+  font-size: 1rem;
+  letter-spacing: .08em;
+}
+
+/* Keep scale visible in the first viewport. */
+.stats-strip {
+  min-height: 108px;
+  margin: 0 auto;
+  border-top-color: var(--cine-line-dark);
+  border-bottom-color: var(--cine-line-dark);
+}
+.stat {
+  min-height: 108px;
+  padding: 14px 22px 17px;
+  align-content: end;
+  border-right-color: var(--cine-line-dark);
+}
+.stat-index {
+  top: 15px;
+  left: 20px;
+  color: var(--cine-brass);
+  font-family: var(--font-index);
+  font-size: .78rem;
+}
+.stat strong {
+  font-family: var(--font-index);
+  font-size: clamp(2.2rem, 3.7vw, 4.1rem);
+  font-weight: 530;
+  letter-spacing: -.035em;
+}
+.stat > span:last-child {
+  margin-top: 2px;
+  color: rgba(241,237,228,.51);
+  font-family: var(--font-index);
+  font-size: .74rem;
+  font-weight: 500;
+  letter-spacing: .11em;
+}
+
+/* Editorial typography: same multilingual skeleton across HY / EN / RU. */
+.section-heading h2, .about-intro h2, .contact-section h2,
+.featured-copy h3, .filmography-table tbody th, .source-grid h3,
+.about-columns h3, .faq-list summary strong {
+  font-family: var(--font-display);
+}
+.eyebrow, .section-tab, .column-number, .source-number, .source-kind,
+.featured-meta, .format-mark, .card-stamp, .result-count,
+.filmography-table thead th, .contact-edge {
+  font-family: var(--font-index);
+}
+.section-heading h2, .about-intro h2, .contact-section h2 {
+  font-size: clamp(3.6rem, 6.7vw, 7.6rem);
+  line-height: .86;
+  letter-spacing: -.055em;
+}
+
+/* Selected Works: more like a visual screenplay, less like a portfolio grid. */
+#selected { overflow: clip; }
+#selected .section-heading {
+  position: relative;
+  z-index: 2;
+  margin-bottom: clamp(70px,9vw,132px);
+}
+.featured-grid { gap: clamp(24px,3vw,46px); }
+.featured-card { isolation: isolate; }
+.featured-card::after {
+  position: absolute;
+  z-index: -1;
+  right: -.02em;
+  top: -.23em;
+  color: rgba(23,23,19,.055);
+  font-family: var(--font-index);
+  font-size: clamp(6rem, 15vw, 14rem);
+  font-weight: 500;
+  line-height: 1;
+  pointer-events: none;
+}
+.featured-card:nth-child(1)::after { content: "01"; }
+.featured-card:nth-child(2)::after { content: "02"; }
+.featured-card:nth-child(3)::after { content: "03"; }
+.featured-card:nth-child(4)::after { content: "04"; }
+.featured-card:nth-child(5)::after { content: "05"; }
+.featured-poster-link { overflow: hidden; }
+.featured-poster {
+  filter: saturate(.76) contrast(1.025);
+  transform: scale(1.018);
+}
+.featured-copy h3 {
+  font-size: clamp(2.25rem, 4vw, 5.3rem);
+  line-height: .88;
+  letter-spacing: -.048em;
+}
+.featured-meta {
+  font-size: .78rem;
+  font-weight: 520;
+}
+.format-mark {
+  border-radius: 0;
+  background: rgba(241,237,228,.92);
+  font-size: .7rem;
+  font-weight: 560;
+}
+
+/* Filmography stays useful but feels like an archive, not a data table widget. */
+.archive-controls {
+  padding: 0 0 22px;
+  border-radius: 0;
+  background: transparent;
+  border-bottom: 1px solid var(--cine-line-light);
+}
+.search-field input {
+  height: 50px;
+  border-radius: 0;
+  border-color: var(--cine-line-light);
+  background: transparent;
+  color: var(--cine-ink);
+}
+.search-field > svg { color: #716859; }
+.clear-search { color: var(--cine-ink); }
+.filter-button {
+  border-color: var(--cine-line-light);
+  color: #665e53;
+  font-family: var(--font-index);
+  font-size: .8rem;
+  font-weight: 540;
+  letter-spacing: .06em;
+}
+.filter-button:hover, .filter-button[data-active="true"] {
+  border-color: var(--cine-ink);
+  background: var(--cine-ink);
+  color: var(--cine-ivory);
+}
+.filmography-table tbody th { font-size: clamp(1.2rem,1.9vw,1.9rem); }
+
+/* Scroll choreography — progressive enhancement only. */
+@supports (animation-timeline: view()) {
+  .featured-card {
+    animation: cine-card-in linear both;
+    animation-timeline: view(block);
+    animation-range: entry 4% cover 28%;
+  }
+  .featured-card:nth-child(even) { animation-name: cine-card-in-right; }
+  .section-heading > div, .about-intro, .source-grid, .faq-list {
+    animation: cine-copy-in linear both;
+    animation-timeline: view(block);
+    animation-range: entry 5% cover 24%;
+  }
+  .featured-poster {
+    animation: cine-image-drift linear both;
+    animation-timeline: view(block);
+    animation-range: entry 0% exit 100%;
+  }
+}
+@supports (animation-timeline: scroll()) {
+  .hero-art-crop img {
+    animation: cine-hero-drift linear both;
+    animation-timeline: scroll(root block);
+    animation-range: 0 100svh;
+  }
+}
+@keyframes cine-card-in {
+  from { opacity: .25; transform: translate3d(-26px,54px,0); }
+  to { opacity: 1; transform: translate3d(0,0,0); }
+}
+@keyframes cine-card-in-right {
+  from { opacity: .25; transform: translate3d(26px,54px,0); }
+  to { opacity: 1; transform: translate3d(0,0,0); }
+}
+@keyframes cine-copy-in {
+  from { opacity: .25; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes cine-image-drift {
+  from { transform: scale(1.075) translateY(2.4%); }
+  to { transform: scale(1.025) translateY(-2.4%); }
+}
+@keyframes cine-hero-drift {
+  from { transform: scale(1.04) translateY(0); }
+  to { transform: scale(1.065) translateY(-2.8%); }
+}
+
+/* Tablet: retain overlap, reduce typographic pressure. */
+@media (max-width: 1050px) and (min-width: 681px) {
+  .hero.section-frame { width: min(calc(100% - 30px), 1520px); }
+  .hero { min-height: calc(100svh - 64px - 104px); }
+  .hero-copy { grid-column: 1 / 10; padding-bottom: 4vh; }
+  .hero h1 { font-size: clamp(4.3rem, 11vw, 7.8rem); width: 8.7ch; }
+  .hero-art { grid-column: 6 / 13; height: min(68vh,680px); }
+  .hero::after { bottom: 12px; }
+}
+
+/* Mobile gets its own art direction: portrait is the screen, type lives inside it. */
+@media (max-width: 680px) {
+  .site-header {
+    min-height: 60px;
+    padding-inline: 12px;
+    background: rgba(9,9,8,.88);
+  }
+  .language-nav { border-color: rgba(241,237,228,.18); }
+  .language-nav a { width: 34px; height: 36px; }
+  .wordmark { font-size: .65rem; letter-spacing: .11em; }
+
+  .hero.section-frame {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+  }
+  .hero {
+    position: relative;
+    display: block;
+    min-height: calc(100svh - 60px);
+    padding: 0;
+    overflow: hidden;
+    background: #080807;
+  }
+  .hero::before { display: none; }
+  .hero::after {
+    left: 16px;
+    right: 16px;
+    bottom: 18px;
+    padding-top: 11px;
+    border-top: 1px solid rgba(241,237,228,.28);
+    font-size: .72rem;
+    line-height: 1.25;
+    letter-spacing: .09em;
+  }
+  .hero-art {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+  }
+  .hero-art-crop { width: 100%; height: 100%; aspect-ratio: auto; }
+  .hero-art-crop::after {
+    background:
+      linear-gradient(0deg, rgba(8,8,7,.94) 0%, rgba(8,8,7,.66) 26%, rgba(8,8,7,.12) 54%, rgba(8,8,7,.08) 100%),
+      linear-gradient(90deg, rgba(8,8,7,.25), transparent 55%);
+  }
+  .hero-art-crop img {
+    object-position: 50% 40%;
+    transform: scale(1.025);
+  }
+  .hero-art figcaption, .edge-number { display: none; }
+
+  .hero-copy {
+    position: absolute;
+    z-index: 5;
+    left: 16px;
+    right: 16px;
+    bottom: 78px;
+    padding: 0;
+  }
+  .hero .eyebrow {
+    margin-bottom: 10px;
+    font-size: .71rem;
+    letter-spacing: .12em;
+  }
+  .hero h1 {
+    width: 8.2ch;
+    max-width: 100%;
+    font-size: clamp(3.45rem, 17vw, 5.7rem);
+    line-height: .78;
+    letter-spacing: -.062em;
+    text-shadow: 0 3px 28px rgba(0,0,0,.5);
+  }
+  .hero h1::after { width: 72px; margin-top: 14px; }
+  .roles {
+    max-width: 28rem;
+    margin-top: 12px;
+    font-size: .72rem;
+    line-height: 1.4;
+    letter-spacing: .095em;
+  }
+  .hero-actions { margin-top: 14px; }
+  .primary-action {
+    width: auto;
+    min-height: 42px;
+    padding-inline: 15px;
+    border-color: rgba(241,237,228,.55);
+    background: rgba(9,9,8,.26);
+    backdrop-filter: blur(8px);
+    font-size: .76rem;
+  }
+  .hero .secondary-action { display: none; }
+
+  .stats-strip {
+    width: 100%;
+    grid-template-columns: repeat(2,1fr);
+    border-left: 0;
+    border-right: 0;
+  }
+  .stat { min-height: 112px; padding: 16px; }
+  .stat strong { font-size: clamp(2.1rem, 10vw, 3.2rem); }
+  .stat > span:last-child { font-size: .68rem; }
+
+  .section-block, .archive-section, .about-section, .sources-section, .faq-section, .contact-section {
+    padding: 76px 12px;
+  }
+  .section-heading h2, .about-intro h2, .contact-section h2 {
+    font-size: clamp(3.25rem, 16vw, 5.3rem);
+    line-height: .84;
+  }
+  .featured-grid { gap: 68px; }
+  .featured-card::after {
+    top: -.18em;
+    right: 0;
+    font-size: clamp(6rem, 35vw, 10rem);
+  }
+  .featured-copy h3 {
+    font-size: clamp(2.6rem, 12vw, 4.4rem);
+    line-height: .88;
+  }
+  .featured-meta { font-size: .72rem; }
+  .format-mark { font-size: .64rem; }
+
+  .archive-controls { grid-template-columns: 1fr; }
+  .filter-row { justify-content: flex-start; }
+  .filter-button { min-height: 40px; padding: 8px 11px; }
+  .filmography-table tbody th { font-size: 1.45rem; }
+}
+
+@media (max-width: 380px) {
+  .hero h1 { font-size: clamp(3.1rem, 16vw, 4.7rem); }
+  .roles { font-size: .66rem; }
+  .hero::after { font-size: .64rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .featured-card, .featured-poster, .hero-art-crop img,
+  .section-heading > div, .about-intro, .source-grid, .faq-list {
+    animation: none !important;
+    transform: none !important;
+  }
+}
