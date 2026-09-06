@@ -4,7 +4,7 @@ import test from "node:test";
 import { updatedIso } from "../lib/site-copy.mjs";
 import { buildIndexNowPayload } from "../scripts/submit-indexnow.mjs";
 import { projects as seoProjects, hubs as seoHubs, localizedPath } from "../scripts/seo-page-data.mjs";
-import { buildSeoIndexNowPayload, collectSeoUrls } from "../scripts/submit-indexnow-seo.mjs";
+import { allIndexableSeoTails, buildSeoIndexNowPayload, collectSeoUrls } from "../scripts/submit-indexnow-seo.mjs";
 
 const pages = [
   { path: "dist/client/index.html", lang: "hy-AM" },
@@ -128,7 +128,6 @@ test("exports repaired project media, links and OKE naming", async () => {
 });
 
 
-
 test("exports a crawlable dedicated page for every project in all three languages", async () => {
   const localeCodes = ["hy", "en", "ru"];
 
@@ -208,12 +207,16 @@ test("distributes all standalone SEO URLs through IndexNow with a GitHub Pages k
   const key = "a70efe4a27d13ce5562b6b907877cf88";
   const urls = collectSeoUrls(site);
   const payload = buildSeoIndexNowPayload(site, key);
+  const expectedCount = allIndexableSeoTails().length * 3;
 
-  assert.equal(urls.length, 156);
+  assert.equal(urls.length, expectedCount);
   assert.equal(payload.host, "example.github.io");
   assert.equal(payload.keyLocation, `${site}/indexnow-key.txt`);
-  assert.equal(payload.urlList.length, 156);
+  assert.equal(payload.urlList.length, expectedCount);
   assert.ok(payload.urlList.includes(`${site}/projects/the-stranger/`));
   assert.ok(payload.urlList.includes(`${site}/en/projects/hotel-grand/`));
   assert.ok(payload.urlList.includes(`${site}/ru/projects/mi-gexecik-or/`));
+  assert.ok(payload.urlList.includes(`${site}/services/screenwriting/`));
+  assert.ok(payload.urlList.includes(`${site}/en/services/showrunning/`));
+  assert.ok(payload.urlList.includes(`${site}/ru/services/creative-production/`));
 });
