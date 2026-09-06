@@ -1,0 +1,54 @@
+/* Measured accessibility corrections from the Lighthouse quality gate.
+   Keep these selectors explicit so later visual passes cannot silently regress WCAG contrast. */
+.format-mark {
+  color: #5f5b54;
+  font-weight: 650;
+}
+.featured-card:nth-child(7) .format-mark {
+  color: #c8c1b6;
+}
+.archive-section .section-heading > div > p {
+  color: #504b43;
+}
+.faq-section .section-heading .eyebrow,
+.faq-list summary > span {
+  color: #634b27;
+}
+
+/* The archive and every table cell own an explicit light paint surface. This keeps
+   offscreen rows accessible even while the archive uses content-visibility. */
+.archive-section,
+.archive-controls,
+.filmography-table-wrap,
+.filmography-table,
+.filmography-table thead,
+.filmography-table tbody,
+.filmography-table thead tr,
+.filmography-table tbody tr,
+.filmography-table thead th,
+.filmography-table tbody th,
+.filmography-table tbody td {
+  background: var(--cine-paper, #e8e0d4);
+}
+.filmography-table tbody th,
+.filmography-table tbody th a {
+  color: var(--cine-ink, #171713);
+}
+.filmography-table tbody td {
+  color: #3f3a33;
+}
+.filmography-table tbody td:first-child {
+  color: #4b391c;
+}
+
+/* Keep below-the-fold editorial chapters out of the initial rendering cost. */
+#selected,
+.archive-section,
+.about-section,
+.sources-section,
+.faq-section,
+.contact-section,
+.site-footer {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
+}

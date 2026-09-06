@@ -64,6 +64,11 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
+      - name: Verify live deployment
+        run: node scripts/verify-live-site.mjs
+        env:
+          SITE_URL: ${{ vars.SITE_URL || steps.deployment.outputs.page_url }}
+
       - name: Notify IndexNow of updated URLs
         continue-on-error: true
         run: |

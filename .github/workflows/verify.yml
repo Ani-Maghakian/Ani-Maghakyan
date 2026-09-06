@@ -21,3 +21,26 @@ jobs:
       - run: npm run lint
       - run: npx tsc --noEmit
       - run: npm test
+
+      - name: Build same-origin Lighthouse fixture
+        run: SITE_BASE_PATH= SITE_URL=http://127.0.0.1:4173 npm run build
+
+      - name: Install Lighthouse CI
+        run: npm install --global @lhci/cli@0.15.x
+
+      - name: Audit representative pages
+        run: lhci autorun
+
+      - name: Print Lighthouse quality matrix
+        if: always()
+        run: node scripts/print-lighthouse-summary.mjs
+
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-reports
+          path: |
+            .lighthouseci
+            lighthouse-reports
+          if-no-files-found: ignore

@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 import { resolve } from "node:path";
 import { allSeoPageTails, locales, localizedPath } from "./seo-page-data.mjs";
+import { serviceHub, services } from "../lib/services.mjs";
 
 const repository = process.env.GITHUB_REPOSITORY ?? "";
 const [owner = "", repositoryName = ""] = repository.split("/");
@@ -14,18 +15,26 @@ const basePath = process.env.SITE_BASE_PATH ?? inferredBasePath;
 const inferredSiteUrl = owner ? `https://${owner}.github.io${basePath}` : "";
 const siteUrl = (process.env.SITE_URL || inferredSiteUrl).replace(/\/$/, "");
 
+export function allIndexableSeoTails() {
+  return [
+    ...allSeoPageTails(),
+    serviceHub.slug,
+    ...services.map((service) => `${serviceHub.slug}/${service.slug}`),
+  ];
+}
+
 export function collectSeoUrls(targetSiteUrl = siteUrl) {
   const clean = String(targetSiteUrl || "").replace(/\/$/, "");
   if (!clean) return [];
 
   const urlList = [];
-  for (const tail of allSeoPageTails()) {
+  for (const tail of allIndexableSeoTails()) {
     for (const locale of Object.keys(locales)) {
       const path = localizedPath(locale, tail);
       urlList.push(`${clean}/${path}/`);
     }
   }
-  return urlList;
+  return [...new Set(urlList)];
 }
 
 export function buildSeoIndexNowPayload(targetSiteUrl, key) {
@@ -63,8 +72,6 @@ export async function resolveIndexNowKey(targetSiteUrl = siteUrl) {
   const envKey = (process.env.INDEXNOW_KEY || "").trim();
   if (envKey) return envKey;
 
-  // Prefer the already-live verification key. This is safest when the submit step
-  // runs before the newest GitHub Pages artifact is published.
   const liveKey = await readLiveKey(targetSiteUrl);
   if (liveKey) return liveKey;
 
