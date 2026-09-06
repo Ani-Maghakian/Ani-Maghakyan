@@ -1,0 +1,30 @@
+{
+  "ci": {
+    "collect": {
+      "staticDistDir": "./dist/client",
+      "url": [
+        "http://localhost/",
+        "http://localhost/en/",
+        "http://localhost/services/screenwriting/",
+        "http://localhost/projects/elens-diary/"
+      ],
+      "numberOfRuns": 1,
+      "settings": {
+        "maxWaitForLoad": 90000,
+        "chromeFlags": "--no-sandbox --headless=new"
+      }
+    },
+    "assert": {
+      "assertions": {
+        "categories:performance": ["warn", { "minScore": 1 }],
+        "categories:accessibility": ["warn", { "minScore": 1 }],
+        "categories:best-practices": ["warn", { "minScore": 1 }],
+        "categories:seo": ["warn", { "minScore": 1 }]
+      }
+    },
+    "upload": {
+      "target": "filesystem",
+      "outputDir": "./lighthouse-reports"
+    }
+  }
+}
