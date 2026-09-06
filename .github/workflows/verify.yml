@@ -32,6 +32,7 @@ jobs:
         run: lhci autorun
 
       - name: Print Lighthouse quality matrix
+        if: always()
         run: node scripts/print-lighthouse-summary.mjs
 
       - name: Upload Lighthouse reports
