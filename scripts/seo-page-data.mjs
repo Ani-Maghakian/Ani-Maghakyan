@@ -1,4 +1,4 @@
-export const updatedIso = "2026-09-04";
+export { updatedIso } from "../lib/site-copy.mjs";
 
 export const locales = {
   "hy": {

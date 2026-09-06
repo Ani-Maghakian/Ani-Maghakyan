@@ -22,6 +22,7 @@ const nextConfig: NextConfig = {
   env: {
     NEXT_PUBLIC_BASE_PATH: basePath,
     NEXT_PUBLIC_SITE_URL: siteUrl,
+    NEXT_PUBLIC_CONTACT_EMAIL: process.env.CONTACT_EMAIL ?? "",
   },
 };
 
