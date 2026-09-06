@@ -27,12 +27,7 @@ export default function RootLayout({
   return (
     <html lang="hy-AM" suppressHydrationWarning>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&family=Noto+Sans+Armenian:wght@400;500;600;700&family=Noto+Serif:wght@400;500;600&family=Noto+Serif+Armenian:wght@400;500;600&display=swap"
-        />
+        <link rel="preconnect" href="https://i.ytimg.com" crossOrigin="anonymous" />
         <link rel="preload" as="image" href={`${basePath}/ani-3180-web.jpg`} type="image/jpeg" />
       </head>
       <body>{children}</body>
