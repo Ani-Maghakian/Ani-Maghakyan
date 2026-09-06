@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
+import { updatedIso } from "../lib/site-copy.mjs";
 import { buildIndexNowPayload } from "../scripts/submit-indexnow.mjs";
 import { projects as seoProjects, hubs as seoHubs, localizedPath } from "../scripts/seo-page-data.mjs";
 import { buildSeoIndexNowPayload, collectSeoUrls } from "../scripts/submit-indexnow-seo.mjs";
@@ -52,7 +53,7 @@ test("exports crawl and sharing assets", async () => {
   }
 
   const sitemap = await readFile("dist/client/sitemap.xml", "utf8");
-  assert.match(sitemap, /2026-09-04/);
+  assert.ok(sitemap.includes(`<lastmod>${updatedIso}</lastmod>`));
   assert.match(sitemap, /xmlns:image=/);
   assert.match(sitemap, /hero\.webp/);
 

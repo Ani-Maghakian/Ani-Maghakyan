@@ -1,3 +1,4 @@
+import { updatedIso } from "../lib/site-copy.mjs";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
@@ -12,7 +13,7 @@ const basePath = process.env.SITE_BASE_PATH ?? inferredBasePath;
 const inferredSiteUrl = owner ? `https://${owner}.github.io${basePath}` : "";
 const siteUrl = (process.env.SITE_URL || inferredSiteUrl).replace(/\/$/, "");
 const output = resolve("dist/client");
-const updatedIso = "2026-09-03";
+
 
 mkdirSync(output, { recursive: true });
 

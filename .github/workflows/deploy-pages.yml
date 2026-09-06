@@ -36,10 +36,14 @@ jobs:
       - name: Build static site
         run: npm run build
         env:
+          CONTACT_EMAIL: ${{ vars.CONTACT_EMAIL }}
           SITE_URL: ${{ vars.SITE_URL }}
           GOOGLE_SITE_VERIFICATION: ${{ vars.GOOGLE_SITE_VERIFICATION }}
           BING_SITE_VERIFICATION: ${{ vars.BING_SITE_VERIFICATION }}
           YANDEX_SITE_VERIFICATION: ${{ vars.YANDEX_SITE_VERIFICATION }}
+
+      - name: Verify exported pages
+        run: node --test tests/*.test.mjs
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

@@ -1,7 +1,7 @@
 "use client";
 
-import { useDeferredValue, useEffect, useMemo, useState } from "react";
-import { ArrowDownRight, ArrowUpRight, Play, Search } from "lucide-react";
+import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
+import { ArrowDownRight, ArrowUpRight, Menu, Play, Search, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -15,6 +15,7 @@ import {
   type ProjectKind,
 } from "@/lib/content";
 import { basePath } from "@/lib/seo";
+import { interfaceCopy, sectionLinks, resultLabel, publicContactEmail } from "@/lib/site-copy.mjs";
 
 type Filter = "all" | ProjectKind;
 
@@ -63,9 +64,13 @@ function ExternalLink({ href, children, className = "" }: { href: string; childr
 
 export function PortfolioPage({ locale }: { locale: Locale }) {
   const t = copy[locale];
+  const ui = interfaceCopy[locale];
+  const localeRoot = `${basePath}${locales[locale].href}`;
+  const contactEmail = publicContactEmail(process.env.NEXT_PUBLIC_CONTACT_EMAIL);
   const [filter, setFilter] = useState<Filter>("all");
   const [query, setQuery] = useState("");
   const deferredQuery = useDeferredValue(query);
+  const featuredGrid = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     document.documentElement.lang = locale === "hy" ? "hy-AM" : locale;
@@ -109,6 +114,7 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
         <span className="binding-knot" />
       </div>
 
+      <a className="skip-link" href="#main-content">{ui.skip}</a>
       <header className="site-header">
         <a className="wordmark" href="#top" aria-label={t.title} onClick={(event) => stableAnchorJump(event, "top")}>
           <span>A.</span> MAGHAKYAN
@@ -135,9 +141,27 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
             </a>
           ))}
         </nav>
+        <details className="mobile-menu" onKeyDown={(event) => {
+          if (event.key === "Escape") {
+            event.currentTarget.open = false;
+            event.currentTarget.querySelector("summary")?.focus();
+          }
+        }}>
+          <summary aria-label={ui.menu}><Menu aria-hidden="true" /></summary>
+          <nav aria-label={t.primaryNavLabel} onClick={(event) => {
+            if ((event.target as Element).closest("a")) event.currentTarget.closest("details")?.removeAttribute("open");
+          }}>
+            <a href="#selected" onClick={(event) => stableAnchorJump(event, "selected")}>{t.nav.work}</a>
+            <a href="#filmography" onClick={(event) => stableAnchorJump(event, "filmography")}>{t.nav.filmography}</a>
+            <a href="#contact" onClick={(event) => stableAnchorJump(event, "contact")}>{ui.collaborate}</a>
+            {sectionLinks.filter((item) => item.slug !== "projects" && item.slug !== "work-with-ani").map((item) => (
+              <a key={item.slug} href={`${localeRoot}${item.slug}/`}>{item.labels[locale]}</a>
+            ))}
+          </nav>
+        </details>
       </header>
 
-      <main>
+      <main id="main-content">
         <section className="hero section-frame" aria-labelledby="hero-title">
           <div className="hero-copy">
             <div className="script-note" aria-hidden="true">
@@ -150,16 +174,16 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
             <p className="name-aliases">{t.aliases}</p>
             <p className="hero-statement">{t.hero}</p>
             <p className="roles">{t.roles}</p>
-            <p className="hero-intro">{t.intro}</p>
+            <p className="hero-intro">{ui.shortIntro}</p>
 
             <div className="hero-actions">
               <Button asChild className="primary-action">
                 <a href="#filmography" onClick={(event) => stableAnchorJump(event, "filmography")}>
-                  {t.explore}
+                  {ui.work}
                   <ArrowDownRight aria-hidden="true" />
                 </a>
               </Button>
-              <ExternalLink href={siteLinks.imdb}>{t.imdb}</ExternalLink>
+              <a className="secondary-action" href="#contact" onClick={(event) => stableAnchorJump(event, "contact")}>{ui.collaborate}</a>
             </div>
           </div>
 
@@ -192,7 +216,7 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
           </div>
         </section>
 
-        <section className="stats-strip section-frame" aria-label="Career statistics">
+        <section className="stats-strip section-frame" aria-label={ui.statistics}>
           {t.stats.map((stat, index) => (
             <div className="stat" key={stat.label}>
               <span className="stat-index">{padded(index + 1)}</span>
@@ -211,7 +235,7 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
             </div>
           </div>
 
-          <div className="featured-grid">
+          <div className="featured-grid" ref={featuredGrid} id="featured-projects">
             {featured.map((project, index) => {
               const internalHref = projectPageHref(locale, project.seoSlug) ?? `#project-${project.id}`;
               const posterSrc = posterSource(project.poster);
@@ -221,28 +245,30 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
                   {posterSrc && (
                     <a
                       className="featured-poster-link"
-                      href={project.watchUrl ?? internalHref}
-                      target={project.watchUrl ? "_blank" : undefined}
-                      rel={project.watchUrl ? "noopener" : undefined}
-                      aria-label={`${project.title[locale]} — ${project.watchKind === "youtube" ? t.watchYoutube : t.openProject}`}
+                      href={internalHref}
+                      data-track="view_project"
+                      data-project={project.seoSlug}
+                      aria-label={`${ui.details}: ${project.title[locale]}`}
                     >
                       <span
                         className="featured-poster-backdrop"
                         aria-hidden="true"
                         style={{ backgroundImage: `url("${posterSrc}")` }}
                       />
+                      <span className="poster-fallback" aria-hidden="true">{project.title[locale]}</span>
+                      {/* Static export serves the already optimized project artwork directly. */}
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         className="featured-poster"
                         src={posterSrc}
                         alt={`${project.title[locale]} — ${project.year}`}
                         loading="lazy"
                         decoding="async"
+                        width="640"
+                        height="400"
+                        onError={(event) => { event.currentTarget.hidden = true; }}
                       />
-                      {project.watchUrl && (
-                        <span className="featured-play" aria-hidden="true">
-                          <Play />
-                        </span>
-                      )}
+                      <span className="featured-play" aria-hidden="true"><ArrowUpRight /></span>
                     </a>
                   )}
                   <div className="featured-meta">
@@ -253,6 +279,8 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
                     <h3>
                       <a
                         className="project-title-link"
+                        data-track="view_project"
+                        data-project={project.seoSlug}
                         href={internalHref}
                         onClick={
                           internalHref.startsWith("#")
@@ -265,7 +293,7 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
                     </h3>
                     <p>{project.featuredDetail?.[locale] ?? project.credit[locale]}</p>
                     {project.watchUrl && (
-                      <a className="project-watch" href={project.watchUrl} target="_blank" rel="noopener">
+                      <a className="project-watch" data-track="watch_project" data-project={project.seoSlug} href={project.watchUrl} target="_blank" rel="noopener">
                         <Play aria-hidden="true" />
                         <span>{project.watchKind === "youtube" ? t.watchYoutube : t.openProject}</span>
                         <ArrowUpRight aria-hidden="true" />
@@ -277,6 +305,12 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
                 </article>
               );
             })}
+          </div>
+          <div className="featured-scroll-controls">
+            {([-1, 1] as const).map((direction) => <button key={direction} type="button" aria-controls="featured-projects" aria-label={direction < 0 ? (locale === "hy" ? "Նախորդ աշխատանքները" : locale === "ru" ? "Предыдущие работы" : "Previous works") : (locale === "hy" ? "Հաջորդ աշխատանքները" : locale === "ru" ? "Следующие работы" : "Next works")} onClick={() => {
+              const grid = featuredGrid.current;
+              if (grid) grid.scrollBy({ left: direction * grid.clientWidth * .9, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+            }}>{direction < 0 ? <ChevronLeft aria-hidden="true" /> : <ChevronRight aria-hidden="true" />}</button>)}
           </div>
           <span className="section-tab" aria-hidden="true">02 / 07</span>
         </section>
@@ -301,9 +335,10 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
                 placeholder={t.search}
                 autoComplete="off"
               />
+              {query && <button className="clear-search" type="button" onClick={() => setQuery("")} aria-label={ui.clear}>×</button>}
             </label>
 
-            <div className="filter-row" role="group" aria-label="Project format">
+            <div className="filter-row" role="group" aria-label={ui.format}>
               {filters.map((item) => (
                 <Button
                   key={item}
@@ -321,7 +356,7 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
           </div>
 
           <p className="result-count" aria-live="polite">
-            {padded(filteredProjects.length)} {t.results}
+            {resultLabel(filteredProjects.length, locale)}
           </p>
 
           <div className="filmography-table-wrap">
@@ -344,7 +379,7 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
                       <th data-label={t.table.project} scope="row">
                         <span className="project-title-cell">
                           {internalHref ? (
-                            <a className="project-title-link" href={internalHref}>
+                            <a className="project-title-link" data-track="view_project" data-project={project.seoSlug} href={internalHref}>
                               {project.title[locale]}
                             </a>
                           ) : (
@@ -353,6 +388,8 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
                           {project.watchUrl && (
                             <a
                               className="project-watch-mini"
+                              data-track="watch_project"
+                              data-project={project.seoSlug}
                               href={project.watchUrl}
                               target="_blank"
                               rel="noopener"
@@ -404,7 +441,7 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
               <span className="column-number">03</span>
               <h3>{t.booksTitle}</h3>
               <ul>
-                {t.books.map((item) => <li key={item}>{item}</li>)}
+                {t.books.map((item, index) => <li key={item}><a href={`${localeRoot}books/#${index === 0 ? "temporary-stop" : "topsy-turvy"}`}>{item}</a></li>)}
               </ul>
             </article>
           </div>
@@ -465,12 +502,15 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
           <p className="eyebrow">{t.contactKicker}</p>
           <h2 id="contact-title">{t.contactTitle}</h2>
           <p>{t.contactText}</p>
-          <Button asChild className="contact-button">
-            <a href={siteLinks.instagram} target="_blank" rel="noopener">
-              {t.contactButton}
-              <ArrowUpRight aria-hidden="true" />
-            </a>
-          </Button>
+          <p className="contact-hint">{ui.contactHint}</p>
+          <div className="contact-actions">
+            {contactEmail && <Button asChild className="contact-button"><a data-track="contact_email" href={`mailto:${contactEmail}`}>{ui.email}<ArrowUpRight aria-hidden="true" /></a></Button>}
+            <Button asChild className={contactEmail ? "secondary-action" : "contact-button"}>
+              <a data-track="contact_instagram" href={siteLinks.instagram} target="_blank" rel="noopener">
+                {ui.instagram}<ArrowUpRight aria-hidden="true" />
+              </a>
+            </Button>
+          </div>
           <span className="contact-edge" aria-hidden="true">07 / 07</span>
         </section>
       </main>
@@ -490,6 +530,10 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
           <time dateTime={updatedIso}>{t.updated}</time>
           <a href="#top" onClick={(event) => stableAnchorJump(event, "top")}>{t.backTop} ↑</a>
         </div>
+        <nav className="footer-hubs" data-seo-hub="ani" aria-label={ui.explore}>
+          <strong>{ui.explore}</strong>
+          {sectionLinks.map((item) => <a key={item.slug} href={`${localeRoot}${item.slug}/`}>{item.labels[locale]}</a>)}
+        </nav>
       </footer>
     </div>
   );

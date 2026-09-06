@@ -1,3 +1,4 @@
+import { books, bookSchema } from "./books.mjs";
 import type { Metadata } from "next";
 import {
   copy,
@@ -119,17 +120,11 @@ export function structuredData(locale: Locale) {
   const websiteId = siteUrl ? `${siteUrl}/#website` : undefined;
   const profileId = pageUrl ? `${pageUrl}#profile` : undefined;
 
-  const bookNames: Record<Locale, [string, string]> = {
-    hy: ["Ժամանակավոր կանգառ", "Տակնուվրա. Մի օրում բոլորը վերադառնում են"],
-    en: ["Temporary Stop", "Topsy-Turvy: Everyone Returns in One Day"],
-    ru: ["Временная остановка", "Вверх дном. За один день возвращаются все"],
-  };
-
   const itemList = projects.map((project) => ({
     "@type": "ListItem",
     position: project.id,
     item: {
-      "@type": project.kind === "series" ? "TVSeries" : project.kind === "film" ? "Movie" : "CreativeWork",
+      "@type": [2, 3].includes(project.id) ? "TVSeason" : project.kind === "series" ? "TVSeries" : project.kind === "film" ? "Movie" : "CreativeWork",
       name: project.title[locale],
       alternateName: [project.title.hy, project.title.en, project.title.ru].filter(
         (value, index, values) => values.indexOf(value) === index,
@@ -138,8 +133,9 @@ export function structuredData(locale: Locale) {
         ? { temporalCoverage: project.year.replace("–", "/") }
         : { dateCreated: project.year }),
       ...(project.episodes ? { numberOfEpisodes: project.episodes } : {}),
-      ...(pageUrl ? { url: `${pageUrl}#project-${project.id}` } : {}),
-      creator: personId ? { "@id": personId } : { "@type": "Person", name: "Անի Մաղաքյան" },
+      ...(pageUrl ? { url: `${pageUrl}projects/${project.seoSlug}/${project.id === 2 ? "#season-1" : ""}` } : {}),
+      ...([2, 3].includes(project.id) && pageUrl ? { seasonNumber: project.id - 1, partOfSeries: { "@id": `${pageUrl}projects/elens-diary/#work` } } : {}),
+      contributor: personId ? { "@id": personId } : { "@type": "Person", name: "Անի Մաղաքյան" },
     },
   }));
 
@@ -152,7 +148,7 @@ export function structuredData(locale: Locale) {
       alternateName: [project.title.hy, project.title.en, project.title.ru].filter(
         (value, index, values) => values.indexOf(value) === index,
       ),
-      ...(pageUrl ? { url: `${pageUrl}#project-${project.id}` } : {}),
+      ...(pageUrl ? { url: `${pageUrl}projects/${project.seoSlug}/` } : {}),
     }));
 
   return {
@@ -222,24 +218,7 @@ export function structuredData(locale: Locale) {
         about: personId ? { "@id": personId } : { "@type": "Person", name: "Անի Մաղաքյան" },
         citation: sourceLinks.map((source) => source.href),
       },
-      {
-        "@type": "Book",
-        ...(pageUrl ? { "@id": `${pageUrl}#book-temporary-stop` } : {}),
-        name: bookNames[locale][0],
-        alternateName: [bookNames.hy[0], bookNames.en[0], bookNames.ru[0]],
-        datePublished: "2010",
-        inLanguage: "hy",
-        author: personId ? { "@id": personId } : { "@type": "Person", name: "Անի Մաղաքյան" },
-      },
-      {
-        "@type": "Book",
-        ...(pageUrl ? { "@id": `${pageUrl}#book-topsy-turvy` } : {}),
-        name: bookNames[locale][1],
-        alternateName: [bookNames.hy[1], bookNames.en[1], bookNames.ru[1]],
-        datePublished: "2021",
-        inLanguage: "hy",
-        author: personId ? { "@id": personId } : { "@type": "Person", name: "Անի Մաղաքյան" },
-      },
+      ...books.map((book) => bookSchema(book, locale, siteUrl, personId)),
       {
         "@type": "FAQPage",
         ...(pageUrl ? { "@id": `${pageUrl}#faq` } : {}),
