@@ -5,6 +5,8 @@ import { interfaceCopy, sectionLinks, publicContactEmail } from '../lib/site-cop
 import { copy, siteLinks, sourceLinks } from '../lib/profile-content.mjs';
 import { books, bookSchema } from '../lib/books.mjs';
 import { projectStories, projectSummary, relatedProjects } from '../lib/project-editorial.mjs';
+import { originalProjectPosters } from '../lib/project-posters.mjs';
+import { writings, writingCopy, writingBlogUrl, writingDate } from '../lib/writings.mjs';
 
 const [owner = '', repositoryName = ''] = (process.env.GITHUB_REPOSITORY ?? '').split('/');
 const isUserOrOrgSite = Boolean(owner) && repositoryName === `${owner}.github.io`;
@@ -46,11 +48,13 @@ function sourceList(locale, sources) {
   return `<aside class="sources" aria-labelledby="sources-heading"><h2 id="sources-heading">${esc(interfaceCopy[locale].sources)}</h2><ol>${unique.map((source) => `<li><a href="${esc(source.url)}" target="_blank" rel="noopener noreferrer">${esc(source.label === 'Official / primary video' ? locales[locale].watchLabel : source.label)}</a></li>`).join('')}</ol></aside>`;
 }
 function projectImage(project) {
+  if (originalProjectPosters[project.slug]) return `${siteUrl}${originalProjectPosters[project.slug].src}`;
   if (project.poster) return project.poster.startsWith('/') ? `${siteUrl}${project.poster}` : project.poster;
   const id = project.watchUrl?.match(/[?&]v=([^&]+)/)?.[1];
   return id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : `${siteUrl}/og.png`;
 }
 function projectMediaSrc(project) {
+  if (originalProjectPosters[project.slug]) return `${basePath}${originalProjectPosters[project.slug].src}`;
   return project.poster?.startsWith('/') ? `${basePath}${project.poster}` : projectImage(project);
 }
 function uniqueTitles(project) { return [...new Set(Object.values(project.titles))]; }
@@ -129,7 +133,7 @@ function projectPage(project, locale) {
   ];
   const watch = project.watchUrl ? `<a data-track="watch_project" data-project="${project.slug}" href="${esc(project.watchUrl)}" target="_blank" rel="noopener noreferrer">${esc(locales[locale].watchLabel)} ↗</a>` : '';
   const body = `<main id="main-content">${crumbs.html}<section class="hero"><div><p class="kicker">${esc(format)} · ${esc(project.year)}</p><h1>${esc(title)}</h1><p class="dek">${esc(description)}</p><div class="cta">${watch}<a class="secondary" href="${esc(pageHref(locale, 'work-with-ani'))}">${esc(ui.collaborate)} →</a></div><p class="aliases">${esc(uniqueTitles(project).join(' · '))}</p></div>
-<figure class="hero-media"><span class="media-fallback" aria-hidden="true">${esc(title)}</span><img src="${esc(projectMediaSrc(project))}" alt="${esc(`${title} — ${project.year}`)}" width="640" height="400" loading="eager" decoding="async"></figure></section>
+<figure class="hero-media${originalProjectPosters[project.slug] ? ' original-poster' : ''}"><span class="media-fallback" aria-hidden="true">${esc(title)}</span><img src="${esc(projectMediaSrc(project))}" alt="${esc(`${title} — ${project.year}`)}" width="${originalProjectPosters[project.slug]?.width ?? 640}" height="${originalProjectPosters[project.slug]?.height ?? 400}" loading="eager" decoding="async">${originalProjectPosters[project.slug] ? `<figcaption><a href="${esc(projectMediaSrc(project))}" target="_blank" rel="noopener noreferrer">${esc({hy:'Պաստառը՝ ամբողջ չափով',en:'View the full poster',ru:'Открыть афишу в полном размере'}[locale])} ↗</a></figcaption>` : ''}</figure></section>
 <section class="content"><article class="prose"><h2>${esc(ui.details)}</h2><dl class="meta">${facts.map(([label,value]) => `<div><dt>${esc(label)}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl>
 ${isDiary ? `<p id="season-1" class="credit-note">${esc({hy:'1-ին եթերաշրջան՝ 197 սերիա։ 2-րդ եթերաշրջան՝ 224 սերիա։ Ընդամենը՝ 421 սերիա՝ ըստ հեղինակային ֆիլմագրության։',en:'Season 1: 197 episodes. Season 2: 224 episodes. Total: 421 episodes in the author filmography.',ru:'Сезон 1 — 197 серий. Сезон 2 — 224 серии. Всего — 421 серия по авторской фильмографии.'}[locale])}</p>` : ''}
 ${story?.note ? `<p class="credit-note">${esc(story.note[locale])}</p>` : ''}
@@ -154,7 +158,7 @@ function hubPage(hub, locale) {
     press: {hy:'Հարցազրույցներ Անի Մաղաքյանի հետ, հրապարակումներ և մասնագիտական աղբյուրներ՝ նրա կարիերայի և աշխատանքների մասին։',en:'Interviews with Ani Maghakyan, editorial coverage and industry sources about her career and work.',ru:'Интервью с Ани Магакян, публикации и профессиональные источники о её карьере и работах.'},
     'work-with-ani': {hy:t.contactText,en:t.contactText,ru:t.contactText},
   };
-  const description = descriptions[tail][locale];
+  const description = (descriptions[tail] ?? hub.descriptions)[locale];
   const nodes = [
     { '@type': tail === 'about' ? 'ProfilePage' : tail === 'work-with-ani' ? 'ContactPage' : 'CollectionPage', '@id': `${canonical}#page`, url: canonical, name: title, description, inLanguage: locales[locale].lang, dateModified: updatedIso, isPartOf: { '@id': `${siteUrl}/#website` }, about: { '@id': personId }, breadcrumb: { '@id': `${canonical}#breadcrumbs` }, ...(tail === 'about' ? {mainEntity:{'@id':personId}} : {}) },
     personNode(), crumbs.node,
@@ -165,6 +169,12 @@ function hubPage(hub, locale) {
     article = `<nav class="section-menu" aria-label="${esc(ui.format)}">${['series','film','stage','children'].map((kind) => `<a href="#${kind}">${esc(t.filters[kind])}</a>`).join('')}<a href="${esc(pageHref(locale))}#filmography">${esc(t.search.replace('…',''))} ↗</a></nav>${['series','film','stage','children'].map((kind) => `<section id="${kind}"><h2>${esc(t.filters[kind])}</h2>${cardGrid(projects.filter((p) => p.kind === kind), locale, 'project-grid all')}</section>`).join('')}`;
     nodes.push({ '@type':'ItemList', '@id':`${canonical}#collection`, numberOfItems:projects.length, itemListElement:projects.map((p,index) => ({'@type':'ListItem',position:index+1,name:p.titles[locale],url:absoluteUrl(locale,`projects/${p.slug}`)})) });
     nodes[0].mainEntity = {'@id':`${canonical}#collection`};
+  } else if (tail === 'writings') {
+    const literary = writingCopy[locale];
+    article = `<div class="writing-list">${writings.map((work) => `<article class="writing-entry" id="${work.slug}"><p class="kicker">${esc(literary.genres[work.kind])} <span aria-hidden="true">·</span> <time datetime="${work.date}">${esc(writingDate(work.date, locale))}</time></p><h2 lang="hy">${esc(work.title)}</h2>${locale === 'hy' ? `<blockquote lang="hy"><p>${esc(work.excerpt)}</p></blockquote>` : ''}<p>${esc(work.descriptions[locale])}</p><a class="writing-read" href="${esc(work.source)}" target="_blank" rel="noopener noreferrer">${esc(literary.read)} <span aria-hidden="true">↗</span></a></article>`).join('')}</div>`;
+    nodes.push({ '@type': 'ItemList', '@id': `${canonical}#writings`, numberOfItems: writings.length, itemListElement: writings.map((work, index) => ({ '@type': 'ListItem', position: index + 1, item: { '@type': 'CreativeWork', '@id': work.source, url: work.source, name: work.title, description: work.descriptions[locale], datePublished: work.date, inLanguage: 'hy', author: { '@id': personId }, isPartOf: { '@type': 'Blog', url: writingBlogUrl, name: 'Անի Մաղաքյան (ԱՆՈՒԵԼԼ)' } } })) });
+    nodes[0].mainEntity = { '@id': `${canonical}#writings` };
+    nodes[0].isBasedOn = writingBlogUrl;
   } else if (tail === 'books') {
     article = books.map((book) => `<article class="book-card" id="${book.slug}"><p class="kicker">${esc(book.year)} · ${esc(book.format[locale])}</p><h2>${esc(book.titles[locale])}</h2><p>${esc(book.descriptions[locale])}</p>${book.isbn ? `<p>ISBN: ${esc(book.isbn)}</p>` : ''}${book.editionNote ? `<p class="edition-note">${esc(book.editionNote[locale])}</p>` : ''}${book.source ? `<div class="cta"><a href="${esc(book.source)}" target="_blank" rel="noopener noreferrer">${esc(ui.readBook)} ↗</a></div>` : ''}</article>`).join('');
     nodes.push(...books.map((book) => bookSchema(book, locale, siteUrl, personId)));
@@ -181,7 +191,8 @@ function hubPage(hub, locale) {
   } else {
     article = `<h2>${esc(t.practiceTitle)}</h2><ul>${t.practice.map((item) => `<li>${esc(item)}</li>`).join('')}</ul><h2>${esc(ui.collaborate)}</h2><p>${esc(ui.contactHint)}</p>${contactCta(locale)}<section class="related"><h2>${esc(t.selectedTitle)}</h2>${cardGrid(projects.filter((p) => ['elens-diary','summer-of-84','paper-dream'].includes(p.slug)),locale)}</section>`;
   }
-  const content = tail === 'projects' ? `<section class="index-content">${article}</section>` : `<section class="content"><div class="prose">${article}</div>${sourceList(locale, sources)}</section>`;
+  const sidebar = tail === 'writings' ? `<aside class="writing-aside"><p class="kicker">${esc(writingCopy[locale].kicker)}</p><p>${esc(writingCopy[locale].intro)}</p><p>${esc(writingCopy[locale].language)}</p><a href="${writingBlogUrl}" target="_blank" rel="noopener noreferrer">${esc(writingCopy[locale].all)} ↗</a><a href="${esc(pageHref(locale, 'books'))}">${esc(sectionLabel(locale, 'books'))} →</a></aside>` : sourceList(locale, sources);
+  const content = tail === 'projects' ? `<section class="index-content">${article}</section>` : `<section class="content"><div class="prose">${article}</div>${sidebar}</section>`;
   const body = `<main id="main-content">${crumbs.html}<section class="hero single"><div><p class="kicker">${esc(sectionLabel(locale, tail))}</p><h1>${esc(title)}</h1><p class="dek">${esc(description)}</p></div></section>${content}</main>`;
   return layout({locale,tail,seoTitle:title,description,body,nodes});
 }

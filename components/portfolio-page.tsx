@@ -11,6 +11,8 @@ import {
 } from "@/lib/content";
 import { basePath } from "@/lib/seo";
 import { interfaceCopy, sectionLinks, resultLabel, publicContactEmail } from "@/lib/site-copy.mjs";
+import { originalProjectPosters } from "@/lib/project-posters.mjs";
+import { writings, writingCopy } from "@/lib/writings.mjs";
 
 type Filter = "all" | ProjectKind;
 
@@ -139,6 +141,7 @@ function interactionScript(locale: Locale) {
 export function PortfolioPage({ locale }: { locale: Locale }) {
   const t = copy[locale];
   const ui = interfaceCopy[locale];
+  const literary = writingCopy[locale];
   const localeRoot = `${basePath}${locales[locale].href}`;
   const contactEmail = publicContactEmail(process.env.NEXT_PUBLIC_CONTACT_EMAIL);
   const featured = projects
@@ -164,6 +167,7 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
         <nav className="primary-nav" aria-label={t.primaryNavLabel}>
           <a href="#selected">{t.nav.work}</a>
           <a href="#filmography">{t.nav.filmography}</a>
+          <a href={`${localeRoot}writings/`}>{sectionLinks.find((item) => item.slug === "writings")?.labels[locale]}</a>
           <a href={`${localeRoot}services/`}>{sectionLinks.find((item) => item.slug === "services")?.labels[locale] ?? "Services"}</a>
           <a href="#about">{t.nav.about}</a>
           <a href="#sources">{t.nav.sources}</a>
@@ -258,7 +262,8 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
           <div className="featured-grid" id="featured-projects">
             {featured.map((project, index) => {
               const internalHref = projectPageHref(locale, project.seoSlug) ?? `#project-${project.id}`;
-              const posterSrc = posterSource(project.poster);
+              const originalPoster = originalProjectPosters[project.seoSlug as keyof typeof originalProjectPosters];
+              const posterSrc = posterSource(originalPoster?.src ?? project.poster);
               return (
                 <article className={`featured-card tone-${(index % 4) + 1}`} key={project.id}>
                   {posterSrc && (
@@ -266,7 +271,7 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
                       <span className="featured-poster-backdrop" aria-hidden="true" style={{ backgroundImage: `url("${posterSrc}")` }} />
                       <span className="poster-fallback" aria-hidden="true">{project.title[locale]}</span>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img className="featured-poster" src={posterSrc} alt={`${project.title[locale]} — ${project.year}`} loading="lazy" decoding="async" width="640" height="400" />
+                      <img className="featured-poster" src={posterSrc} alt={`${project.title[locale]} — ${project.year}`} loading="lazy" decoding="async" width={originalPoster?.width ?? 640} height={originalPoster?.height ?? 400} />
                       <span className="featured-play" aria-hidden="true">↗</span>
                     </a>
                   )}
@@ -359,6 +364,22 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
             <article><span className="column-number">03</span><h3>{t.booksTitle}</h3><ul>{t.books.map((item, index) => <li key={item}><a href={`${localeRoot}books/#${index === 0 ? "temporary-stop" : "topsy-turvy"}`}>{item}</a></li>)}</ul></article>
           </div>
           <span className="section-tab" aria-hidden="true">04 / 07</span>
+        </section>
+
+        <section className="writing-section section-frame" id="writings" aria-labelledby="writings-title">
+          <div className="writing-heading">
+            <div><p className="eyebrow">{literary.kicker}</p><h2 id="writings-title">{literary.title}</h2><p>{literary.intro}</p></div>
+            <a className="writing-browse" href={`${localeRoot}writings/`}>{literary.browse}<span aria-hidden="true">↗</span></a>
+          </div>
+          <div className="writing-preview">
+            {[writings[0], writings[1], writings[4]].map((work) => (
+              <article key={work.slug}>
+                <p className="writing-meta">{literary.genres[work.kind as keyof typeof literary.genres]} · {work.date.slice(0, 4)}</p>
+                <h3 lang="hy"><a href={`${localeRoot}writings/#${work.slug}`}>{work.title}</a></h3>
+                <p>{work.descriptions[locale]}</p>
+              </article>
+            ))}
+          </div>
         </section>
 
         <section className="sources-section section-frame" id="sources" aria-labelledby="sources-title">
