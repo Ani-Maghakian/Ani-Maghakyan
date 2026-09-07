@@ -224,8 +224,8 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
                 <img
                   src={`${basePath}/ani-3180-web.jpg`}
                   alt={t.imageAlt}
-                  width="1200"
-                  height="1799"
+                  width="1366"
+                  height="2048"
                   fetchPriority="high"
                   decoding="async"
                 />
