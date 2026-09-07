@@ -832,13 +832,14 @@ body { font-family: var(--font-ui); }
 }
 .about-columns {
   display: grid;
+  background: var(--cine-black);
   grid-template-columns: repeat(3,minmax(0,1fr));
   gap: 0;
   margin-top: clamp(64px,7vw,104px);
   border-top: 1px solid var(--cine-line-dark);
   border-bottom: 1px solid var(--cine-line-dark);
 }
-.about-columns article { position: relative; min-width: 0; padding: 30px 30px 34px 0; }
+.about-columns article { position: relative; min-width: 0; padding: 30px 30px 34px 0; background: var(--cine-black); }
 .about-columns article + article { padding-left: 30px; border-left: 1px solid var(--cine-line-dark); }
 .column-number {
   color: var(--cine-brass);

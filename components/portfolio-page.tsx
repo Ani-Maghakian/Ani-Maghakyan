@@ -11,7 +11,7 @@ import {
 } from "@/lib/content";
 import { basePath } from "@/lib/seo";
 import { interfaceCopy, sectionLinks, resultLabel, publicContactEmail } from "@/lib/site-copy.mjs";
-import { originalProjectPosters } from "@/lib/project-posters.mjs";
+import { originalProjectPosters, posterPreviews, posterSrcSet } from "@/lib/project-posters.mjs";
 import { writings, writingCopy } from "@/lib/writings.mjs";
 
 type Filter = "all" | ProjectKind;
@@ -268,10 +268,10 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
                 <article className={`featured-card tone-${(index % 4) + 1}`} key={project.id}>
                   {posterSrc && (
                     <a className="featured-poster-link" href={internalHref} data-track="view_project" data-project={project.seoSlug} aria-label={`${ui.details}: ${project.title[locale]}`}>
-                      <span className="featured-poster-backdrop" aria-hidden="true" style={{ backgroundImage: `url("${posterSrc}")` }} />
+                      <span className="featured-poster-backdrop" aria-hidden="true" style={{ backgroundImage: `url("${originalPoster ? posterSource(posterPreviews(project.seoSlug)[0].src) : posterSrc}")` }} />
                       <span className="poster-fallback" aria-hidden="true">{project.title[locale]}</span>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img className="featured-poster" src={posterSrc} alt={`${project.title[locale]} — ${project.year}`} loading="lazy" decoding="async" width={originalPoster?.width ?? 640} height={originalPoster?.height ?? 400} />
+                      <img className="featured-poster" src={posterSrc} srcSet={originalPoster ? posterSrcSet(project.seoSlug, basePath) : undefined} sizes={originalPoster ? "(max-width: 680px) calc(100vw - 28px), 50vw" : undefined} alt={`${project.title[locale]} — ${project.year}`} loading="lazy" decoding="async" width={originalPoster?.width ?? 640} height={originalPoster?.height ?? 400} />
                       <span className="featured-play" aria-hidden="true">↗</span>
                     </a>
                   )}

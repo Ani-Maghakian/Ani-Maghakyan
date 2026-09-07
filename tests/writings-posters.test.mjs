@@ -4,7 +4,7 @@ import { resolve } from 'node:path';
 import test from 'node:test';
 import { localizedPath } from '../scripts/seo-page-data.mjs';
 import { writings } from '../lib/writings.mjs';
-import { originalProjectPosters } from '../lib/project-posters.mjs';
+import { originalProjectPosters, posterPreviews } from '../lib/project-posters.mjs';
 
 const root = resolve('dist/client');
 const codes = ['hy', 'en', 'ru'];
@@ -39,12 +39,18 @@ test('all six original posters are complete files and appear on all localized pr
   const sizes = { 'se-la-vi': 1034572, 'life-after-war': 182934, 'mi-gexecik-or': 107501, blockade: 890168, 'mtmtik-prptik': 666511, 'dear-sahmi': 652988 };
   for (const [slug, poster] of Object.entries(originalProjectPosters)) {
     assert.equal((await stat(resolve(root, poster.src.slice(1)))).size, sizes[slug]);
+    for (const preview of posterPreviews(slug)) {
+      const data = await readFile(resolve(root, preview.src.slice(1)));
+      assert.equal(data.toString('ascii', 8, 12), 'WEBP');
+      assert.ok(data.length < sizes[slug], `${slug} preview should reduce transfer size`);
+    }
     for (const code of codes) {
       const html = await readPage(code, `projects/${slug}`);
       const img = [...html.matchAll(/<img\b[^>]*>/g)].find(([tag]) => tag.includes(poster.src))?.[0];
       assert.ok(img, `${code}/${slug} original image`);
       assert.ok(img.includes(`width="${poster.width}"`));
       assert.ok(img.includes(`height="${poster.height}"`));
+      for (const preview of posterPreviews(slug)) assert.ok(img.includes(`${preview.src} ${preview.width}w`));
       assert.match(html, /<figcaption><a href="[^"]+original\.(jpg|png)"/);
       assert.ok(graph(html).find((node) => node['@id']?.endsWith('#work')).image.endsWith(poster.src));
     }

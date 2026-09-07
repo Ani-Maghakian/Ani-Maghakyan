@@ -5,7 +5,7 @@ import { interfaceCopy, sectionLinks, publicContactEmail } from '../lib/site-cop
 import { copy, siteLinks, sourceLinks } from '../lib/profile-content.mjs';
 import { books, bookSchema } from '../lib/books.mjs';
 import { projectStories, projectSummary, relatedProjects } from '../lib/project-editorial.mjs';
-import { originalProjectPosters } from '../lib/project-posters.mjs';
+import { originalProjectPosters, posterSrcSet } from '../lib/project-posters.mjs';
 import { writings, writingCopy, writingBlogUrl, writingDate } from '../lib/writings.mjs';
 
 const [owner = '', repositoryName = ''] = (process.env.GITHUB_REPOSITORY ?? '').split('/');
@@ -104,6 +104,8 @@ function projectPage(project, locale) {
   const seoTitle = `${title} (${project.year}) — ${copy[locale].title}`;
   const crumbs = breadcrumbs(locale, title, tail, true);
   const image = projectImage(project);
+  const originalPoster = originalProjectPosters[project.slug];
+  const responsivePoster = originalPoster ? ` srcset="${esc(posterSrcSet(project.slug, basePath))}" sizes="(max-width: 760px) min(calc(100vw - 32px), ${(62 * originalPoster.width / originalPoster.height).toFixed(2)}svh), (max-width: 1200px) 40vw, 480px" fetchpriority="high"` : '';
   const { parts, related } = relatedProjects(project, projects);
   const isDiary = project.slug === 'elens-diary';
   const isDiary2 = project.slug === 'elens-diary-2';
@@ -133,7 +135,7 @@ function projectPage(project, locale) {
   ];
   const watch = project.watchUrl ? `<a data-track="watch_project" data-project="${project.slug}" href="${esc(project.watchUrl)}" target="_blank" rel="noopener noreferrer">${esc(locales[locale].watchLabel)} ↗</a>` : '';
   const body = `<main id="main-content">${crumbs.html}<section class="hero"><div><p class="kicker">${esc(format)} · ${esc(project.year)}</p><h1>${esc(title)}</h1><p class="dek">${esc(description)}</p><div class="cta">${watch}<a class="secondary" href="${esc(pageHref(locale, 'work-with-ani'))}">${esc(ui.collaborate)} →</a></div><p class="aliases">${esc(uniqueTitles(project).join(' · '))}</p></div>
-<figure class="hero-media${originalProjectPosters[project.slug] ? ' original-poster' : ''}"><span class="media-fallback" aria-hidden="true">${esc(title)}</span><img src="${esc(projectMediaSrc(project))}" alt="${esc(`${title} — ${project.year}`)}" width="${originalProjectPosters[project.slug]?.width ?? 640}" height="${originalProjectPosters[project.slug]?.height ?? 400}" loading="eager" decoding="async">${originalProjectPosters[project.slug] ? `<figcaption><a href="${esc(projectMediaSrc(project))}" target="_blank" rel="noopener noreferrer">${esc({hy:'Պաստառը՝ ամբողջ չափով',en:'View the full poster',ru:'Открыть афишу в полном размере'}[locale])} ↗</a></figcaption>` : ''}</figure></section>
+<figure class="hero-media${originalProjectPosters[project.slug] ? ' original-poster' : ''}"><span class="media-fallback" aria-hidden="true">${esc(title)}</span><img src="${esc(projectMediaSrc(project))}"${responsivePoster} alt="${esc(`${title} — ${project.year}`)}" width="${originalProjectPosters[project.slug]?.width ?? 640}" height="${originalProjectPosters[project.slug]?.height ?? 400}" loading="eager" decoding="async">${originalProjectPosters[project.slug] ? `<figcaption><a href="${esc(projectMediaSrc(project))}" target="_blank" rel="noopener noreferrer">${esc({hy:'Պաստառը՝ ամբողջ չափով',en:'View the full poster',ru:'Открыть афишу в полном размере'}[locale])} ↗</a></figcaption>` : ''}</figure></section>
 <section class="content"><article class="prose"><h2>${esc(ui.details)}</h2><dl class="meta">${facts.map(([label,value]) => `<div><dt>${esc(label)}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl>
 ${isDiary ? `<p id="season-1" class="credit-note">${esc({hy:'1-ին եթերաշրջան՝ 197 սերիա։ 2-րդ եթերաշրջան՝ 224 սերիա։ Ընդամենը՝ 421 սերիա՝ ըստ հեղինակային ֆիլմագրության։',en:'Season 1: 197 episodes. Season 2: 224 episodes. Total: 421 episodes in the author filmography.',ru:'Сезон 1 — 197 серий. Сезон 2 — 224 серии. Всего — 421 серия по авторской фильмографии.'}[locale])}</p>` : ''}
 ${story?.note ? `<p class="credit-note">${esc(story.note[locale])}</p>` : ''}
