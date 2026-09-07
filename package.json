@@ -8,7 +8,7 @@
   "scripts": {
     "install:ci": "bash scripts/install-ci.sh",
     "dev": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vite",
-    "build": "bash scripts/build-verified.sh && node scripts/generate-static-seo.mjs && node scripts/generate-seo-pages.mjs && node scripts/generate-service-seo.mjs && node scripts/optimize-export.mjs",
+    "build": "node scripts/generate-poster-previews.mjs && bash scripts/build-verified.sh && node scripts/generate-static-seo.mjs && node scripts/generate-seo-pages.mjs && node scripts/generate-service-seo.mjs && node scripts/optimize-export.mjs",
     "start": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext start",
     "test": "SITE_BASE_PATH= SITE_URL=https://example.com npm run build && node --test tests/*.test.mjs",
     "lint": "bash scripts/sites-env.sh -- eslint . --ignore-pattern dist --ignore-pattern .next --max-warnings=0"
@@ -34,6 +34,7 @@
     "eslint": "9.39.4",
     "eslint-config-next": "16.2.6",
     "react-server-dom-webpack": "19.2.6",
+    "sharp": "0.34.5",
     "tailwindcss": "4.2.1",
     "tw-animate-css": "^1.4.0",
     "typescript": "5.9.3",

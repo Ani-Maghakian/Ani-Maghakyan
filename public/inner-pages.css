@@ -96,4 +96,16 @@ h1{font-size:clamp(2.6rem,5vw,5.25rem);line-height:1.15;letter-spacing:-.035em;o
 .dek,.meta dd{font-size:1rem;line-height:1.65}
 .hero-media:has(img[hidden]){min-height:220px;aspect-ratio:16/10}
 .hero-media:has(img[hidden]) .media-fallback{position:relative;min-height:220px}
+.hero-media.original-poster img{width:100%;height:auto;max-height:760px;object-fit:contain}
+.original-poster figcaption{position:relative;padding:10px 16px;background:#111;color:#f5f0e7;font-size:.875rem}
+.original-poster figcaption a{display:inline-flex;align-items:center;min-height:44px}
+.writing-entry{padding:0 0 36px;margin:0 0 36px;border-bottom:1px solid var(--line);scroll-margin-top:32px}
+.writing-entry h2{margin:14px 0 22px;font-size:clamp(1.6rem,3vw,2.2rem)}
+.writing-entry blockquote{margin:0 0 24px;padding:4px 0 4px 22px;border-left:2px solid #78613e;font-family:var(--serif);font-size:1.35rem;line-height:1.65}
+.writing-entry blockquote p{margin:0}
+.writing-read{display:inline-flex;align-items:center;gap:10px;min-height:44px;margin-top:8px;font-size:.9375rem}
+.writing-aside{padding:24px;background:#e8e0d4;color:#171713;border-top:2px solid #78613e}
+.writing-aside .kicker{color:#695332}
+.writing-aside a{display:flex;align-items:center;min-height:44px;margin-top:12px}
+@media(max-width:760px){.hero-media.original-poster img{max-height:62svh}.writing-entry{padding-bottom:28px;margin-bottom:28px}}
 @media(max-width:760px){h1{font-size:clamp(2rem,8.5vw,3.4rem);line-height:1.18}.brand{font-size:.75rem}.hero-media{width:100%;margin-inline:0}.languages a{min-height:44px}.mobile-menu nav{z-index:10}}

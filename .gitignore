@@ -41,3 +41,6 @@ next-env.d.ts
 /.sites-runtime/
 /outputs/
 /work/
+
+# Recreated from the supplied originals by the build.
+/public/posters/*-display-*.webp

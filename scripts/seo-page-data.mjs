@@ -1,4 +1,5 @@
 export { updatedIso } from "../lib/site-copy.mjs";
+import { writingHub } from '../lib/writings.mjs';
 
 export const locales = {
   "hy": {
@@ -2632,6 +2633,7 @@ export const projects = [
 ];
 
 export const hubs = [
+  writingHub,
   {
     "slug": "projects",
     "titles": {
