@@ -1,16 +1,4 @@
-/* Production visual QA override — real retina portrait + iOS-first composition. */
-.hero-art-crop {
-  background-color: #080807;
-  background-image: var(--hero-retina-image);
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: 50% 0;
-}
-.hero-art-crop picture { background: transparent !important; }
-.hero-art-crop img {
-  opacity: 0 !important;
-  visibility: hidden !important;
-}
+/* Original IMG_3180 portrait with the iOS-first composition. */
 
 @media (max-width: 680px) {
   .site-header {
@@ -79,7 +67,7 @@
     height: 100%;
     overflow: hidden;
   }
-  .hero-art-crop { background-position: 50% 14%; }
+  .hero-art-crop img { object-position: 50% 14%; }
   .hero-art-crop::before { display: none !important; }
   .hero-art-crop::after {
     position: absolute;
