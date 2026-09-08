@@ -106,7 +106,8 @@ test('service fragments preserve GitHub Pages base paths and reject stale servic
 
 test('all sitemap pages have reciprocal, same-intent language alternates and unique metadata', async () => {
   const xml = await readFile(resolve(root, 'sitemap.xml'), 'utf8');
-  const urls = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
+  // URL hosts are case-insensitive; paths retain their case and full identity.
+  const urls = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => new URL(match[1]).href);
   const base = new URL(urls[0]);
   const titles = new Set();
   const descriptions = new Set();
@@ -123,8 +124,12 @@ test('all sitemap pages have reciprocal, same-intent language alternates and uni
     const tail = relative.replace(/^(?:en|ru)\//, '').replace(/\/$/, '');
     const expected = Object.keys(locales).map((locale) => [locales[locale].lang, `${base.href}${localizedPath(locale, tail)}${tail || locale !== 'hy' ? '/' : ''}`]);
     expected.push(['x-default', expected[0][1]]);
+    const alternates = [...html.matchAll(/<link\b[^>]*hreflang="([^"]+)"[^>]*href="([^"]+)"[^>]*>/g)]
+      .map((match) => [match[1], new URL(match[2]).href]);
+    assert.equal(alternates.length, expected.length, `${url}: complete language alternate set`);
+    const targets = new Map(alternates);
     for (const [language, target] of expected) {
-      assert.ok(html.includes(`hreflang="${language}" href="${target}"`), `${url}: ${language} must link to same intent`);
+      assert.equal(targets.get(language), target, `${url}: ${language} must link to same intent`);
       assert.ok(urls.includes(target), `${url}: alternate must be indexable`);
     }
   }
