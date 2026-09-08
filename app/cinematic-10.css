@@ -1421,3 +1421,18 @@ body { font-family: var(--font-ui); }
   .scroll-progress { display: none; }
   .featured-poster { animation: none !important; transform: none !important; }
 }
+
+/* Crawlable service choices beside the inquiry action. */
+.contact-services {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px 24px;
+  margin: 24px auto;
+  max-width: 820px;
+}
+.contact-services a {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  font-size: 1rem;
+}

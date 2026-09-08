@@ -7,6 +7,8 @@ import { books, bookSchema } from '../lib/books.mjs';
 import { projectStories, projectSummary, relatedProjects } from '../lib/project-editorial.mjs';
 import { originalProjectPosters, posterSrcSet } from '../lib/project-posters.mjs';
 import { writings, writingCopy, writingBlogUrl, writingDate } from '../lib/writings.mjs';
+import { services } from '../lib/services.mjs';
+import { serviceLinks, inquiryBrief } from './service-fragments.mjs';
 
 const [owner = '', repositoryName = ''] = (process.env.GITHUB_REPOSITORY ?? '').split('/');
 const isUserOrOrgSite = Boolean(owner) && repositoryName === `${owner}.github.io`;
@@ -142,6 +144,7 @@ ${story?.note ? `<p class="credit-note">${esc(story.note[locale])}</p>` : ''}
 ${story ? `<p class="source-ref"><a href="${esc(story.source.url)}" target="_blank" rel="noopener noreferrer">${esc(story.source.label)} ↗</a></p>` : ''}
 ${parts.length ? `<section class="related"><h2>${esc(ui.season)}</h2>${cardGrid(parts, locale)}</section>` : ''}
 ${related.length ? `<section class="related"><h2>${esc(ui.related)}</h2>${cardGrid(related, locale)}</section>` : ''}
+${serviceLinks(locale, basePath, services.filter((service) => service.related.includes(project.slug)).map((service) => service.slug))}
 <div class="cta"><a class="secondary" href="${esc(pageHref(locale))}#filmography">${esc(locales[locale].backLabel)} →</a></div></article>${sourceList(locale, sourceItems)}</section></main>`;
   return layout({ locale, tail, seoTitle, description, body, nodes, image });
 }
@@ -191,7 +194,7 @@ function hubPage(hub, locale) {
     nodes[0].mainEntity = {'@id':`${canonical}#articles`};
     sources = [{label:'IMDb',url:siteLinks.imdb},{label:'KinoPoisk',url:siteLinks.kinopoisk},{label:'elCinema',url:siteLinks.elcinema}];
   } else {
-    article = `<h2>${esc(t.practiceTitle)}</h2><ul>${t.practice.map((item) => `<li>${esc(item)}</li>`).join('')}</ul><h2>${esc(ui.collaborate)}</h2><p>${esc(ui.contactHint)}</p>${contactCta(locale)}<section class="related"><h2>${esc(t.selectedTitle)}</h2>${cardGrid(projects.filter((p) => ['elens-diary','summer-of-84','paper-dream'].includes(p.slug)),locale)}</section>`;
+    article = `<h2>${esc(t.practiceTitle)}</h2><ul>${t.practice.map((item) => `<li>${esc(item)}</li>`).join('')}</ul>${serviceLinks(locale, basePath, services.map((service) => service.slug))}${inquiryBrief(locale)}${contactCta(locale)}<section class="related"><h2>${esc(t.selectedTitle)}</h2>${cardGrid(projects.filter((p) => ['elens-diary','summer-of-84','paper-dream'].includes(p.slug)),locale)}</section>`;
   }
   const sidebar = tail === 'writings' ? `<aside class="writing-aside"><p class="kicker">${esc(writingCopy[locale].kicker)}</p><p>${esc(writingCopy[locale].intro)}</p><p>${esc(writingCopy[locale].language)}</p><a href="${writingBlogUrl}" target="_blank" rel="noopener noreferrer">${esc(writingCopy[locale].all)} ↗</a><a href="${esc(pageHref(locale, 'books'))}">${esc(sectionLabel(locale, 'books'))} →</a></aside>` : sourceList(locale, sources);
   const content = tail === 'projects' ? `<section class="index-content">${article}</section>` : `<section class="content"><div class="prose">${article}</div>${sidebar}</section>`;
