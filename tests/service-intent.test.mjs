@@ -53,6 +53,9 @@ test('every service is directly discoverable from home and contact and links to 
         assert.ok(project.includes(`${servicePath}"`), `Reciprocal project link: ${locale}/${slug}`);
         assert.ok(main(html).includes(`${localizedPath(locale, `projects/${slug}`)}/"`));
       }
+      if (service.related.includes('elens-diary')) {
+        assert.ok(main(html).includes({ hy: '2 եթերաշրջան · 421 սերիա', en: '2 seasons · 421 episodes', ru: '2 сезона · 421 серия' }[locale]));
+      }
       assert.ok(service.next.length > 0);
       for (const slug of service.next) {
         assert.notEqual(slug, service.slug);

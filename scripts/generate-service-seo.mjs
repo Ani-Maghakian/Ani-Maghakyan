@@ -112,7 +112,13 @@ function projectCards(service, locale) {
     en: 'Relevant work',
     ru: 'Связанные работы',
   };
-  return `<section class="related"><h2>${esc(labels[locale])}</h2><div class="related-grid">${selected.map((project) => `<a data-track="view_project" data-project="${esc(project.slug)}" href="${esc(pageHref(locale, `projects/${project.slug}`))}"><strong>${esc(project.titles[locale])}</strong><small>${esc(project.year)} · ${esc(project.credit[locale])}</small></a>`).join('')}</div></section>`;
+  return `<section class="related"><h2>${esc(labels[locale])}</h2><div class="related-grid">${selected.map((project) => {
+    // This link opens the complete series, not just the first season.
+    const scope = project.slug === 'elens-diary'
+      ? { hy: '2 եթերաշրջան · 421 սերիա', en: '2 seasons · 421 episodes', ru: '2 сезона · 421 серия' }[locale]
+      : project.credit[locale];
+    return `<a data-track="view_project" data-project="${esc(project.slug)}" href="${esc(pageHref(locale, `projects/${project.slug}`))}"><strong>${esc(project.titles[locale])}</strong><small>${esc(project.year)} · ${esc(scope)}</small></a>`;
+  }).join('')}</div></section>`;
 }
 
 function faqSection(service, locale, canonical) {
