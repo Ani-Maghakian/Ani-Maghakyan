@@ -13,6 +13,7 @@ import { basePath } from "@/lib/seo";
 import { interfaceCopy, sectionLinks, resultLabel, publicContactEmail } from "@/lib/site-copy.mjs";
 import { originalProjectPosters, posterPreviews, posterSrcSet } from "@/lib/project-posters.mjs";
 import { writings, writingCopy } from "@/lib/writings.mjs";
+import { services } from "@/lib/services.mjs";
 
 type Filter = "all" | ProjectKind;
 
@@ -401,7 +402,9 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
         </section>
 
         <section className="contact-section section-frame" id="contact" aria-labelledby="contact-title">
-          <p className="eyebrow">{t.contactKicker}</p><h2 id="contact-title">{t.contactTitle}</h2><p>{t.contactText}</p><p className="contact-hint">{ui.contactHint}</p>
+          <p className="eyebrow">{t.contactKicker}</p><h2 id="contact-title">{t.contactTitle}</h2><p>{t.contactText}</p>
+          <nav className="contact-services" aria-label={sectionLinks.find((item) => item.slug === "services")?.labels[locale]}>{services.map((service) => <a key={service.slug} data-track="view_service" data-service={service.slug} href={`${localeRoot}services/${service.slug}/`}>{service.names[locale]}</a>)}</nav>
+          <p className="contact-hint">{ui.contactHint}</p>
           <div className="contact-actions">
             {contactEmail && <a className="contact-button" data-track="contact_email" href={`mailto:${contactEmail}`}>{ui.email}<span aria-hidden="true">↗</span></a>}
             <a className={contactEmail ? "secondary-action" : "contact-button"} data-track="contact_instagram" href={siteLinks.instagram} target="_blank" rel="noopener noreferrer">{ui.instagram}<span aria-hidden="true">↗</span></a>

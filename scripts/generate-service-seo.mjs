@@ -1,9 +1,10 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { projects, locales, localizedPath, updatedIso } from './seo-page-data.mjs';
-import { serviceHub, services } from '../lib/services.mjs';
+import { serviceHub, services, serviceCopy } from '../lib/services.mjs';
 import { interfaceCopy, publicContactEmail, sectionLinks } from '../lib/site-copy.mjs';
 import { siteLinks } from '../lib/profile-content.mjs';
+import { serviceLinks, inquiryBrief } from './service-fragments.mjs';
 
 const [owner = '', repositoryName = ''] = (process.env.GITHUB_REPOSITORY ?? '').split('/');
 const isUserOrOrgSite = Boolean(owner) && repositoryName === `${owner}.github.io`;
@@ -111,7 +112,13 @@ function projectCards(service, locale) {
     en: 'Relevant work',
     ru: 'Связанные работы',
   };
-  return `<section class="related"><h2>${esc(labels[locale])}</h2><div class="related-grid">${selected.map((project) => `<a data-track="view_project" data-project="${esc(project.slug)}" href="${esc(pageHref(locale, `projects/${project.slug}`))}"><strong>${esc(project.titles[locale])}</strong><small>${esc(project.year)} · ${esc(project.credit[locale])}</small></a>`).join('')}</div></section>`;
+  return `<section class="related"><h2>${esc(labels[locale])}</h2><div class="related-grid">${selected.map((project) => {
+    // This link opens the complete series, not just the first season.
+    const scope = project.slug === 'elens-diary'
+      ? { hy: '2 եթերաշրջան · 421 սերիա', en: '2 seasons · 421 episodes', ru: '2 сезона · 421 серия' }[locale]
+      : project.credit[locale];
+    return `<a data-track="view_project" data-project="${esc(project.slug)}" href="${esc(pageHref(locale, `projects/${project.slug}`))}"><strong>${esc(project.titles[locale])}</strong><small>${esc(project.year)} · ${esc(scope)}</small></a>`;
+  }).join('')}</div></section>`;
 }
 
 function faqSection(service, locale, canonical) {
@@ -166,12 +173,12 @@ function servicePage(service, locale) {
   const crumbs = breadcrumbs(locale, service.names[locale], tail, true);
   const faq = faqSection(service, locale, canonical);
   const labels = {
-    hy: { kicker: 'Ծառայություն', discuss: 'Քննարկել այս աշխատանքի scope-ը' },
-    en: { kicker: 'Service', discuss: 'Discuss this scope' },
-    ru: { kicker: 'Услуга', discuss: 'Обсудить этот scope' },
+    hy: { kicker: 'Ծառայություն' },
+    en: { kicker: 'Service' },
+    ru: { kicker: 'Услуга' },
   }[locale];
   const sections = service.sections[locale].map(([heading, items]) => `<section class="prose"><h2>${esc(heading)}</h2><ul>${items.map((item) => `<li>${esc(item)}</li>`).join('')}</ul></section>`).join('');
-  const body = `<main id="main-content">${crumbs.html}<section class="hero single"><div><p class="kicker">${esc(labels.kicker)}</p><h1>${esc(service.names[locale])}</h1><p class="dek">${esc(service.descriptions[locale])}</p></div></section><section class="content"><div><article class="prose"><p>${esc(service.leads[locale])}</p></article>${sections}${projectCards(service, locale)}${faq.html}<section class="prose"><h2>${esc(labels.discuss)}</h2><p>${esc(interfaceCopy[locale].contactHint)}</p>${contactCta(locale)}</section></div></section></main>`;
+  const body = `<main id="main-content">${crumbs.html}<section class="hero single"><div><p class="kicker">${esc(labels.kicker)}</p><h1>${esc(service.headings[locale])}</h1><p class="dek">${esc(service.descriptions[locale])}</p><div class="cta"><a href="#project-brief">${esc(serviceCopy[locale].discuss)} →</a></div></div></section><section class="content"><div><article class="prose"><p>${esc(service.leads[locale])}</p></article>${sections}${projectCards(service, locale)}${serviceLinks(locale, basePath, service.next, "next")}${faq.html}<section class="prose" id="project-brief">${inquiryBrief(locale)}${contactCta(locale)}</section></div></section></main>`;
   const serviceId = `${canonical}#service`;
   const nodes = [
     {
@@ -181,7 +188,7 @@ function servicePage(service, locale) {
     },
     {
       '@type': 'Service', '@id': serviceId, name: service.names[locale], serviceType: service.names[locale],
-      description: service.descriptions[locale], url: canonical, provider: { '@id': personId },
+      description: service.descriptions[locale], url: canonical, mainEntityOfPage: { '@id': `${canonical}#page` }, provider: { '@id': personId },
       subjectOf: service.related.map((slug) => ({ '@type': 'CreativeWork', url: absoluteUrl(locale, `projects/${slug}`) })),
     },
     faq.node, personNode(), crumbs.node,

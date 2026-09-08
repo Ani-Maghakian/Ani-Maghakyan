@@ -62,7 +62,7 @@ test('service-intent pages expose visible copy, FAQ schema and one consistent pr
     assert.equal(hubNodes.find((node) => node['@type'] === 'ItemList').numberOfItems, services.length);
     for (const service of services) {
       const html = await readPage(code, `services/${service.slug}`);
-      assert.ok(html.includes(`<h1>${service.names[code]}</h1>`));
+      assert.ok(html.includes(`<h1>${service.headings[code]}</h1>`));
       assert.ok(html.includes(service.descriptions[code].replaceAll('&', '&amp;')));
       const nodes = graph(html);
       const serviceNode = nodes.find((node) => node['@type'] === 'Service');
