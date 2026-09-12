@@ -20,8 +20,8 @@ test('home navigation, project covers and book links are usable in exported HTML
     assert.match(html, /books\/#temporary-stop/);
     assert.match(html, /books\/#topsy-turvy/);
     assert.match(html, /services\//);
-    const covers = [...html.matchAll(/<a\b([^>]*class="featured-poster-link"[^>]*)>/g)];
-    assert.equal(covers.length, 11);
+    const covers = [...html.matchAll(/<a\b([^>]*class="featured-poster-link(?: featured-text-cover)?"[^>]*)>/g)];
+    assert.equal(covers.length, 12);
     for (const [, attributes] of covers) {
       assert.match(attributes, /href="[^"\s]*\/projects\/[a-z0-9-]+\/"/);
       assert.doesNotMatch(attributes, /target="_blank"/);

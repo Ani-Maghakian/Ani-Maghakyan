@@ -11,7 +11,7 @@ import {
 } from "@/lib/content";
 import { basePath } from "@/lib/seo";
 import { interfaceCopy, sectionLinks, resultLabel, publicContactEmail } from "@/lib/site-copy.mjs";
-import { originalProjectPosters, posterPreviews, posterSrcSet } from "@/lib/project-posters.mjs";
+import { originalProjectPosters, posterNotes, posterPreviews, posterSrcSet } from "@/lib/project-posters.mjs";
 import { writings, writingCopy } from "@/lib/writings.mjs";
 import { services } from "@/lib/services.mjs";
 
@@ -192,6 +192,14 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
         <details className="mobile-menu">
           <summary aria-label={ui.menu}><span aria-hidden="true">☰</span></summary>
           <nav aria-label={t.primaryNavLabel}>
+            <div className="mobile-language-options" role="group" aria-label={t.languageNavLabel}>
+              {(Object.keys(locales) as Locale[]).map((code) => (
+                <a key={code} href={`${basePath}${locales[code].href}`} hrefLang={locales[code].hrefLang}
+                  aria-label={locales[code].label} aria-current={code === locale ? "page" : undefined}>
+                  {locales[code].short}
+                </a>
+              ))}
+            </div>
             <a href="#selected">{t.nav.work}</a>
             <a href="#filmography">{t.nav.filmography}</a>
             <a href="#contact">{ui.collaborate}</a>
@@ -264,18 +272,27 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
             {featured.map((project, index) => {
               const internalHref = projectPageHref(locale, project.seoSlug) ?? `#project-${project.id}`;
               const originalPoster = originalProjectPosters[project.seoSlug as keyof typeof originalProjectPosters];
-              const posterSrc = posterSource(originalPoster?.src ?? project.poster);
+              const posterSrc = posterSource(originalPoster?.src ?? (project.featuredArtworkReady === false ? undefined : project.poster));
               return (
-                <article className={`featured-card tone-${(index % 4) + 1}`} key={project.id}>
+                <article className={`featured-card tone-${(index % 4) + 1}`} data-selected-project={project.seoSlug} key={project.id}>
                   {posterSrc && (
                     <a className="featured-poster-link" href={internalHref} data-track="view_project" data-project={project.seoSlug} aria-label={`${ui.details}: ${project.title[locale]}`}>
                       <span className="featured-poster-backdrop" aria-hidden="true" style={{ backgroundImage: `url("${originalPoster ? posterSource(posterPreviews(project.seoSlug)[0].src) : posterSrc}")` }} />
                       <span className="poster-fallback" aria-hidden="true">{project.title[locale]}</span>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img className="featured-poster" src={posterSrc} srcSet={originalPoster ? posterSrcSet(project.seoSlug, basePath) : undefined} sizes={originalPoster ? "(max-width: 680px) calc(100vw - 28px), 50vw" : undefined} alt={`${project.title[locale]} — ${project.year}`} loading="lazy" decoding="async" width={originalPoster?.width ?? 640} height={originalPoster?.height ?? 400} />
+                      <img className="featured-poster" src={posterSrc} srcSet={originalPoster ? posterSrcSet(project.seoSlug, basePath) : undefined} sizes={originalPoster ? "(max-width: 680px) calc(100vw - 28px), (max-width: 1100px) calc((100vw - 80px) / 2), 460px" : undefined} alt={`${project.title[locale]} — ${project.year}`} loading="lazy" decoding="async" width={originalPoster?.width ?? 640} height={originalPoster?.height ?? 400} />
                       <span className="featured-play" aria-hidden="true">↗</span>
                     </a>
                   )}
+                  {!posterSrc && (
+                    <a className="featured-poster-link featured-text-cover" href={internalHref} data-track="view_project" data-project={project.seoSlug} aria-label={`${ui.details}: ${project.title[locale]}`}>
+                      <span className="cover-kind">{t.filters[project.kind]}</span>
+                      <span className="cover-title">{project.title[locale]}</span>
+                      <span className="cover-year">{project.year}</span>
+                      <span className="featured-play" aria-hidden="true">↗</span>
+                    </a>
+                  )}
+                  {posterNotes[project.seoSlug as keyof typeof posterNotes] && <p className="poster-note">{posterNotes[project.seoSlug as keyof typeof posterNotes][locale]}</p>}
                   <div className="featured-meta"><span>{padded(index + 1)}</span><span>{project.year}</span></div>
                   <div className="featured-copy">
                     <h3><a className="project-title-link" data-track="view_project" data-project={project.seoSlug} href={internalHref}>{project.title[locale]}</a></h3>
@@ -377,10 +394,13 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
               <article key={work.slug}>
                 <p className="writing-meta">{literary.genres[work.kind as keyof typeof literary.genres]} · {work.date.slice(0, 4)}</p>
                 <h3 lang="hy"><a href={`${localeRoot}writings/#${work.slug}`}>{work.title}</a></h3>
+                <blockquote lang="hy" cite={work.source}>{work.excerpt}</blockquote>
                 <p>{work.descriptions[locale]}</p>
+                <a className="writing-read" href={`${localeRoot}writings/#${work.slug}`}>{literary.read}<span aria-hidden="true"> ↗</span></a>
               </article>
             ))}
           </div>
+          <p className="writing-attribution">{literary.source} · {literary.language}</p>
         </section>
 
         <section className="sources-section section-frame" id="sources" aria-labelledby="sources-title">

@@ -73,7 +73,7 @@ test("keeps the approved key-project selection and Summer of ’84 authorship", 
     "84-ի ամառը",
     "Բլոկադա",
     "Կհանդիպենք անտառի տնակում",
-    "Եթե ես կրկին պարեի",
+    "Եթե ես կրկին պարեմ",
     "Se.La.Vi",
     "Hotel Grand",
   ];

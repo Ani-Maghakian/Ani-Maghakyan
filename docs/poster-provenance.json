@@ -1,0 +1,91 @@
+[
+  {
+    "slug": "hotel-grand",
+    "src": "/posters/hotel-grand-original.jpg",
+    "width": 2598,
+    "height": 1299,
+    "source": "Portfolio(1).pdf",
+    "page": 2,
+    "bytes": 401230,
+    "sha256": "aaf9e918780c266f10d0079033074bf4608629418bab46829061afa5fab9628a"
+  },
+  {
+    "slug": "paper-dream",
+    "src": "/posters/paper-dream-original.jpg",
+    "width": 2598,
+    "height": 1299,
+    "source": "Portfolio(1).pdf",
+    "page": 4,
+    "bytes": 409312,
+    "sha256": "92f66cc237a965123df823e9f80c1f8059e5c3f9c2e19dad23976115cbeeb951"
+  },
+  {
+    "slug": "elens-diary",
+    "src": "/posters/elens-diary-original.jpg",
+    "width": 2598,
+    "height": 1299,
+    "source": "Portfolio(1).pdf",
+    "page": 8,
+    "bytes": 448782,
+    "sha256": "1296e2b195d943726d822d188714852fdf2d2eb8f408af4c6400edbafdd26afe"
+  },
+  {
+    "slug": "special-class",
+    "src": "/posters/special-class-original.jpg",
+    "width": 2598,
+    "height": 1299,
+    "source": "Portfolio(1).pdf",
+    "page": 22,
+    "bytes": 360240,
+    "sha256": "832b1d1d06d0827307abd756d1c754009ee59eaf85abcd9a92e50c56a4867ac1"
+  },
+  {
+    "slug": "forest-cottage",
+    "src": "/posters/forest-cottage-original.jpg",
+    "width": 2598,
+    "height": 1299,
+    "source": "Portfolio(1).pdf",
+    "page": 24,
+    "bytes": 493099,
+    "sha256": "85a9134305a2ed89bab5539fa0fd97351ac98e3aa70c1eef8bcdb4b4841d111f"
+  },
+  {
+    "slug": "summer-of-84",
+    "src": "/posters/summer-of-84-original.png",
+    "width": 751,
+    "height": 1001,
+    "source": "portfolio1.pdf",
+    "page": 2,
+    "bytes": 944097,
+    "sha256": "987efcf322b4af26636e592415557c79d1da5acd6f0e2e43f21c38ef7d1df7a1"
+  },
+  {
+    "slug": "if-i-danced-again",
+    "src": "/posters/if-i-danced-again-original.jpg",
+    "width": 1170,
+    "height": 728,
+    "source": "portfolio1.pdf",
+    "page": 20,
+    "bytes": 220997,
+    "sha256": "07ea8620d13dfa7abf6ab0d83a0797064a0193eb87ea9e7c7b7a32c5421518db"
+  },
+  {
+    "slug": "addiction",
+    "src": "/posters/addiction-original.jpg",
+    "width": 1280,
+    "height": 719,
+    "source": "Portfolio.pdf",
+    "page": 9,
+    "bytes": 100967,
+    "sha256": "6bb1f721a57df2ab669d0d92844392bb45f37f2c13b0225889c07b4ba6e15cd8"
+  },
+  {
+    "slug": "white-shirt",
+    "src": "/posters/white-shirt-original.jpg",
+    "width": 2048,
+    "height": 1152,
+    "source": "01-IMG_5374.jpeg",
+    "bytes": 503280,
+    "sha256": "1f2af458f7813aaebdf76a67a03082b2a6296fcf5a37ea151d855032b448f198"
+  }
+]

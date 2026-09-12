@@ -24,7 +24,6 @@ const homeInteractionSrc = `${basePath}/home-interactions.js`.replace(/\/\/+/, '
 
 const homeQualityStyle = `<style id="homepage-quality-overrides">
 .format-mark{color:#5f5b54!important;font-weight:650!important}
-.featured-card:nth-child(7) .format-mark{color:#c8c1b6!important}
 .archive-section .section-heading>div>p{color:#504b43!important}
 .faq-section .section-heading .eyebrow,.faq-list summary>span{color:#634b27!important}
 .archive-section,.archive-controls,.filmography-table-wrap,.filmography-table,.filmography-table tbody,.filmography-table tbody tr{background:var(--cine-paper,#e8e0d4)!important}
