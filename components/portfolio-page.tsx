@@ -192,6 +192,14 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
         <details className="mobile-menu">
           <summary aria-label={ui.menu}><span aria-hidden="true">☰</span></summary>
           <nav aria-label={t.primaryNavLabel}>
+            <div className="mobile-language-options" role="group" aria-label={t.languageNavLabel}>
+              {(Object.keys(locales) as Locale[]).map((code) => (
+                <a key={code} href={`${basePath}${locales[code].href}`} hrefLang={locales[code].hrefLang}
+                  aria-label={locales[code].label} aria-current={code === locale ? "page" : undefined}>
+                  {locales[code].short}
+                </a>
+              ))}
+            </div>
             <a href="#selected">{t.nav.work}</a>
             <a href="#filmography">{t.nav.filmography}</a>
             <a href="#contact">{ui.collaborate}</a>

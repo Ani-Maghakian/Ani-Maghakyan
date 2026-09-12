@@ -13,10 +13,8 @@
     border: 0;
     border-bottom: 1px solid rgba(243,239,230,.16);
     border-radius: 0;
-    background: #080807;
-    box-shadow: none;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
+    background: #11110f;
+    box-shadow: inset 0 1px 0 rgba(243,239,230,.08);
   }
   .wordmark { color: #f3efe6; font-size: .72rem; letter-spacing: .12em; }
   .wordmark span { color: #c0a570; }
@@ -159,6 +157,66 @@
   }
   .stats-strip { grid-template-columns: repeat(2, minmax(0,1fr)); }
   .stat { min-height: 112px; padding: 18px 20px; }
+}
+
+/* Keep the mobile header opaque so its dropdown can blur the page behind it. */
+@media (max-width: 680px) {
+  .site-header {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .mobile-menu[open] nav {
+    left: 12px;
+    right: 12px;
+    top: calc(100% + 8px);
+    max-height: calc(100dvh - 82px);
+    border: 1px solid rgba(243,239,230,.24);
+    border-radius: 16px;
+    background: #171713;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.10), 0 18px 48px rgba(0,0,0,.35);
+  }
+  .mobile-language-options {
+    display: flex;
+    gap: 8px;
+    padding: 0 0 12px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid rgba(243,239,230,.20);
+  }
+  .mobile-menu[open] nav .mobile-language-options a {
+    display: grid;
+    place-items: center;
+    min-width: 48px;
+    min-height: 44px;
+    padding: 8px 12px;
+    border: 1px solid rgba(243,239,230,.25);
+    border-radius: 8px;
+    font-size: .875rem;
+  }
+  .mobile-menu[open] nav .mobile-language-options a[aria-current="page"] {
+    color: #171713;
+    background: #f3efe6;
+  }
+  .mobile-menu summary:focus-visible,
+  .mobile-menu nav a:focus-visible {
+    outline: 2px solid #f3efe6;
+    outline-offset: 2px;
+  }
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .mobile-menu[open] nav {
+      background: rgba(17,17,15,.88);
+      -webkit-backdrop-filter: blur(20px) saturate(115%);
+      backdrop-filter: blur(20px) saturate(115%);
+    }
+  }
+}
+
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  .site-header,
+  .mobile-menu[open] nav {
+    background: #11110f;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
 }
 
 @media (max-width: 360px) {
