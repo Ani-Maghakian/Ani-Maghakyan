@@ -20,18 +20,22 @@
   const buttons = [...document.querySelectorAll('.filter-button[data-filter]')];
   const input = document.querySelector('.search-field input[type="search"]');
   const count = document.querySelector('.result-count');
+  const clear = document.querySelector('[data-clear-search]');
+  const empty = document.querySelector('[data-empty-state]');
   let active = 'all';
 
   const apply = () => {
     const q = (input?.value || '').trim().toLocaleLowerCase(language);
     let visible = 0;
     for (const row of rows) {
-      const text = (row.textContent || '').toLocaleLowerCase(language);
+      const text = (row.dataset.search || row.textContent || '').toLocaleLowerCase(language);
       const show = (active === 'all' || row.dataset.kind === active) && (!q || text.includes(q));
       row.hidden = !show;
       if (show) visible += 1;
     }
     if (count) count.textContent = label(visible);
+    if (empty) empty.hidden = visible !== 0;
+    if (clear) clear.hidden = !input?.value;
     for (const button of buttons) {
       const on = button.dataset.filter === active;
       button.dataset.active = String(on);
@@ -40,6 +44,12 @@
   };
 
   input?.addEventListener('input', apply, { passive: true });
+  clear?.addEventListener('click', () => {
+    if (!input) return;
+    input.value = '';
+    input.focus();
+    apply();
+  });
   for (const button of buttons) {
     button.addEventListener('click', () => {
       active = button.dataset.filter || 'all';
@@ -71,6 +81,13 @@
       event.currentTarget.querySelector('summary')?.focus();
     }
   });
+
+  document.querySelectorAll('.featured-poster').forEach((image) => {
+    const showFallback = () => { image.hidden = true; };
+    image.addEventListener('error', showFallback, { once: true });
+    if (image.complete && !image.naturalWidth) showFallback();
+  });
+  apply();
 
   const grid = document.getElementById('featured-projects');
   document.querySelectorAll('.featured-scroll-controls button').forEach((button, index) => {

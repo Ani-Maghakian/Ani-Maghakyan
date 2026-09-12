@@ -22,8 +22,8 @@
   .language-nav { display: none !important; }
   .mobile-menu { display: block; justify-self: end; }
   .mobile-menu summary {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     border: 0;
     color: #f3efe6;
     background: transparent;
@@ -109,10 +109,11 @@
     margin: 0;
     color: #f3efe6;
     font-size: clamp(2.15rem, 9.4vw, 2.8rem);
-    line-height: .98;
-    letter-spacing: -.04em;
-    white-space: nowrap;
-    text-wrap: nowrap;
+    line-height: 1.2;
+    letter-spacing: -.025em;
+    white-space: normal;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
     text-shadow: none;
   }
   .hero h1::after {
@@ -127,7 +128,7 @@
     max-width: 100%;
     margin: 12px 0 0;
     color: rgba(243,239,230,.84);
-    font-size: .82rem;
+    font-size: .875rem;
     line-height: 1.45;
   }
   .hero-actions {
