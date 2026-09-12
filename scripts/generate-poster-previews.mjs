@@ -11,4 +11,4 @@ for (const [slug, original] of Object.entries(originalProjectPosters)) {
       .toFile(resolve('public', preview.src.slice(1)));
   }
 }
-console.log('Prepared responsive encodings for six original project posters.');
+console.log(`Prepared responsive encodings for ${Object.keys(originalProjectPosters).length} supplied project posters.`);

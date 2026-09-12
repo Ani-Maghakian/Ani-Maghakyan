@@ -8,19 +8,25 @@ This extends the glass-navigation proposal in PR #18. It is not a published rede
 
 The grid uses three columns on desktop, two on medium screens, and one on phones. Covers preserve the entire image using `object-fit: contain`. The previous seven-project CSS layout has been removed, including its seventh-card color override in the static exporter.
 
-## Artwork required before publication
+## Supplied artwork integrated
 
-| Requested project | Available material | Action |
-| --- | --- | --- |
-| Սիրելի Սահմի | Owner-supplied `dear-sahmi-original.jpg`, 1920 × 1080 | Uses the original with responsive delivery encodings. |
-| Հատուկ դասարան | `hatuk-dasaran.webp` visibly says season 2 | Request the intended original; selected card uses text temporarily. |
-| Կհանդիպենք անտառի տնակում | `antarri-tnakum.webp` is a landscape title frame | Request the original poster; selected card uses text temporarily. |
-| Եթե ես կրկին պարեմ | External VHX/Armflix preview URL; no owner-supplied original | Request the original; selected card uses text temporarily. |
-| Ճերմակ շապիկ | No poster in repository | Request the original; selected card uses text temporarily. |
+All twelve selected projects now use owner-supplied local artwork. Nine image files were added from the new JPEG and three portfolio PDFs; the existing supplied Dear Sahmi, Blockade and Se.La.Vi originals are retained.
 
-Other selected projects: Blockade and Se.La.Vi have supplied originals. Elen's Diary and Paper Dream have existing local WebP artwork; Addiction, Summer of '84 and Hotel Grand use existing YouTube previews. These five existing images have not been authenticated as original poster files. If every selected project requires an original, obtain those five originals as well. Existing images are not relabeled as originals.
+| Project | Source |
+| --- | --- |
+| White Shirt | IMG_5374.jpeg, unchanged, 2048 × 1152 |
+| Hotel Grand | Portfolio(1).pdf, page 2; season 3 artwork, explicitly captioned |
+| Paper Dream | Portfolio(1).pdf, page 4 |
+| Elen’s Diary | Portfolio(1).pdf, page 8 |
+| Special Class | Portfolio(1).pdf, page 22; season 2 artwork, explicitly captioned |
+| Forest Cottage | Portfolio(1).pdf, page 24; supplied title artwork |
+| Summer of ’84 | portfolio1.pdf, page 2, 751 × 1001 |
+| If I Danced Again | portfolio1.pdf, page 20 |
+| Addiction | Portfolio.pdf, page 9 |
 
-`featuredArtworkReady: false` reserves a text cover without inventing art. Adding the correct supplied image to `originalProjectPosters` automatically takes precedence over that flag and supplies responsive encodings. No project is removed because artwork is missing.
+PDF image streams were extracted at their embedded resolution, without cropping, redrawing or upscaling. `docs/poster-provenance.json` records source pages, dimensions, byte sizes and SHA-256 hashes. These are the images supplied in the PDFs; an extracted image is not claimed to be a higher-resolution production master.
+
+Homepage cards and all three localized project pages use the same original-art registry and generated responsive WebP encodings. Original downloads stay available on project pages. No selected project uses an external thumbnail or text-only placeholder. Season-specific artwork has explicit localized captions. The PDFs' episode counts and historical dates do not overwrite existing project facts.
 
 ## Literary and mobile changes
 
@@ -33,4 +39,4 @@ Other selected projects: Blockade and Se.La.Vi have supplied originals. Elen's D
 
 Production export and 34 automated tests pass, including DOM interaction checks in HY / EN / RU. ESLint, TypeScript and diff checks are also run. DOM tests do not measure layout, font fit, contrast, touch behavior or Safari compatibility.
 
-The cloud browser refused localhost/project-preview navigation, and its URL policy rejected an offline preview. No alternate browser or policy workaround was used. Visual QA at narrow phone, tablet and desktop widths remains required before publication, along with the requested original posters. There is no claimed pixel-height reduction or live visual pass for this revision.
+The cloud browser refused localhost/project-preview navigation, and its URL policy rejected an offline preview. No alternate browser or policy workaround was used. Visual QA at narrow phone, tablet and desktop widths remains required before publication, The requested poster gap is resolved. There is no claimed pixel-height reduction or live visual pass for this revision.

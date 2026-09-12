@@ -1183,3 +1183,5 @@ body { font-family: var(--font-ui); }
   text-underline-offset: 4px;
   font-size: 1rem;
 }
+
+.poster-note { margin: 10px 0 0; font-size: .8125rem; line-height: 1.5; color: var(--cine-muted-light); }

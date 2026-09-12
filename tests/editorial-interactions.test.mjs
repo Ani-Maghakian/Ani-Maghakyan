@@ -2,10 +2,10 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import { JSDOM, VirtualConsole } from 'jsdom';
+import { originalProjectPosters } from '../lib/project-posters.mjs';
 import { writings } from '../lib/writings.mjs';
 
 const selected = ['elens-diary', 'paper-dream', 'dear-sahmi', 'special-class', 'addiction', 'summer-of-84', 'blockade', 'forest-cottage', 'if-i-danced-again', 'se-la-vi', 'hotel-grand', 'white-shirt'];
-const pendingArtwork = ['special-class', 'forest-cottage', 'if-i-danced-again', 'white-shirt'];
 const interaction = await readFile('public/home-interactions.js', 'utf8');
 
 for (const locale of ['hy', 'en', 'ru']) {
@@ -19,10 +19,11 @@ for (const locale of ['hy', 'en', 'ru']) {
     try {
       window.eval(interaction);
       assert.deepEqual([...doc.querySelectorAll('[data-selected-project]')].map((el) => el.dataset.selectedProject), selected);
-      for (const slug of pendingArtwork) {
+      for (const slug of selected) {
         const card = doc.querySelector(`[data-selected-project="${slug}"]`);
-        assert.ok(card.querySelector('.featured-text-cover'), `${slug} stays discoverable while awaiting an original`);
-        assert.equal(card.querySelector('img'), null, `${slug} must not substitute unrelated artwork`);
+        assert.equal(card.querySelector('.featured-text-cover'), null);
+        assert.equal(card.querySelector('img').getAttribute('src'), originalProjectPosters[slug].src);
+        assert.ok(card.querySelector('img').getAttribute('srcset'));
       }
       assert.ok(doc.querySelector('[data-selected-project="dear-sahmi"] img').getAttribute('src').includes('dear-sahmi-original.jpg'));
       const languageLinks = [...doc.querySelectorAll('.mobile-language-options a')];

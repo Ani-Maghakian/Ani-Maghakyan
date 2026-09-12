@@ -1,3 +1,5 @@
+import sharp from 'sharp';
+import { createHash } from 'node:crypto';
 import assert from 'node:assert/strict';
 import { readFile, stat } from 'node:fs/promises';
 import { resolve } from 'node:path';
@@ -35,9 +37,17 @@ test('literary previews preserve original attribution, dates and language in eve
   }
 });
 
-test('all six original posters are complete files and appear on all localized project pages', async () => {
+test('all supplied posters are complete files and appear on all localized project pages', async () => {
   const sizes = { 'se-la-vi': 1034572, 'life-after-war': 182934, 'mi-gexecik-or': 107501, blockade: 890168, 'mtmtik-prptik': 666511, 'dear-sahmi': 652988 };
+  const provenance = JSON.parse(await readFile('docs/poster-provenance.json', 'utf8'));
+  for (const item of provenance) sizes[item.slug] = item.bytes;
   for (const [slug, poster] of Object.entries(originalProjectPosters)) {
+    const originalBytes = await readFile(resolve(root, poster.src.slice(1)));
+    const record = provenance.find((item) => item.slug === slug);
+    if (record) assert.equal(createHash('sha256').update(originalBytes).digest('hex'), record.sha256);
+    const decoded = await sharp(originalBytes).raw().toBuffer({ resolveWithObject: true });
+    assert.equal(decoded.info.width, poster.width);
+    assert.equal(decoded.info.height, poster.height);
     assert.equal((await stat(resolve(root, poster.src.slice(1)))).size, sizes[slug]);
     for (const preview of posterPreviews(slug)) {
       const data = await readFile(resolve(root, preview.src.slice(1)));
@@ -51,7 +61,7 @@ test('all six original posters are complete files and appear on all localized pr
       assert.ok(img.includes(`width="${poster.width}"`));
       assert.ok(img.includes(`height="${poster.height}"`));
       for (const preview of posterPreviews(slug)) assert.ok(img.includes(`${preview.src} ${preview.width}w`));
-      assert.match(html, /<figcaption><a href="[^"]+original\.(jpg|png)"/);
+      assert.match(html, /<figcaption>.*?<a href="[^"]+original\.(jpg|png)"/);
       assert.ok(graph(html).find((node) => node['@id']?.endsWith('#work')).image.endsWith(poster.src));
     }
   }

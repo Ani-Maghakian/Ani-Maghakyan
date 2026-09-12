@@ -11,7 +11,7 @@ import {
 } from "@/lib/content";
 import { basePath } from "@/lib/seo";
 import { interfaceCopy, sectionLinks, resultLabel, publicContactEmail } from "@/lib/site-copy.mjs";
-import { originalProjectPosters, posterPreviews, posterSrcSet } from "@/lib/project-posters.mjs";
+import { originalProjectPosters, posterNotes, posterPreviews, posterSrcSet } from "@/lib/project-posters.mjs";
 import { writings, writingCopy } from "@/lib/writings.mjs";
 import { services } from "@/lib/services.mjs";
 
@@ -292,6 +292,7 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
                       <span className="featured-play" aria-hidden="true">↗</span>
                     </a>
                   )}
+                  {posterNotes[project.seoSlug as keyof typeof posterNotes] && <p className="poster-note">{posterNotes[project.seoSlug as keyof typeof posterNotes][locale]}</p>}
                   <div className="featured-meta"><span>{padded(index + 1)}</span><span>{project.year}</span></div>
                   <div className="featured-copy">
                     <h3><a className="project-title-link" data-track="view_project" data-project={project.seoSlug} href={internalHref}>{project.title[locale]}</a></h3>
