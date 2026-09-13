@@ -16,19 +16,21 @@ for (const locale of ['hy', 'en', 'ru']) {
     const dom = new JSDOM(html, { url: `https://example.com/${path}`, runScripts: 'outside-only', virtualConsole: new VirtualConsole() });
     const { window } = dom;
     const doc = window.document;
+    // The exported canonical retains the deployment prefix on GitHub Pages.
+    const basePath = new URL(doc.querySelector('link[rel="canonical"]').href).pathname.slice(0, -(path.length + 1));
     try {
       window.eval(interaction);
       assert.deepEqual([...doc.querySelectorAll('[data-selected-project]')].map((el) => el.dataset.selectedProject), selected);
       for (const slug of selected) {
         const card = doc.querySelector(`[data-selected-project="${slug}"]`);
         assert.equal(card.querySelector('.featured-text-cover'), null);
-        assert.equal(card.querySelector('img').getAttribute('src'), originalProjectPosters[slug].src);
+        assert.equal(card.querySelector('img').getAttribute('src'), `${basePath}${originalProjectPosters[slug].src}`);
         assert.ok(card.querySelector('img').getAttribute('srcset'));
       }
       assert.ok(doc.querySelector('[data-selected-project="dear-sahmi"] img').getAttribute('src').includes('dear-sahmi-original.jpg'));
       const languageLinks = [...doc.querySelectorAll('.mobile-language-options a')];
       assert.equal(languageLinks.length, 3);
-      assert.deepEqual(languageLinks.map((a) => new URL(a.href).pathname), ['/', '/en/', '/ru/']);
+      assert.deepEqual(languageLinks.map((a) => new URL(a.href).pathname), ['/', '/en/', '/ru/'].map((path) => `${basePath}${path}`));
       assert.equal(languageLinks.filter((a) => a.getAttribute('aria-current') === 'page').length, 1);
       assert.equal(languageLinks.find((a) => a.getAttribute('aria-current') === 'page').textContent, locale.toUpperCase());
       for (const work of [writings[0], writings[1], writings[4]]) {
