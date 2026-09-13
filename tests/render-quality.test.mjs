@@ -39,7 +39,9 @@ test('home locales ship static HTML without the React hydration runtime', async 
     const html = await read(path);
     assert.doesNotMatch(html, /<script[^>]+src=["'][^"']*\/assets\/[^"']+\.js/i);
     assert.doesNotMatch(html, /rel=["']modulepreload["'][^>]+\.js/i);
-    assert.match(html, /<script[^>]+src=["'][^"']*home-interactions\.js["'][^>]*\bdefer\b/i);
+    const interaction = html.match(/<script[^>]+src=["'][^"']*(home-interactions\.[a-f0-9]{12}\.js)["'][^>]*\bdefer\b/i);
+    assert.ok(interaction, 'interactive script URL changes when its contents change');
+    assert.equal(await readFile(resolve('dist/client', interaction[1]), 'utf8'), await readFile('public/home-interactions.js', 'utf8'));
     assert.match(html, /data-filter="all"/);
     assert.match(html, /data-filter="series"/);
     assert.match(html, /data-kind="series"/);

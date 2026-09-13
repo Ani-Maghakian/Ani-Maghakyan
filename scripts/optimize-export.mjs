@@ -1,5 +1,6 @@
 import { readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
+import { createHash } from 'node:crypto';
 import { projects } from './seo-page-data.mjs';
 
 const root = resolve('dist/client');
@@ -20,7 +21,11 @@ const inferredBasePath =
     ? `/${repositoryName}`
     : '';
 const basePath = process.env.SITE_BASE_PATH ?? inferredBasePath;
-const homeInteractionSrc = `${basePath}/home-interactions.js`.replace(/\/\/+/, '/');
+const interactionBytes = readFileSync('public/home-interactions.js');
+const interactionHash = createHash('sha256').update(interactionBytes).digest('hex').slice(0, 12);
+const interactionFilename = `home-interactions.${interactionHash}.js`;
+writeFileSync(join(root, interactionFilename), interactionBytes);
+const homeInteractionSrc = `${basePath}/${interactionFilename}`.replace(/\/\/+/, '/');
 
 const homeQualityStyle = `<style id="homepage-quality-overrides">
 .format-mark{color:#5f5b54!important;font-weight:650!important}
