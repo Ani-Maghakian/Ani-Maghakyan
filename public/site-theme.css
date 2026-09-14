@@ -55,3 +55,36 @@
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.site-header,.masthead{background:#20292de8}}
 
 .landscape-middle,.landscape-front{background-size:100% 100%;background-repeat:no-repeat}
+
+/* Liquid-glass controls: translucent body, reflected rim, readable symbols. */
+.featured-play,.project-watch-mini,.project-watch,.external-link,.writing-browse,.writing-read,.contact-button,.secondary-action:has(.ui-icon){
+  border:1px solid #ffffff38;
+  border-top-color:#ffffff80;
+  border-bottom-color:#ffffff24;
+  border-radius:999px;
+  background:linear-gradient(135deg,#ffffff24 0%,#ffffff06 45%,#ffffff12 100%),#18202542;
+  color:#fff5ef;
+  box-shadow:inset 0 1px 1px #ffffff38,inset 0 -1px 2px #ffffff12,0 4px 16px #00000020;
+  backdrop-filter:blur(12px) saturate(150%);
+  -webkit-backdrop-filter:blur(12px) saturate(150%);
+  text-decoration:none;
+  transition:background .2s,box-shadow .2s,transform .2s;
+}
+.project-watch,.external-link,.writing-browse,.writing-read{min-height:44px;padding:9px 14px;gap:10px;max-width:100%;}
+.featured-play,.project-watch-mini{width:44px;height:44px;min-width:44px;min-height:44px;flex-shrink:0;}
+.featured-play .ui-icon,.project-watch-mini .ui-icon{filter:drop-shadow(0 1px 2px #0009);}
+@media(hover:hover){
+  .featured-poster-link:hover .featured-play,.project-watch-mini:hover,.project-watch:hover,.external-link:hover,.writing-browse:hover,.writing-read:hover,.contact-button:hover,.secondary-action:has(.ui-icon):hover{
+    background:linear-gradient(135deg,#ffffff38,#ffffff0c 48%,#ffffff20),#18202555;
+    color:#fff;
+    box-shadow:inset 0 1px 2px #ffffff70,inset 0 -1px 2px #ffffff24,0 6px 20px #0003;
+    transform:translateY(-2px);
+  }
+}
+.project-watch-mini:active,.project-watch:active,.external-link:active,.writing-browse:active,.writing-read:active,.contact-button:active{transform:scale(.98);}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .featured-play,.project-watch-mini,.project-watch,.external-link,.writing-browse,.writing-read,.contact-button,.secondary-action:has(.ui-icon){background:#293338;}
+}
+@media(prefers-reduced-motion:reduce){
+  .featured-play,.project-watch-mini,.project-watch,.external-link,.writing-browse,.writing-read,.contact-button,.secondary-action:has(.ui-icon){transition:none;transform:none!important;}
+}
