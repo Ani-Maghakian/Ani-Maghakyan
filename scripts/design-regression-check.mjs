@@ -36,3 +36,42 @@ for (const height of [160, 389]) {
   w.close();
 }
 console.log(`Verified shared theme, motion script and local images on ${urls.length} pages; desktop/mobile parallax and reduced-motion behavior.`);
+
+// Verify reversibility and the live reduced-motion preference on non-home pages.
+{
+  const dom = new JSDOM('<main><h2>Հայերեն Русский English</h2><figure class="hero-media"><img alt="Original poster"></figure></main>', {runScripts:'outside-only'});
+  const w = dom.window;
+  let preferenceChanged;
+  const media = {matches:false,addEventListener(_event, callback){preferenceChanged=callback;}};
+  w.matchMedia = () => media;
+  w.ResizeObserver = class {observe(){}};
+  w.requestAnimationFrame = fn => fn();
+  Object.defineProperty(w,'innerHeight',{value:800});
+  const heading = w.document.querySelector('h2');
+  const poster = w.document.querySelector('img');
+  let top = 750;
+  heading.getBoundingClientRect = poster.getBoundingClientRect = () => ({top});
+  w.eval(readFileSync('public/design-interactions.js','utf8'));
+  const initial = Number(heading.style.getPropertyValue('--reveal'));
+  assert(initial < .1);
+  top = 500;
+  w.dispatchEvent(new w.Event('scroll'));
+  const middleProgress = Number(heading.style.getPropertyValue('--reveal'));
+  assert(middleProgress > initial && middleProgress < 1);
+  top = 300;
+  w.dispatchEvent(new w.Event('scroll'));
+  assert.equal(heading.style.getPropertyValue('--reveal'),'1.0000');
+  assert.equal(poster.style.getPropertyValue('--image-inset'),'0%');
+  assert.equal(poster.style.getPropertyValue('--image-scale'),'1');
+  top = 750;
+  w.dispatchEvent(new w.Event('scroll'));
+  assert.equal(Number(heading.style.getPropertyValue('--reveal')),initial);
+  media.matches = true;
+  preferenceChanged();
+  assert.equal(heading.style.getPropertyValue('--reveal'),'1.0000');
+  assert.equal(poster.style.getPropertyValue('--image-inset'),'0%');
+  assert.equal(w.document.documentElement.style.getPropertyValue('--bg'),'#101211');
+  assert.equal(heading.textContent,'Հայերեն Русский English');
+  w.close();
+}
+console.log('Verified progressive/reversible text and image reveals, intact multilingual text, full poster framing, and live reduced-motion reset on inner pages.');
