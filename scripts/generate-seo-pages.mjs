@@ -61,11 +61,11 @@ function projectMediaSrc(project) {
 }
 function uniqueTitles(project) { return [...new Set(Object.values(project.titles))]; }
 function cardGrid(items, locale, className = 'related-grid') {
-  return `<div class="${className}">${items.map((p) => `<a data-track="view_project" data-project="${esc(p.slug)}" href="${esc(pageHref(locale, `projects/${p.slug}`))}"><strong>${esc(p.titles[locale])}</strong><small>${esc(p.year)} · ${esc(p.slug === "elens-diary" ? {hy:"2 եթերաշրջան · 421 սերիա",en:"2 seasons · 421 episodes",ru:"2 сезона · 421 серия"}[locale] : p.credit[locale])}</small></a>`).join('')}</div>`;
+  return `<div class="${className}">${items.map((p) => `<a data-track="view_project" data-project="${esc(p.slug)}" href="${esc(pageHref(locale, `projects/${p.slug}`))}">${originalProjectPosters[p.slug] ? `<img class="catalog-poster" src="${esc(projectMediaSrc(p))}" srcset="${esc(posterSrcSet(p.slug, basePath))}" sizes="(max-width: 440px) 90vw, 320px" width="${originalProjectPosters[p.slug].width}" height="${originalProjectPosters[p.slug].height}" alt="${esc(p.titles[locale])}" loading="lazy" decoding="async">` : ''}<strong>${esc(p.titles[locale])}</strong><small>${esc(p.year)} · ${esc(p.slug === "elens-diary" ? {hy:"2 եթերաշրջան · 421 սերիա",en:"2 seasons · 421 episodes",ru:"2 сезона · 421 серия"}[locale] : p.credit[locale])}</small></a>`).join('')}</div>`;
 }
 function contactCta(locale) {
   const ui = interfaceCopy[locale];
-  return `<div class="cta">${contactEmail ? `<a data-track="contact_email" href="mailto:${esc(contactEmail)}">${esc(ui.email)} ↗</a>` : ''}<a data-track="contact_instagram" ${contactEmail ? 'class="secondary" ' : ''}href="${esc(siteLinks.instagram)}" target="_blank" rel="noopener noreferrer">${esc(ui.instagram)} ↗</a></div>`;
+  return `<div class="cta">${contactEmail ? `<a data-track="contact_email" href="mailto:${esc(contactEmail)}">${esc(ui.email)}</a>` : ''}<a data-track="contact_instagram" ${contactEmail ? 'class="secondary" ' : ''}href="${esc(siteLinks.instagram)}" target="_blank" rel="noopener noreferrer">${esc(ui.instagram)}</a></div>`;
 }
 function layout({ locale, tail, seoTitle, description, body, nodes, image }) {
   const ui = interfaceCopy[locale];
@@ -83,14 +83,12 @@ ${Object.keys(locales).map((code) => `<link rel="alternate" hreflang="${locales[
 <meta property="og:description" content="${esc(description)}"><meta property="og:url" content="${esc(canonical)}"><meta property="og:site_name" content="Ani Maghakyan">
 <meta property="og:locale" content="${{hy:'hy_AM',en:'en_US',ru:'ru_RU'}[locale]}"><meta property="og:image" content="${esc(image || `${siteUrl}/og.png`)}">
 <meta name="twitter:card" content="summary_large_image"><link rel="icon" href="${basePath}/favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&family=Noto+Sans+Armenian:wght@400;500;600;700&family=Noto+Serif:wght@400;500;600&family=Noto+Serif+Armenian:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="${basePath}/inner-pages.css"><script src="${basePath}/site-interactions.js" defer></script>
+<link rel="stylesheet" href="${basePath}/site-theme.css"><script src="${basePath}/site-interactions.js" defer></script><script src="${basePath}/design-interactions.js" defer></script>
 <script type="application/ld+json">${JSON.stringify(jsonLd).replaceAll('<', '\\u003c')}</script>
-</head><body><a class="skip-link" href="#main-content">${esc(ui.skip)}</a><div class="shell">
-<header class="masthead"><a class="brand" href="${esc(pageHref(locale))}">A. MAGHAKYAN</a><nav class="topnav" aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav>
+</head><body data-page="${esc(tail)}"><a class="skip-link" href="#main-content">${esc(ui.skip)}</a><div class="shell">
+<header class="masthead"><a class="brand" href="${esc(pageHref(locale))}">Ani Maghakyan.</a><nav class="topnav" aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav>
 <nav class="languages" aria-label="${esc(ui.languages)}">${Object.keys(locales).map((code) => `<a href="${esc(pageHref(code, tail))}" hreflang="${locales[code].lang}" lang="${locales[code].lang}" aria-label="${esc(locales[code].label)}"${code === locale ? ' aria-current="page"' : ''}>${code.toUpperCase()}</a>`).join('')}</nav>
-<details class="mobile-menu"><summary aria-label="${esc(ui.menu)}"><span aria-hidden="true">☰</span></summary><nav aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav></details></header>
+<details class="mobile-menu"><summary aria-label="${esc(ui.menu)}"><span class="menu-icon" aria-hidden="true"></span></summary><nav aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav></details></header>
 ${body}
 <footer class="footer"><nav class="footer-nav" aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav><div class="footer-info"><a href="${esc(pageHref(locale))}">Ani Maghakyan · Maghakian Scripts</a><span>${esc(ui.updated)} <time datetime="${updatedIso}">${updatedIso}</time></span></div></footer>
 </div></body></html>`;
@@ -135,17 +133,17 @@ function projectPage(project, locale) {
     { '@type': 'WebPage', '@id': `${canonical}#webpage`, url: canonical, name: seoTitle, description, inLanguage: locales[locale].lang, dateModified: updatedIso, mainEntity: { '@id': `${canonical}#work` }, isPartOf: { '@id': `${siteUrl}/#website` }, breadcrumb: { '@id': `${canonical}#breadcrumbs` } },
     workNode, crumbs.node, personNode(),
   ];
-  const watch = project.watchUrl ? `<a data-track="watch_project" data-project="${project.slug}" href="${esc(project.watchUrl)}" target="_blank" rel="noopener noreferrer">${esc(locales[locale].watchLabel)} ↗</a>` : '';
-  const body = `<main id="main-content">${crumbs.html}<section class="hero"><div><p class="kicker">${esc(format)} · ${esc(project.year)}</p><h1>${esc(title)}</h1><p class="dek">${esc(description)}</p><div class="cta">${watch}<a class="secondary" href="${esc(pageHref(locale, 'work-with-ani'))}">${esc(ui.collaborate)} →</a></div><p class="aliases">${esc(uniqueTitles(project).join(' · '))}</p></div>
-<figure class="hero-media${originalProjectPosters[project.slug] ? ' original-poster' : ''}"><span class="media-fallback" aria-hidden="true">${esc(title)}</span><img src="${esc(projectMediaSrc(project))}"${responsivePoster} alt="${esc(`${title} — ${project.year}`)}" width="${originalProjectPosters[project.slug]?.width ?? 640}" height="${originalProjectPosters[project.slug]?.height ?? 400}" loading="eager" decoding="async">${originalProjectPosters[project.slug] ? `<figcaption>${posterNotes[project.slug]?.[locale] ? `${esc(posterNotes[project.slug][locale])} · ` : ''}<a href="${esc(projectMediaSrc(project))}" target="_blank" rel="noopener noreferrer">${esc({hy:'Պաստառը՝ ամբողջ չափով',en:'View the full poster',ru:'Открыть афишу в полном размере'}[locale])} ↗</a></figcaption>` : ''}</figure></section>
+  const watch = project.watchUrl ? `<a data-track="watch_project" data-project="${project.slug}" href="${esc(project.watchUrl)}" target="_blank" rel="noopener noreferrer">${esc(locales[locale].watchLabel)}</a>` : '';
+  const body = `<main id="main-content">${crumbs.html}<section class="hero"><div><p class="kicker">${esc(format)} · ${esc(project.year)}</p><h1>${esc(title)}</h1><p class="dek">${esc(description)}</p><div class="cta">${watch}<a class="secondary" href="${esc(pageHref(locale, 'work-with-ani'))}">${esc(ui.collaborate)}</a></div><p class="aliases">${esc(uniqueTitles(project).join(' · '))}</p></div>
+<figure class="hero-media${originalProjectPosters[project.slug] ? ' original-poster' : ''}"><span class="media-fallback" aria-hidden="true">${esc(title)}</span><img src="${esc(projectMediaSrc(project))}"${responsivePoster} alt="${esc(`${title} — ${project.year}`)}" width="${originalProjectPosters[project.slug]?.width ?? 640}" height="${originalProjectPosters[project.slug]?.height ?? 400}" loading="eager" decoding="async">${originalProjectPosters[project.slug] ? `<figcaption>${posterNotes[project.slug]?.[locale] ? `${esc(posterNotes[project.slug][locale])} · ` : ''}<a href="${esc(projectMediaSrc(project))}" target="_blank" rel="noopener noreferrer">${esc({hy:'Պաստառը՝ ամբողջ չափով',en:'View the full poster',ru:'Открыть афишу в полном размере'}[locale])}</a></figcaption>` : ''}</figure></section>
 <section class="content"><article class="prose"><h2>${esc(ui.details)}</h2><dl class="meta">${facts.map(([label,value]) => `<div><dt>${esc(label)}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl>
 ${isDiary ? `<p id="season-1" class="credit-note">${esc({hy:'1-ին եթերաշրջան՝ 197 սերիա։ 2-րդ եթերաշրջան՝ 224 սերիա։ Ընդամենը՝ 421 սերիա՝ ըստ հեղինակային ֆիլմագրության։',en:'Season 1: 197 episodes. Season 2: 224 episodes. Total: 421 episodes in the author filmography.',ru:'Сезон 1 — 197 серий. Сезон 2 — 224 серии. Всего — 421 серия по авторской фильмографии.'}[locale])}</p>` : ''}
 ${story?.note ? `<p class="credit-note">${esc(story.note[locale])}</p>` : ''}
-${story ? `<p class="source-ref"><a href="${esc(story.source.url)}" target="_blank" rel="noopener noreferrer">${esc(story.source.label)} ↗</a></p>` : ''}
+${story ? `<p class="source-ref"><a href="${esc(story.source.url)}" target="_blank" rel="noopener noreferrer">${esc(story.source.label)}</a></p>` : ''}
 ${parts.length ? `<section class="related"><h2>${esc(ui.season)}</h2>${cardGrid(parts, locale)}</section>` : ''}
 ${related.length ? `<section class="related"><h2>${esc(ui.related)}</h2>${cardGrid(related, locale)}</section>` : ''}
 ${serviceLinks(locale, basePath, services.filter((service) => service.related.includes(project.slug)).map((service) => service.slug))}
-<div class="cta"><a class="secondary" href="${esc(pageHref(locale))}#filmography">${esc(locales[locale].backLabel)} →</a></div></article>${sourceList(locale, sourceItems)}</section></main>`;
+<div class="cta"><a class="secondary" href="${esc(pageHref(locale))}#filmography">${esc(locales[locale].backLabel)}</a></div></article>${sourceList(locale, sourceItems)}</section></main>`;
   return layout({ locale, tail, seoTitle, description, body, nodes, image });
 }
 
@@ -171,34 +169,34 @@ function hubPage(hub, locale) {
   let article = '';
   let sources = hub.sources;
   if (tail === 'projects') {
-    article = `<nav class="section-menu" aria-label="${esc(ui.format)}">${['series','film','stage','children'].map((kind) => `<a href="#${kind}">${esc(t.filters[kind])}</a>`).join('')}<a href="${esc(pageHref(locale))}#filmography">${esc(t.search.replace('…',''))} ↗</a></nav>${['series','film','stage','children'].map((kind) => `<section id="${kind}"><h2>${esc(t.filters[kind])}</h2>${cardGrid(projects.filter((p) => p.kind === kind), locale, 'project-grid all')}</section>`).join('')}`;
+    article = `<nav class="section-menu" aria-label="${esc(ui.format)}">${['series','film','stage','children'].map((kind) => `<a href="#${kind}">${esc(t.filters[kind])}</a>`).join('')}<a href="${esc(pageHref(locale))}#filmography">${esc(t.search.replace('…',''))}</a></nav>${['series','film','stage','children'].map((kind) => `<section id="${kind}"><h2>${esc(t.filters[kind])}</h2>${cardGrid(projects.filter((p) => p.kind === kind), locale, 'project-grid all')}</section>`).join('')}`;
     nodes.push({ '@type':'ItemList', '@id':`${canonical}#collection`, numberOfItems:projects.length, itemListElement:projects.map((p,index) => ({'@type':'ListItem',position:index+1,name:p.titles[locale],url:absoluteUrl(locale,`projects/${p.slug}`)})) });
     nodes[0].mainEntity = {'@id':`${canonical}#collection`};
   } else if (tail === 'writings') {
     const literary = writingCopy[locale];
-    article = `<div class="writing-list">${writings.map((work) => `<article class="writing-entry" id="${work.slug}"><p class="kicker">${esc(literary.genres[work.kind])} <span aria-hidden="true">·</span> <time datetime="${work.date}">${esc(writingDate(work.date, locale))}</time></p><h2 lang="hy">${esc(work.title)}</h2>${locale === 'hy' ? `<blockquote lang="hy"><p>${esc(work.excerpt)}</p></blockquote>` : ''}<p>${esc(work.descriptions[locale])}</p><a class="writing-read" href="${esc(work.source)}" target="_blank" rel="noopener noreferrer">${esc(literary.read)} <span aria-hidden="true">↗</span></a></article>`).join('')}</div>`;
+    article = `<div class="writing-list">${writings.map((work) => `<article class="writing-entry" id="${work.slug}"><p class="kicker">${esc(literary.genres[work.kind])} <span aria-hidden="true">·</span> <time datetime="${work.date}">${esc(writingDate(work.date, locale))}</time></p><h2 lang="hy">${esc(work.title)}</h2>${locale === 'hy' ? `<blockquote lang="hy"><p>${esc(work.excerpt)}</p></blockquote>` : ''}<p>${esc(work.descriptions[locale])}</p><a class="writing-read" href="${esc(work.source)}" target="_blank" rel="noopener noreferrer">${esc(literary.read)} </a></article>`).join('')}</div>`;
     nodes.push({ '@type': 'ItemList', '@id': `${canonical}#writings`, numberOfItems: writings.length, itemListElement: writings.map((work, index) => ({ '@type': 'ListItem', position: index + 1, item: { '@type': 'CreativeWork', '@id': work.source, url: work.source, name: work.title, description: work.descriptions[locale], datePublished: work.date, inLanguage: 'hy', author: { '@id': personId }, isPartOf: { '@type': 'Blog', url: writingBlogUrl, name: 'Անի Մաղաքյան (ԱՆՈՒԵԼԼ)' } } })) });
     nodes[0].mainEntity = { '@id': `${canonical}#writings` };
     nodes[0].isBasedOn = writingBlogUrl;
   } else if (tail === 'books') {
-    article = books.map((book) => `<article class="book-card" id="${book.slug}"><p class="kicker">${esc(book.year)} · ${esc(book.format[locale])}</p><h2>${esc(book.titles[locale])}</h2><p>${esc(book.descriptions[locale])}</p>${book.isbn ? `<p>ISBN: ${esc(book.isbn)}</p>` : ''}${book.editionNote ? `<p class="edition-note">${esc(book.editionNote[locale])}</p>` : ''}${book.source ? `<div class="cta"><a href="${esc(book.source)}" target="_blank" rel="noopener noreferrer">${esc(ui.readBook)} ↗</a></div>` : ''}</article>`).join('');
+    article = books.map((book) => `<article class="book-card" id="${book.slug}"><p class="kicker">${esc(book.year)} · ${esc(book.format[locale])}</p><h2>${esc(book.titles[locale])}</h2><p>${esc(book.descriptions[locale])}</p>${book.isbn ? `<p>ISBN: ${esc(book.isbn)}</p>` : ''}${book.editionNote ? `<p class="edition-note">${esc(book.editionNote[locale])}</p>` : ''}${book.source ? `<div class="cta"><a href="${esc(book.source)}" target="_blank" rel="noopener noreferrer">${esc(ui.readBook)}</a></div>` : ''}</article>`).join('');
     nodes.push(...books.map((book) => bookSchema(book, locale, siteUrl, personId)));
     nodes[0].mainEntity = books.map((book) => ({'@id':`${siteUrl}/#book-${book.slug}`}));
     sources = [{label:'Abril Books · Taknuvra',url:books[1].source}];
   } else if (tail === 'about') {
-    article = `<p>${esc(t.bio)}</p><p>${esc(t.philosophy)}</p><h2>${esc(t.educationTitle)}</h2><ul>${t.education.map((item) => `<li>${esc(item)}</li>`).join('')}</ul><h2>${esc(t.practiceTitle)}</h2><ul>${t.practice.map((item) => `<li>${esc(item)}</li>`).join('')}</ul><div class="cta"><a href="${esc(pageHref(locale,'projects'))}">${esc(ui.work)} →</a><a class="secondary" href="${esc(pageHref(locale,'books'))}">${esc(t.booksTitle)} →</a></div>`;
+    article = `<p>${esc(t.bio)}</p><p>${esc(t.philosophy)}</p><h2>${esc(t.educationTitle)}</h2><ul>${t.education.map((item) => `<li>${esc(item)}</li>`).join('')}</ul><h2>${esc(t.practiceTitle)}</h2><ul>${t.practice.map((item) => `<li>${esc(item)}</li>`).join('')}</ul><div class="cta"><a href="${esc(pageHref(locale,'projects'))}">${esc(ui.work)}</a><a class="secondary" href="${esc(pageHref(locale,'books'))}">${esc(t.booksTitle)}</a></div>`;
   } else if (tail === 'press') {
     const editorial = sourceLinks.filter((source) => source.id !== 1);
-    article = `<ul class="press-list">${editorial.map((source) => `<li><p class="kicker">${esc(source.kind[locale])}</p><h2><a href="${esc(source.href)}" target="_blank" rel="noopener noreferrer">${esc(source.label)} ↗</a></h2><p>${esc(source.note[locale])}</p></li>`).join('')}</ul>`;
+    article = `<ul class="press-list">${editorial.map((source) => `<li><p class="kicker">${esc(source.kind[locale])}</p><h2><a href="${esc(source.href)}" target="_blank" rel="noopener noreferrer">${esc(source.label)}</a></h2><p>${esc(source.note[locale])}</p></li>`).join('')}</ul>`;
     nodes.push({'@type':'ItemList','@id':`${canonical}#articles`,numberOfItems:editorial.length,itemListElement:editorial.map((source,index) => ({'@type':'ListItem',position:index+1,item:{'@type':'CreativeWork',name:source.label,description:source.note[locale],url:source.href,about:{'@id':personId}}}))});
     nodes[0].mainEntity = {'@id':`${canonical}#articles`};
     sources = [{label:'IMDb',url:siteLinks.imdb},{label:'KinoPoisk',url:siteLinks.kinopoisk},{label:'elCinema',url:siteLinks.elcinema}];
   } else {
     article = `<h2>${esc(t.practiceTitle)}</h2><ul>${t.practice.map((item) => `<li>${esc(item)}</li>`).join('')}</ul>${serviceLinks(locale, basePath, services.map((service) => service.slug))}${inquiryBrief(locale)}${contactCta(locale)}<section class="related"><h2>${esc(t.selectedTitle)}</h2>${cardGrid(projects.filter((p) => ['elens-diary','summer-of-84','paper-dream'].includes(p.slug)),locale)}</section>`;
   }
-  const sidebar = tail === 'writings' ? `<aside class="writing-aside"><p class="kicker">${esc(writingCopy[locale].kicker)}</p><p>${esc(writingCopy[locale].intro)}</p><p>${esc(writingCopy[locale].language)}</p><a href="${writingBlogUrl}" target="_blank" rel="noopener noreferrer">${esc(writingCopy[locale].all)} ↗</a><a href="${esc(pageHref(locale, 'books'))}">${esc(sectionLabel(locale, 'books'))} →</a></aside>` : sourceList(locale, sources);
+  const sidebar = tail === 'writings' ? `<aside class="writing-aside"><p class="kicker">${esc(writingCopy[locale].kicker)}</p><p>${esc(writingCopy[locale].intro)}</p><p>${esc(writingCopy[locale].language)}</p><a href="${writingBlogUrl}" target="_blank" rel="noopener noreferrer">${esc(writingCopy[locale].all)}</a><a href="${esc(pageHref(locale, 'books'))}">${esc(sectionLabel(locale, 'books'))}</a></aside>` : sourceList(locale, sources);
   const content = tail === 'projects' ? `<section class="index-content">${article}</section>` : `<section class="content"><div class="prose">${article}</div>${sidebar}</section>`;
-  const body = `<main id="main-content">${crumbs.html}<section class="hero single"><div><p class="kicker">${esc(sectionLabel(locale, tail))}</p><h1>${esc(title)}</h1><p class="dek">${esc(description)}</p></div></section>${content}</main>`;
+  const body = `<main id="main-content">${crumbs.html}<section class="hero${tail === 'about' ? '' : ' single'}"><div><p class="kicker">${esc(sectionLabel(locale, tail))}</p><h1>${esc(title)}</h1><p class="dek">${esc(description)}</p></div>${tail === 'about' ? `<figure class="hero-media author-media"><img src="${basePath}/ani-3180-web.jpg" alt="${esc(t.title)}" width="1279" height="1919" decoding="async"></figure>` : ''}</section>${content}</main>`;
   return layout({locale,tail,seoTitle:title,description,body,nodes});
 }
 

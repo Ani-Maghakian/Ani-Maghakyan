@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { ArrowUpRight, Play, Search, X } from "lucide-react";
 import {
   copy,
   locales,
@@ -36,7 +37,7 @@ function ExternalLink({ href, children, className = "" }: { href: string; childr
   return (
     <a className={`external-link ${className}`} href={href} target="_blank" rel="noopener noreferrer">
       <span>{children}</span>
-      <span aria-hidden="true">↗</span>
+      <ArrowUpRight className="ui-icon" aria-hidden="true" />
     </a>
   );
 }
@@ -153,16 +154,11 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
   return (
     <div className="site-shell" id="top" lang={locale === "hy" ? "hy-AM" : locale}>
       <div className="scroll-progress" aria-hidden="true" />
-      <div className="archive-binding" aria-hidden="true">
-        <span className="binding-line" />
-        <span className="binding-eyelet" />
-        <span className="binding-knot" />
-      </div>
 
       <a className="skip-link" href="#main-content">{ui.skip}</a>
       <header className="site-header">
         <a className="wordmark" href="#top" aria-label={t.title}>
-          <span>A.</span> MAGHAKYAN
+          Ani Maghakyan.
         </a>
 
         <nav className="primary-nav" aria-label={t.primaryNavLabel}>
@@ -190,7 +186,7 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
         </nav>
 
         <details className="mobile-menu">
-          <summary aria-label={ui.menu}><span aria-hidden="true">☰</span></summary>
+          <summary aria-label={ui.menu}><span className="menu-icon" aria-hidden="true" /></summary>
           <nav aria-label={t.primaryNavLabel}>
             <div className="mobile-language-options" role="group" aria-label={t.languageNavLabel}>
               {(Object.keys(locales) as Locale[]).map((code) => (
@@ -211,45 +207,27 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
       </header>
 
       <main id="main-content">
-        <section className="hero section-frame" aria-labelledby="hero-title">
-          <div className="hero-copy">
-            <div className="script-note" aria-hidden="true">
-              <span>FADE IN:</span>
-              <span>INT. WRITER&apos;S ROOM — DAY</span>
-              <span>A story waits on paper.</span>
-            </div>
-            <p className="eyebrow">{t.eyebrow}</p>
-            <h1 id="hero-title">{t.title}</h1>
-            <p className="name-aliases">{t.aliases}</p>
-            <p className="hero-statement">{t.hero}</p>
-            <p className="roles">{t.roles}</p>
-            <p className="hero-intro">{ui.shortIntro}</p>
-
-            <div className="hero-actions">
-              <a className="primary-action" href="#selected">{ui.work}<span aria-hidden="true">↘</span></a>
-              <a className="secondary-action" href="#contact">{ui.collaborate}</a>
-            </div>
+        <section className="landscape-hero" aria-labelledby="hero-title">
+          <div className="landscape-copy">
+            <p className="eyebrow">{t.title} · {t.eyebrow}</p>
+            <h1 id="hero-title">{{hy:"Պատմություններ, որոնք կյանք են առնում էկրանին։",en:"Stories built to live on screen.",ru:"Истории, созданные для экрана."}[locale]}</h1>
+            <p className="hero-intro">{{hy:"Սերիալներ, ֆիլմեր, ներկայացումներ և մանկական պատմություններ՝ 2016 թվականից։",en:"Series, films, stage works and children’s stories since 2016.",ru:"Сериалы, фильмы, спектакли и детские истории с 2016 года."}[locale]}</p>
+            <div className="hero-actions"><a className="primary-action" href="#selected">{ui.work}</a><a className="secondary-action" href="#contact">{ui.collaborate}</a></div>
           </div>
-
-          <figure className="hero-art">
-            <a className="hero-art-crop" href="#selected" aria-label={`${t.selectedTitle}: ${t.title}`}>
-              <picture>
-                <img
-                  src={`${basePath}/ani-3180-web.jpg`}
-                  alt={t.imageAlt}
-                  width="1366"
-                  height="2048"
-                  fetchPriority="high"
-                  decoding="async"
-                />
-              </picture>
-            </a>
-            <figcaption>PORTFOLIO · 2026</figcaption>
-            <span className="edge-number" aria-hidden="true">01 / 11</span>
-          </figure>
-
-          <div className="archive-flap" aria-hidden="true"><span>A WRITER&apos;S ARCHIVE</span></div>
-          <div className="hero-scroll" aria-hidden="true"><span>SCROLL</span><i /></div>
+          <div className="landscape-stage" aria-hidden="true">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className="landscape-layer landscape-back" src={`${basePath}/landscape/aragats-back.webp`} width="1400" height="470" alt="" decoding="async" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className="landscape-layer landscape-middle" src={`${basePath}/landscape/aragats-middle.webp`} width="1400" height="467" alt="" decoding="async" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className="landscape-layer landscape-front" src={`${basePath}/landscape/aragats-front.webp`} width="1400" height="467" alt="" decoding="async" />
+          </div>
+        </section>
+        <section className="author-intro section-frame" aria-labelledby="author-intro-title">
+          <figure>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={`${basePath}/ani-3180-web.jpg`} alt={t.imageAlt} width="1279" height="1919" loading="lazy" decoding="async" /></figure>
+          <div><p className="eyebrow">{t.aboutKicker}</p><h2 id="author-intro-title">{t.title}</h2><p className="roles">{t.roles}</p><p>{ui.shortIntro}</p><a className="secondary-action" href={`${localeRoot}about/`}>{t.nav.about}</a></div>
         </section>
 
         <section className="stats-strip section-frame" aria-label={ui.statistics}>
@@ -280,8 +258,8 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
                       <span className="featured-poster-backdrop" aria-hidden="true" style={{ backgroundImage: `url("${originalPoster ? posterSource(posterPreviews(project.seoSlug)[0].src) : posterSrc}")` }} />
                       <span className="poster-fallback" aria-hidden="true">{project.title[locale]}</span>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img className="featured-poster" src={posterSrc} srcSet={originalPoster ? posterSrcSet(project.seoSlug, basePath) : undefined} sizes={originalPoster ? "(max-width: 680px) calc(100vw - 28px), (max-width: 1100px) calc((100vw - 80px) / 2), 460px" : undefined} alt={`${project.title[locale]} — ${project.year}`} loading="lazy" decoding="async" width={originalPoster?.width ?? 640} height={originalPoster?.height ?? 400} />
-                      <span className="featured-play" aria-hidden="true">↗</span>
+                      <img className="featured-poster" src={posterSrc} srcSet={originalPoster ? posterSrcSet(project.seoSlug, basePath) : undefined} sizes={originalPoster ? "(max-width: 440px) calc(100vw - 36px), (max-width: 1150px) 46vw, 360px" : undefined} alt={`${project.title[locale]} — ${project.year}`} loading="lazy" decoding="async" width={originalPoster?.width ?? 640} height={originalPoster?.height ?? 400} />
+                      <span className="featured-play" aria-hidden="true"><ArrowUpRight className="ui-icon" /></span>
                     </a>
                   )}
                   {!posterSrc && (
@@ -289,7 +267,7 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
                       <span className="cover-kind">{t.filters[project.kind]}</span>
                       <span className="cover-title">{project.title[locale]}</span>
                       <span className="cover-year">{project.year}</span>
-                      <span className="featured-play" aria-hidden="true">↗</span>
+                      <span className="featured-play" aria-hidden="true"><ArrowUpRight className="ui-icon" /></span>
                     </a>
                   )}
                   {posterNotes[project.seoSlug as keyof typeof posterNotes] && <p className="poster-note">{posterNotes[project.seoSlug as keyof typeof posterNotes][locale]}</p>}
@@ -299,7 +277,7 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
                     <p>{project.featuredDetail?.[locale] ?? project.credit[locale]}</p>
                     {project.watchUrl && (
                       <a className="project-watch" data-track="watch_project" data-project={project.seoSlug} href={project.watchUrl} target="_blank" rel="noopener noreferrer">
-                        <span aria-hidden="true">▶</span><span>{project.watchKind === "youtube" ? t.watchYoutube : t.openProject}</span><span aria-hidden="true">↗</span>
+                        <Play className="ui-icon" aria-hidden="true" /><span>{project.watchKind === "youtube" ? t.watchYoutube : t.openProject}</span><ArrowUpRight className="ui-icon" aria-hidden="true" />
                       </a>
                     )}
                   </div>
@@ -326,9 +304,9 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
           <div className="archive-controls">
             <label className="search-field">
               <span className="sr-only">{t.search}</span>
-              <span aria-hidden="true">⌕</span>
+              <Search className="ui-icon" aria-hidden="true" />
               <input data-filmography-search type="search" placeholder={t.search} autoComplete="off" />
-              <button hidden data-clear-search className="clear-search" type="button" aria-label={ui.clear}>×</button>
+              <button hidden data-clear-search className="clear-search" type="button" aria-label={ui.clear}><X className="ui-icon" aria-hidden="true" /></button>
             </label>
 
             <div className="filter-row" role="group" aria-label={ui.format}>
@@ -356,7 +334,7 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
                         <span className="project-title-cell">
                           {internalHref ? <a className="project-title-link" data-track="view_project" data-project={project.seoSlug} href={internalHref}>{project.title[locale]}</a> : <span>{project.title[locale]}</span>}
                           {project.watchUrl && (
-                            <a className="project-watch-mini" data-track="watch_project" data-project={project.seoSlug} href={project.watchUrl} target="_blank" rel="noopener noreferrer" aria-label={`${t.watchProject}: ${project.title[locale]}`} title={t.watchProject}><span aria-hidden="true">▶</span></a>
+                            <a className="project-watch-mini" data-track="watch_project" data-project={project.seoSlug} href={project.watchUrl} target="_blank" rel="noopener noreferrer" aria-label={`${t.watchProject}: ${project.title[locale]}`} title={t.watchProject}><Play className="ui-icon" aria-hidden="true" /></a>
                           )}
                         </span>
                       </th>
@@ -387,7 +365,7 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
         <section className="writing-section section-frame" id="writings" aria-labelledby="writings-title">
           <div className="writing-heading">
             <div><p className="eyebrow">{literary.kicker}</p><h2 id="writings-title">{literary.title}</h2><p>{literary.intro}</p></div>
-            <a className="writing-browse" href={`${localeRoot}writings/`}>{literary.browse}<span aria-hidden="true">↗</span></a>
+            <a className="writing-browse" href={`${localeRoot}writings/`}>{literary.browse}<ArrowUpRight className="ui-icon" aria-hidden="true" /></a>
           </div>
           <div className="writing-preview">
             {[writings[0], writings[1], writings[4]].map((work) => (
@@ -396,7 +374,7 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
                 <h3 lang="hy"><a href={`${localeRoot}writings/#${work.slug}`}>{work.title}</a></h3>
                 <blockquote lang="hy" cite={work.source}>{work.excerpt}</blockquote>
                 <p>{work.descriptions[locale]}</p>
-                <a className="writing-read" href={`${localeRoot}writings/#${work.slug}`}>{literary.read}<span aria-hidden="true"> ↗</span></a>
+                <a className="writing-read" href={`${localeRoot}writings/#${work.slug}`}>{literary.read}<ArrowUpRight className="ui-icon" aria-hidden="true" /></a>
               </article>
             ))}
           </div>
@@ -426,8 +404,8 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
           <nav className="contact-services" aria-label={sectionLinks.find((item) => item.slug === "services")?.labels[locale]}>{services.map((service) => <a key={service.slug} data-track="view_service" data-service={service.slug} href={`${localeRoot}services/${service.slug}/`}>{service.names[locale]}</a>)}</nav>
           <p className="contact-hint">{ui.contactHint}</p>
           <div className="contact-actions">
-            {contactEmail && <a className="contact-button" data-track="contact_email" href={`mailto:${contactEmail}`}>{ui.email}<span aria-hidden="true">↗</span></a>}
-            <a className={contactEmail ? "secondary-action" : "contact-button"} data-track="contact_instagram" href={siteLinks.instagram} target="_blank" rel="noopener noreferrer">{ui.instagram}<span aria-hidden="true">↗</span></a>
+            {contactEmail && <a className="contact-button" data-track="contact_email" href={`mailto:${contactEmail}`}>{ui.email}<ArrowUpRight className="ui-icon" aria-hidden="true" /></a>}
+            <a className={contactEmail ? "secondary-action" : "contact-button"} data-track="contact_instagram" href={siteLinks.instagram} target="_blank" rel="noopener noreferrer">{ui.instagram}<ArrowUpRight className="ui-icon" aria-hidden="true" /></a>
           </div>
           <span className="contact-edge" aria-hidden="true">07 / 07</span>
         </section>
@@ -436,7 +414,7 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
       <footer className="site-footer section-frame">
         <div><strong>A. MAGHAKYAN</strong><span>{t.roles}</span></div>
         <div className="footer-sources"><span>{t.sources}</span><ExternalLink href={siteLinks.imdb}>IMDb</ExternalLink><ExternalLink href={siteLinks.personalInstagram}>Instagram</ExternalLink><ExternalLink href={siteLinks.instagram}>Maghakian Scripts</ExternalLink></div>
-        <div className="footer-meta"><time dateTime={updatedIso}>{t.updated}</time><a href="#top">{t.backTop} ↑</a></div>
+        <div className="footer-meta"><time dateTime={updatedIso}>{t.updated}</time><a href="#top">{t.backTop}</a></div>
         <nav className="footer-hubs" data-seo-hub="ani" aria-label={ui.explore}><strong>{ui.explore}</strong>{sectionLinks.map((item) => <a key={item.slug} href={`${localeRoot}${item.slug}/`}>{item.labels[locale]}</a>)}</nav>
       </footer>
 

@@ -1,9 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { basePath, siteUrl } from "@/lib/seo";
-import "./globals.css";
-import "./cinematic-10.css";
-import "./mobile-visual-qa.css";
-import "./writings.css";
 
 export const metadata: Metadata = {
   metadataBase: siteUrl ? new URL(`${siteUrl}/`) : undefined,
@@ -17,8 +13,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  colorScheme: "dark light",
-  themeColor: "#080807",
+  colorScheme: "dark",
+  themeColor: "#090a09",
 };
 
 export default function RootLayout({
@@ -29,6 +25,7 @@ export default function RootLayout({
   return (
     <html lang="hy-AM" suppressHydrationWarning>
       <head>
+        <link rel="stylesheet" href={`${basePath}/site-theme.css`} />
         <link rel="preconnect" href="https://i.ytimg.com" crossOrigin="anonymous" />
         <link rel="preload" as="image" href={`${basePath}/ani-3180-web.jpg`} type="image/jpeg" />
       </head>

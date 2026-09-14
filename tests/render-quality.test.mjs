@@ -45,7 +45,7 @@ test('home locales ship static HTML without the React hydration runtime', async 
     assert.match(html, /data-filter="all"/);
     assert.match(html, /data-filter="series"/);
     assert.match(html, /data-kind="series"/);
-    assert.match(html, /filmography-table tbody/);
+    assert.match(html, /site-theme\.css/);
     assert.match(html, /i\.ytimg\.com/);
   }
 });

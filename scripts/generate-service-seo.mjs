@@ -73,7 +73,7 @@ function breadcrumbs(locale, title, tail, includeHub = false) {
 
 function contactCta(locale) {
   const ui = interfaceCopy[locale];
-  return `<div class="cta">${contactEmail ? `<a data-track="contact_email" href="mailto:${esc(contactEmail)}">${esc(ui.email)} ↗</a>` : ''}<a data-track="contact_instagram" ${contactEmail ? 'class="secondary" ' : ''}href="${esc(siteLinks.instagram)}" target="_blank" rel="noopener noreferrer">${esc(ui.instagram)} ↗</a></div>`;
+  return `<div class="cta">${contactEmail ? `<a data-track="contact_email" href="mailto:${esc(contactEmail)}">${esc(ui.email)}</a>` : ''}<a data-track="contact_instagram" ${contactEmail ? 'class="secondary" ' : ''}href="${esc(siteLinks.instagram)}" target="_blank" rel="noopener noreferrer">${esc(ui.instagram)}</a></div>`;
 }
 
 function layout({ locale, tail, seoTitle, description, body, nodes }) {
@@ -92,14 +92,12 @@ ${Object.keys(locales).map((code) => `<link rel="alternate" hreflang="${locales[
 <meta property="og:description" content="${esc(description)}"><meta property="og:url" content="${esc(canonical)}"><meta property="og:site_name" content="Ani Maghakyan">
 <meta property="og:locale" content="${{ hy: 'hy_AM', en: 'en_US', ru: 'ru_RU' }[locale]}"><meta property="og:image" content="${siteUrl}/og.png">
 <meta name="twitter:card" content="summary_large_image"><link rel="icon" href="${basePath}/favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&family=Noto+Sans+Armenian:wght@400;500;600;700&family=Noto+Serif:wght@400;500;600&family=Noto+Serif+Armenian:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="${basePath}/inner-pages.css"><script src="${basePath}/site-interactions.js" defer></script>
+<link rel="stylesheet" href="${basePath}/site-theme.css"><script src="${basePath}/site-interactions.js" defer></script><script src="${basePath}/design-interactions.js" defer></script>
 <script type="application/ld+json">${JSON.stringify(jsonLd).replaceAll('<', '\\u003c')}</script>
-</head><body><a class="skip-link" href="#main-content">${esc(ui.skip)}</a><div class="shell">
-<header class="masthead"><a class="brand" href="${esc(pageHref(locale))}">A. MAGHAKYAN</a><nav class="topnav" aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav>
+</head><body data-page="${esc(tail)}"><a class="skip-link" href="#main-content">${esc(ui.skip)}</a><div class="shell">
+<header class="masthead"><a class="brand" href="${esc(pageHref(locale))}">Ani Maghakyan.</a><nav class="topnav" aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav>
 <nav class="languages" aria-label="${esc(ui.languages)}">${Object.keys(locales).map((code) => `<a href="${esc(pageHref(code, tail))}" hreflang="${locales[code].lang}" lang="${locales[code].lang}" aria-label="${esc(locales[code].label)}"${code === locale ? ' aria-current="page"' : ''}>${code.toUpperCase()}</a>`).join('')}</nav>
-<details class="mobile-menu"><summary aria-label="${esc(ui.menu)}"><span aria-hidden="true">☰</span></summary><nav aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav></details></header>
+<details class="mobile-menu"><summary aria-label="${esc(ui.menu)}"><span class="menu-icon" aria-hidden="true"></span></summary><nav aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav></details></header>
 ${body}
 <footer class="footer"><nav class="footer-nav" aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav><div class="footer-info"><a href="${esc(pageHref(locale))}">Ani Maghakyan · Maghakian Scripts</a><span>${esc(ui.updated)} <time datetime="${updatedIso}">${updatedIso}</time></span></div></footer>
 </div></body></html>`;
@@ -150,7 +148,7 @@ function serviceHubPage(locale) {
     ru: { kicker: 'Услуги', explore: 'Выберите формат работы', proof: 'Основа — реальная фильмография', proofText: '47 проектов · 2 300+ серий · сериалы, фильмы, театр и детские истории.' },
   }[locale];
   const cards = services.map((service) => `<a href="${esc(pageHref(locale, `services/${service.slug}`))}"><strong>${esc(service.names[locale])}</strong><small>${esc(service.descriptions[locale])}</small></a>`).join('');
-  const body = `<main id="main-content">${crumbs.html}<section class="hero single"><div><p class="kicker">${esc(labels.kicker)}</p><h1>${esc(serviceHub.headings[locale])}</h1><p class="dek">${esc(serviceHub.descriptions[locale])}</p></div></section><section class="content"><div class="prose"><p>${esc(serviceHub.intros[locale])}</p><h2>${esc(labels.explore)}</h2><div class="project-grid all">${cards}</div><h2>${esc(labels.proof)}</h2><p>${esc(labels.proofText)}</p><div class="cta"><a href="${esc(pageHref(locale, 'projects'))}">${esc(interfaceCopy[locale].work)} →</a><a class="secondary" href="${esc(pageHref(locale, 'work-with-ani'))}">${esc(interfaceCopy[locale].collaborate)} →</a></div></div></section></main>`;
+  const body = `<main id="main-content">${crumbs.html}<section class="hero single"><div><p class="kicker">${esc(labels.kicker)}</p><h1>${esc(serviceHub.headings[locale])}</h1><p class="dek">${esc(serviceHub.descriptions[locale])}</p></div></section><section class="content"><div class="prose"><p>${esc(serviceHub.intros[locale])}</p><h2>${esc(labels.explore)}</h2><div class="project-grid all">${cards}</div><h2>${esc(labels.proof)}</h2><p>${esc(labels.proofText)}</p><div class="cta"><a href="${esc(pageHref(locale, 'projects'))}">${esc(interfaceCopy[locale].work)}</a><a class="secondary" href="${esc(pageHref(locale, 'work-with-ani'))}">${esc(interfaceCopy[locale].collaborate)}</a></div></div></section></main>`;
   const nodes = [
     {
       '@type': 'CollectionPage', '@id': `${canonical}#page`, url: canonical, name: title,
@@ -178,7 +176,7 @@ function servicePage(service, locale) {
     ru: { kicker: 'Услуга' },
   }[locale];
   const sections = service.sections[locale].map(([heading, items]) => `<section class="prose"><h2>${esc(heading)}</h2><ul>${items.map((item) => `<li>${esc(item)}</li>`).join('')}</ul></section>`).join('');
-  const body = `<main id="main-content">${crumbs.html}<section class="hero single"><div><p class="kicker">${esc(labels.kicker)}</p><h1>${esc(service.headings[locale])}</h1><p class="dek">${esc(service.descriptions[locale])}</p><div class="cta"><a href="#project-brief">${esc(serviceCopy[locale].discuss)} →</a></div></div></section><section class="content"><div><article class="prose"><p>${esc(service.leads[locale])}</p></article>${sections}${projectCards(service, locale)}${serviceLinks(locale, basePath, service.next, "next")}${faq.html}<section class="prose" id="project-brief">${inquiryBrief(locale)}${contactCta(locale)}</section></div></section></main>`;
+  const body = `<main id="main-content">${crumbs.html}<section class="hero single"><div><p class="kicker">${esc(labels.kicker)}</p><h1>${esc(service.headings[locale])}</h1><p class="dek">${esc(service.descriptions[locale])}</p><div class="cta"><a href="#project-brief">${esc(serviceCopy[locale].discuss)}</a></div></div></section><section class="content"><div><article class="prose"><p>${esc(service.leads[locale])}</p></article>${sections}${projectCards(service, locale)}${serviceLinks(locale, basePath, service.next, "next")}${faq.html}<section class="prose" id="project-brief">${inquiryBrief(locale)}${contactCta(locale)}</section></div></section></main>`;
   const serviceId = `${canonical}#service`;
   const nodes = [
     {
