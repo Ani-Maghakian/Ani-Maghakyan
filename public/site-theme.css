@@ -93,10 +93,10 @@
 .filter-button[aria-pressed=true]{background:linear-gradient(135deg,#ffffff40,#ffffff16),#35423c99;color:#fff5ef;border-color:#fff5efb3;box-shadow:inset 0 0 0 1px #fff5ef50,0 3px 12px #0002;}
 
 /* Scroll progress is written by design-interactions.js; no timed entrance delay. */
-.scroll-text{opacity:calc(.38 + var(--reveal,1)*.62);translate:0 calc((1 - var(--reveal,1))*14px);}
+.scroll-text.scroll-text{color:#fff3f0;opacity:calc(.25 + var(--reveal,1)*.75);translate:0 calc((1 - var(--reveal,1))*24px);}
 .scroll-image{scale:var(--image-scale,1);clip-path:inset(var(--image-inset,0%) round 12px);filter:brightness(calc(.78 + var(--reveal,1)*.22));}
 .scroll-card{translate:0 calc((1 - var(--reveal,1))*28px);}
-.scroll-text:focus-within,.scroll-card:focus-within{opacity:1;translate:none;}
+.scroll-text.scroll-text:focus-within,.scroll-card:focus-within{opacity:1;translate:none;}
 a:focus-visible .scroll-image{scale:1;clip-path:none;filter:none;}
 @media(prefers-reduced-motion:reduce){
   .scroll-text,.scroll-image,.scroll-card{opacity:1!important;translate:none!important;scale:1!important;clip-path:none!important;filter:none!important;}

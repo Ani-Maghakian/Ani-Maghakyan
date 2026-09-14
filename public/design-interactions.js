@@ -7,7 +7,7 @@
   const middle = document.querySelector('.landscape-middle');
   const front = document.querySelector('.landscape-front');
   const clamp = value => Math.max(0, Math.min(1, value));
-  const texts = [...document.querySelectorAll('main h2,.bio-lead,.author-intro p:not(.eyebrow):not(.roles),.writing-preview blockquote,.writing-entry blockquote')];
+  const texts = [...document.querySelectorAll('main h2,.section-heading p,.featured-copy h3,.writing-preview h3,.prose>p,.prose>h3,.bio-lead,.author-intro p:not(.eyebrow):not(.roles),.writing-preview blockquote,.writing-entry blockquote')];
   const images = [...document.querySelectorAll('.author-intro img,.featured-poster,.hero-media img,.catalog-poster')];
   const cards = [...document.querySelectorAll('.writing-preview article,.book-card,.source-grid li,.service-card')];
   const targets = [...texts, ...images, ...cards];
@@ -32,7 +32,8 @@
       front.style.transform = still ? 'none' : `scale(${1 + progress * .18})`;
     }
     for (const {el, top} of frames) {
-      const p = still ? 1 : clamp((height * .94 - top) / (height * .49));
+      const isText = el.classList.contains('scroll-text');
+      const p = still ? 1 : clamp((height * (isText ? .82 : .94) - top) / (height * (isText ? .47 : .49)));
       el.style.setProperty('--reveal', p.toFixed(4));
       if (el.classList.contains('scroll-image')) {
         // Posters expand to their full original frame; portraits settle from a close-up.

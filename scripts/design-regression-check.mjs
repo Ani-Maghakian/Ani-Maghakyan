@@ -58,7 +58,8 @@ console.log(`Verified shared theme, motion script and local images on ${urls.len
   w.dispatchEvent(new w.Event('scroll'));
   const middleProgress = Number(heading.style.getPropertyValue('--reveal'));
   assert(middleProgress > initial && middleProgress < 1);
-  top = 300;
+  assert(middleProgress < Number(poster.style.getPropertyValue('--reveal')), 'Text illumination should finish later than image reveal');
+  top = 240;
   w.dispatchEvent(new w.Event('scroll'));
   assert.equal(heading.style.getPropertyValue('--reveal'),'1.0000');
   assert.equal(poster.style.getPropertyValue('--image-inset'),'0%');
