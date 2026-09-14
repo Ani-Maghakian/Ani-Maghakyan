@@ -57,7 +57,7 @@
 .landscape-middle,.landscape-front{background-size:100% 100%;background-repeat:no-repeat}
 
 /* Liquid-glass controls: translucent body, reflected rim, readable symbols. */
-.featured-play,.project-watch-mini,.project-watch,.external-link,.writing-browse,.writing-read,.contact-button,.secondary-action:has(.ui-icon){
+.featured-play,.project-watch-mini,.project-watch,.external-link,.writing-browse,.writing-read,.contact-button,:is(.primary-action,.secondary-action,.hero-actions a,.cta a,.cta a:not(.secondary),button[type="submit"],input[type="submit"],.filter-button){
   border:1px solid #ffffff38;
   border-top-color:#ffffff80;
   border-bottom-color:#ffffff24;
@@ -74,17 +74,20 @@
 .featured-play,.project-watch-mini{width:44px;height:44px;min-width:44px;min-height:44px;flex-shrink:0;}
 .featured-play .ui-icon,.project-watch-mini .ui-icon{filter:drop-shadow(0 1px 2px #0009);}
 @media(hover:hover){
-  .featured-poster-link:hover .featured-play,.project-watch-mini:hover,.project-watch:hover,.external-link:hover,.writing-browse:hover,.writing-read:hover,.contact-button:hover,.secondary-action:has(.ui-icon):hover{
+  .featured-poster-link:hover .featured-play,.project-watch-mini:hover,.project-watch:hover,.external-link:hover,.writing-browse:hover,.writing-read:hover,.contact-button:hover,:is(.primary-action,.secondary-action,.hero-actions a,.cta a,.cta a:not(.secondary),button[type="submit"],input[type="submit"],.filter-button):hover{
     background:linear-gradient(135deg,#ffffff38,#ffffff0c 48%,#ffffff20),#18202555;
     color:#fff;
     box-shadow:inset 0 1px 2px #ffffff70,inset 0 -1px 2px #ffffff24,0 6px 20px #0003;
     transform:translateY(-2px);
   }
 }
-.project-watch-mini:active,.project-watch:active,.external-link:active,.writing-browse:active,.writing-read:active,.contact-button:active{transform:scale(.98);}
+.project-watch-mini:active,.project-watch:active,.external-link:active,.writing-browse:active,.writing-read:active,.contact-button:active,:is(.primary-action,.secondary-action,.hero-actions a,.cta a,.cta a:not(.secondary),button[type="submit"],input[type="submit"],.filter-button):active{transform:scale(.98);}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-  .featured-play,.project-watch-mini,.project-watch,.external-link,.writing-browse,.writing-read,.contact-button,.secondary-action:has(.ui-icon){background:#293338;}
+  .featured-play,.project-watch-mini,.project-watch,.external-link,.writing-browse,.writing-read,.contact-button,:is(.primary-action,.secondary-action,.hero-actions a,.cta a,.cta a:not(.secondary),button[type="submit"],input[type="submit"],.filter-button){background:#293338;}
 }
 @media(prefers-reduced-motion:reduce){
-  .featured-play,.project-watch-mini,.project-watch,.external-link,.writing-browse,.writing-read,.contact-button,.secondary-action:has(.ui-icon){transition:none;transform:none!important;}
+  .featured-play,.project-watch-mini,.project-watch,.external-link,.writing-browse,.writing-read,.contact-button,:is(.primary-action,.secondary-action,.hero-actions a,.cta a,.cta a:not(.secondary),button[type="submit"],input[type="submit"],.filter-button){transition:none;transform:none!important;}
 }
+
+/* Keep selected filters distinguishable within the glass system. */
+.filter-button[aria-pressed=true]{background:linear-gradient(135deg,#ffffff40,#ffffff16),#35423c99;color:#fff5ef;border-color:#fff5efb3;box-shadow:inset 0 0 0 1px #fff5ef50,0 3px 12px #0002;}
