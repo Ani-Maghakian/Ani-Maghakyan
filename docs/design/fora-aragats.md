@@ -10,4 +10,4 @@ Existing project descriptions, literary quotations, language routes, canonical U
 
 Validation: production-prefix build, 34 existing regression checks, TypeScript, and `node scripts/design-regression-check.mjs` covering all 177 canonical routes and the parallax behavior. A cloud browser cannot access this workspace's local preview, so automated DOM checks are not a substitute for final browser/device visual acceptance. The in-conversation preview is provided for that review.
 
-This branch is a review draft. It must not be merged/published until the user approves the full-site result.
+The user approved publication on 2026-09-14, requesting the earlier translucent header. The sticky header now uses a 40% tinted background and 12px backdrop blur (including Safari), with the dusk sky extending beneath it on the homepage.

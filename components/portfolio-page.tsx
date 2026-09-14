@@ -217,10 +217,8 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
           <div className="landscape-stage" aria-hidden="true">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img className="landscape-layer landscape-back" src={`${basePath}/landscape/aragats-back.webp`} width="1400" height="470" alt="" decoding="async" />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="landscape-layer landscape-middle" src={`${basePath}/landscape/aragats-middle.webp`} width="1400" height="467" alt="" decoding="async" />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="landscape-layer landscape-front" src={`${basePath}/landscape/aragats-front.webp`} width="1400" height="467" alt="" decoding="async" />
+            <div className="landscape-layer landscape-middle" style={{ backgroundImage: `url("${basePath}/landscape/aragats-middle.webp")` }} />
+            <div className="landscape-layer landscape-front" style={{ backgroundImage: `url("${basePath}/landscape/aragats-front.webp")` }} />
           </div>
         </section>
         <section className="author-intro section-frame" aria-labelledby="author-intro-title">

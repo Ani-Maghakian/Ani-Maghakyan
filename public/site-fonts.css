@@ -3,14 +3,14 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url(./fonts/portfolio-0.ttf) format('truetype');
+  src: url(./fonts/portfolio-0.woff) format('woff');
 }
 @font-face {
   font-family: 'Inter';
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url(./fonts/portfolio-1.ttf) format('truetype');
+  src: url(./fonts/portfolio-1.woff) format('woff');
 }
 @font-face {
   font-family: 'Noto Sans Armenian';
@@ -18,7 +18,7 @@
   font-weight: 400;
   font-stretch: normal;
   font-display: swap;
-  src: url(./fonts/portfolio-2.ttf) format('truetype');
+  src: url(./fonts/portfolio-2.woff) format('woff');
 }
 @font-face {
   font-family: 'Noto Sans Armenian';
@@ -26,5 +26,5 @@
   font-weight: 500;
   font-stretch: normal;
   font-display: swap;
-  src: url(./fonts/portfolio-3.ttf) format('truetype');
+  src: url(./fonts/portfolio-3.woff) format('woff');
 }
