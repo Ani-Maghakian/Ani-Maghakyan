@@ -71,7 +71,7 @@
       ? 0
       : Math.max(0, window.scrollY + target.getBoundingClientRect().top - offset);
     history.pushState(null, '', href);
-    window.scrollTo({ top, left: 0, behavior: 'auto' });
+    window.scrollTo({ top, left: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
     anchor.closest('details')?.removeAttribute('open');
   });
 

@@ -27,15 +27,7 @@ const interactionFilename = `home-interactions.${interactionHash}.js`;
 writeFileSync(join(root, interactionFilename), interactionBytes);
 const homeInteractionSrc = `${basePath}/${interactionFilename}`.replace(/\/\/+/, '/');
 
-const homeQualityStyle = `<style id="homepage-quality-overrides">
-.format-mark{color:#5f5b54!important;font-weight:650!important}
-.archive-section .section-heading>div>p{color:#504b43!important}
-.faq-section .section-heading .eyebrow,.faq-list summary>span{color:#634b27!important}
-.archive-section,.archive-controls,.filmography-table-wrap,.filmography-table,.filmography-table tbody,.filmography-table tbody tr{background:var(--cine-paper,#e8e0d4)!important}
-.filmography-table tbody th,.filmography-table tbody th a{color:var(--cine-ink,#171713)!important}
-.filmography-table tbody td{color:#3f3a33!important}
-.filmography-table tbody td:first-child{color:#4b391c!important}
-</style>`;
+const homeQualityStyle = "";
 
 function stripRemoteFonts(html) {
   return html.replace(/<link\b[^>]*(?:fonts\.googleapis\.com|fonts\.gstatic\.com)[^>]*>\s*/gi, '');
@@ -86,7 +78,7 @@ function optimizeHomepage(html) {
   result = result.replace('</head>', `${additions.join('\n')}\n</head>`);
   return result.replace(
     '</body>',
-    `<script src="${homeInteractionSrc}" defer></script>\n</body>`,
+    `<script src="${homeInteractionSrc}" defer></script><script src="${basePath}/design-interactions.js" defer></script>\n</body>`,
   );
 }
 

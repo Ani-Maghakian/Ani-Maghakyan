@@ -93,7 +93,8 @@ test("exports repaired project media, links and OKE naming", async () => {
   const hy = await readFile("dist/client/index.html", "utf8");
   const en = await readFile("dist/client/en/index.html", "utf8");
 
-  assert.match(hy, /<a class="hero-art-crop" href="#selected"/);
+  assert.match(hy, /class="landscape-stage"/);
+  assert.match(hy, /class="author-intro section-frame"[\s\S]*?ani-3180-web\.jpg/);
   assert.match(hy, /featured-poster-backdrop/);
   assert.doesNotMatch(hy, /fastnews\.am\/culture\/post\/arsenn-vou-thghthe-erazanqy-harcazrvouyc/);
 
