@@ -111,8 +111,9 @@ export async function submitSeoIndexNow(targetSiteUrl = siteUrl) {
   }
 
   const endpoints = [
+    // One successful endpoint shares submissions with all participating engines.
+    // https://www.indexnow.org/faq — avoid duplicate per-engine notifications.
     "https://api.indexnow.org/indexnow",
-    "https://yandex.com/indexnow",
   ];
   const results = [];
   for (const endpoint of endpoints) {

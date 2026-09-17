@@ -57,3 +57,17 @@ unrequested social posts are part of this refinement.
 The first book's real cover remains unavailable. Its text presentation is
 intentional and does not imply that a substitute cover is authentic. Search
 rankings and third-party availability are not guaranteed by these checks.
+
+## Publication and search notifications
+
+The website refinement was published as `eb18b10749b5fc3c740db6ee3b180fdab5b0184c`.
+GitHub Pages run `35208918003` passed both build and live verification. The live
+homepage retains the approved Armenian heading, two book cards and three Press
+previews; the live archive has all 29 items and working search/clear controls.
+
+The release's global IndexNow notifications returned HTTP 200: the home submission
+and all 174 localized inner pages. The duplicate direct Yandex submission returned
+422. Following the [official IndexNow FAQ](https://www.indexnow.org/faq), which
+specifies that one participating endpoint shares notifications across the network,
+the redundant per-engine call was removed. This does not assert that any individual
+search engine has indexed every submitted URL.
