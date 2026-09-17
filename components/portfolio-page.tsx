@@ -209,10 +209,10 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
 
       <main id="main-content">
         <section className="landscape-hero" aria-labelledby="hero-title">
-          <div className="landscape-copy" style={locale === "hy" ? { width: "min(900px, calc(100% - 40px))" } : undefined}>
+          <div className="landscape-copy" style={locale === "hy" ? { width: "min(1100px, calc(100% - 40px))" } : undefined}>
             <p className="eyebrow">{t.title} · {t.eyebrow}</p>
-            <h1 id="hero-title">{locale === "hy" ? homeHero.hy.heading.split(", ").map((line, index, lines) => (
-              <span className="hero-title-line" style={{ display: "block" }} key={line}>{line}{index < lines.length - 1 ? ", " : ""}</span>
+            <h1 id="hero-title">{locale === "hy" ? homeHero.hy.lines.map((line, index, lines) => (
+              <span className="hero-title-line" style={{ display: "block" }} key={line}>{line}{index < lines.length - 1 ? " " : ""}</span>
             )) : homeHero[locale].heading}</h1>
             <p className="hero-tagline">{homeHero[locale].tagline}</p>
             <p className="hero-intro">{{hy:"Սերիալներ, ֆիլմեր, ներկայացումներ և մանկական պատմություններ՝ 2016 թվականից։",en:"Series, films, stage works and children’s stories since 2016.",ru:"Сериалы, фильмы, спектакли и детские истории с 2016 года."}[locale]}</p>
