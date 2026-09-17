@@ -54,7 +54,7 @@
 @media(max-width:760px){.landscape-hero{margin-top:-68px;padding-top:112px}}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.site-header,.masthead{background:#20292de8}}
 
-.landscape-middle,.landscape-front{background-size:100% 100%;background-repeat:no-repeat}
+.landscape-middle,.landscape-front{height:auto;object-fit:contain}
 
 /* Liquid-glass controls: translucent body, reflected rim, readable symbols. */
 .featured-play,.project-watch-mini,.project-watch,.external-link,.writing-browse,.writing-read,.contact-button,:is(.primary-action,.secondary-action,.hero-actions a,.cta a,.cta a:not(.secondary),button[type="submit"],input[type="submit"],.filter-button){
