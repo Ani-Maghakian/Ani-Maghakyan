@@ -14,9 +14,9 @@ export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "
 export const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 const descriptions: Record<Locale, string> = {
-  hy: "Անի Մաղաքյանի պաշտոնական կայքը՝ սցենարիստ, շոուռաներ, պրոդյուսեր և գրող․ 47 նախագիծ, 2,300+ սերիա, կենսագրություն, ֆիլմագրություն, հարցազրույցներ և հաստատված աղբյուրներ։",
-  en: "Official site of Armenian screenwriter, showrunner, producer and author Ani Maghakyan: 47 projects, 2,300+ episodes, biography, filmography, interviews and verified sources.",
-  ru: "Официальный сайт Ани Магакян — армянского сценариста, шоураннера, продюсера и автора: 47 проектов, 2 300+ серий, биография, фильмография, интервью и подтверждённые источники.",
+  hy: "Անի Մաղաքյան՝ «Էլենի օրագիրը» և «84-ի ամառը» սերիալների սցենարիստ։ Պաշտոնական կայք՝ կենսագրություն, սերիալներ, ֆիլմեր, 47 նախագծի ֆիլմագրություն և հարցազրույցներ։",
+  en: "Explore Ani Maghakyan’s biography, TV series and films, including Elen’s Diary and Summer of ’84. Official filmography with 47 projects and interviews.",
+  ru: "Ани Магакян — сценарист «Дневника Элен» и «Лета ’84». Биография, сериалы, фильмы, интервью и фильмография из 47 проектов на официальном сайте.",
 };
 
 const titles: Record<Locale, string> = {

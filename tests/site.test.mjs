@@ -94,7 +94,11 @@ test("exports repaired project media, links and OKE naming", async () => {
   const en = await readFile("dist/client/en/index.html", "utf8");
 
   assert.match(hy, /class="landscape-stage"/);
-  assert.match(hy, /class="author-intro section-frame"[\s\S]*?ani-3180-web\.jpg/);
+  assert.match(hy, /class="author-intro section-frame"[\s\S]*?ani-portrait-display-640\.webp/);
+  const portrait = await readFile('dist/client/ani-portrait-display-640.webp');
+  const originalPortrait = await readFile('public/ani-3180-web.jpg');
+  assert.ok(portrait.length > 0 && portrait.length < originalPortrait.length, 'the portrait variant is available and smaller than its source');
+  assert.doesNotMatch(hy, /<link\b[^>]*rel="preload"[^>]*href="[^"]*ani-3180-web\.jpg/);
   assert.match(hy, /featured-poster-backdrop/);
   assert.doesNotMatch(hy, /fastnews\.am\/culture\/post\/arsenn-vou-thghthe-erazanqy-harcazrvouyc/);
 

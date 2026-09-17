@@ -44,3 +44,5 @@ next-env.d.ts
 
 # Recreated from the supplied originals by the build.
 /public/posters/*-display-*.webp
+/public/ani-portrait-display-*.webp
+/public/landscape/*-display-*.webp

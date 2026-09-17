@@ -11,7 +11,8 @@ import {
   type ProjectKind,
 } from "@/lib/content";
 import { basePath } from "@/lib/seo";
-import { interfaceCopy, sectionLinks, resultLabel, publicContactEmail } from "@/lib/site-copy.mjs";
+import { interfaceCopy, sectionLinks, resultLabel, publicContactEmail, homeHero } from "@/lib/site-copy.mjs";
+import { siteImages, siteImagePreviews, siteImageSrcSet } from "@/lib/site-images.mjs";
 import { originalProjectPosters, posterNotes, posterPreviews, posterSrcSet } from "@/lib/project-posters.mjs";
 import { writings, writingCopy } from "@/lib/writings.mjs";
 import { services } from "@/lib/services.mjs";
@@ -210,21 +211,22 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
         <section className="landscape-hero" aria-labelledby="hero-title">
           <div className="landscape-copy">
             <p className="eyebrow">{t.title} · {t.eyebrow}</p>
-            <h1 id="hero-title">{{hy:"Պատմություններ, որոնք կյանք են առնում էկրանին։",en:"Stories built to live on screen.",ru:"Истории, созданные для экрана."}[locale]}</h1>
+            <h1 id="hero-title">{homeHero[locale].heading}</h1>
+            <p className="hero-tagline">{homeHero[locale].tagline}</p>
             <p className="hero-intro">{{hy:"Սերիալներ, ֆիլմեր, ներկայացումներ և մանկական պատմություններ՝ 2016 թվականից։",en:"Series, films, stage works and children’s stories since 2016.",ru:"Сериалы, фильмы, спектакли и детские истории с 2016 года."}[locale]}</p>
             <div className="hero-actions"><a className="primary-action" href="#selected">{ui.work}</a><a className="secondary-action" href="#contact">{ui.collaborate}</a></div>
           </div>
           <div className="landscape-stage" aria-hidden="true">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="landscape-layer landscape-back" src={`${basePath}/landscape/aragats-back.webp`} width="1400" height="470" alt="" decoding="async" />
-            <div className="landscape-layer landscape-middle" style={{ backgroundImage: `url("${basePath}/landscape/aragats-middle.webp")` }} />
-            <div className="landscape-layer landscape-front" style={{ backgroundImage: `url("${basePath}/landscape/aragats-front.webp")` }} />
+            {(["back", "middle", "front"] as const).map(layer => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img key={layer} className={`landscape-layer landscape-${layer}`} src={`${basePath}${siteImagePreviews(layer)[1].src}`} srcSet={siteImageSrcSet(layer, basePath)} sizes="(min-width: 1700px) 1600px, 100vw" width={siteImages[layer].width} height={siteImages[layer].height} alt="" decoding="async" fetchPriority={layer === "back" ? "high" : "low"} />
+            ))}
           </div>
         </section>
         <section className="author-intro section-frame" aria-labelledby="author-intro-title">
           <figure>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={`${basePath}/ani-3180-web.jpg`} alt={t.imageAlt} width="1279" height="1919" loading="lazy" decoding="async" /></figure>
+            <img src={`${basePath}${siteImagePreviews('portrait')[1].src}`} srcSet={siteImageSrcSet('portrait', basePath)} sizes="(max-width: 760px) calc(100vw - 32px), 400px" alt={t.imageAlt} width="1279" height="1919" loading="lazy" decoding="async" /></figure>
           <div><p className="eyebrow">{t.aboutKicker}</p><h2 id="author-intro-title">{t.title}</h2><p className="roles">{t.roles}</p><p>{ui.shortIntro}</p><a className="secondary-action" href={`${localeRoot}about/`}>{t.nav.about}</a></div>
         </section>
 
@@ -253,10 +255,13 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
                 <article className={`featured-card tone-${(index % 4) + 1}`} data-selected-project={project.seoSlug} key={project.id}>
                   {posterSrc && (
                     <a className="featured-poster-link" href={internalHref} data-track="view_project" data-project={project.seoSlug} aria-label={`${ui.details}: ${project.title[locale]}`}>
-                      <span className="featured-poster-backdrop" aria-hidden="true" style={{ backgroundImage: `url("${originalPoster ? posterSource(posterPreviews(project.seoSlug)[0].src) : posterSrc}")` }} />
                       <span className="poster-fallback" aria-hidden="true">{project.title[locale]}</span>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img className="featured-poster" src={posterSrc} srcSet={originalPoster ? posterSrcSet(project.seoSlug, basePath) : undefined} sizes={originalPoster ? "(max-width: 440px) calc(100vw - 36px), (max-width: 1150px) 46vw, 360px" : undefined} alt={`${project.title[locale]} — ${project.year}`} loading="lazy" decoding="async" width={originalPoster?.width ?? 640} height={originalPoster?.height ?? 400} />
+                      <span className="featured-poster-backdrop" aria-hidden="true">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={originalPoster ? posterSource(posterPreviews(project.seoSlug)[0].src)! : posterSrc} alt="" loading="lazy" decoding="async" width={originalPoster?.width ?? 640} height={originalPoster?.height ?? 400} />
+                      </span>
                       <span className="featured-play" aria-hidden="true"><ArrowUpRight className="ui-icon" /></span>
                     </a>
                   )}

@@ -27,7 +27,6 @@ export default function RootLayout({
       <head>
         <link rel="stylesheet" href={`${basePath}/site-theme.css`} />
         <link rel="preconnect" href="https://i.ytimg.com" crossOrigin="anonymous" />
-        <link rel="preload" as="image" href={`${basePath}/ani-3180-web.jpg`} type="image/jpeg" />
       </head>
       <body>{children}</body>
     </html>
