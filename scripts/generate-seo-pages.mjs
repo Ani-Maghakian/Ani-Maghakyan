@@ -75,33 +75,33 @@ const archiveCopy = {
     browse: 'Ընտրել բաժինը', read: 'Կարդալ հարցազրույցը', readArticle: 'Կարդալ հրապարակումը', watch: 'Դիտել տեսանյութը', archive: 'Բացել արխիվային համարը',
     language: { hy: 'Հայերեն', en: 'Անգլերեն', ru: 'Ռուսերեն' }, page: 'էջ', guest: 'Զրուցակից',
     cover: 'գրքի կազմը', coverSource: 'Կազմի աղբյուր', catalogue: 'Դիտել գրքի տվյալները', publisher: 'Հրատարակիչ', pages: 'Էջեր', sources: 'Գրքի աղբյուրները',
-    profiles: 'Մասնագիտական էջեր',
+    profiles: 'Մասնագիտական էջեր', search: 'Որոնել հարցազրույցներում և մամուլում', searchHint: 'Անուն, թեմա կամ լրատվամիջոց՝ հայերեն, անգլերեն կամ ռուսերեն։', clearSearch: 'Մաքրել որոնումը', results: '{count} նյութ՝ {total}-ից', empty: 'Այս որոնմամբ նյութ չգտնվեց։ Փորձեք այլ անուն կամ թեմա։',
     categories: {
-      interview: { title: 'Հարցազրույցներ Անիի հետ', description: 'Անին՝ իր գրքերի, սցենարների և ստեղծագործական աշխատանքի մասին։' },
-      journalism: { title: 'Անիի վարած հարցազրույցներն ու հոդվածները', description: 'Անի Մաղաքյանը՝ որպես հարցազրույց վարող և հրապարակումների հեղինակ։' },
-      coverage: { title: 'Մամուլը՝ Անիի և նրա աշխատանքների մասին', description: 'Գրքերի շնորհանդեսներ, բեմադրություններ և ստեղծագործական նախագծեր։' },
+      interview: { label: 'Անիի հետ', title: 'Հարցազրույցներ Անիի հետ', description: 'Անին՝ իր գրքերի, սցենարների և ստեղծագործական աշխատանքի մասին։' },
+      journalism: { label: 'Անիի վարած', title: 'Անիի վարած հարցազրույցները', description: 'Անի Մաղաքյանի զրույցները գրողների, արվեստագետների և այլ մասնագետների հետ։' },
+      coverage: { label: 'Մամուլ', title: 'Մամուլը՝ Անիի և նրա աշխատանքների մասին', description: 'Գրքերի շնորհանդեսներ, բեմադրություններ և ստեղծագործական նախագծեր։' },
     },
   },
   en: {
     browse: 'Browse the archive', read: 'Read the interview', readArticle: 'Read the article', watch: 'Watch the video', archive: 'Open the archived issue',
     language: { hy: 'Armenian', en: 'English', ru: 'Russian' }, page: 'p.', guest: 'Interview guest',
     cover: 'book cover', coverSource: 'Cover source', catalogue: 'View book details', publisher: 'Publisher', pages: 'Pages', sources: 'Book sources',
-    profiles: 'Industry profiles',
+    profiles: 'Industry profiles', search: 'Search interviews and press', searchHint: 'Find a name, topic or publication in Armenian, English or Russian.', clearSearch: 'Clear search', results: '{count} of {total} items', empty: 'No items found. Try another name or topic.',
     categories: {
-      interview: { title: 'Interviews with Ani', description: 'Ani on her books, screenplays and creative work.' },
-      journalism: { title: 'Interviews and articles by Ani', description: 'Ani Maghakyan as interviewer and author of published articles.' },
-      coverage: { title: 'Ani and her work in the press', description: 'Book launches, stage productions and creative projects.' },
+      interview: { label: 'With Ani', title: 'Interviews with Ani', description: 'Ani on her books, screenplays and creative work.' },
+      journalism: { label: 'By Ani', title: 'Interviews by Ani', description: 'Ani Maghakyan in conversation with writers, artists and other professionals.' },
+      coverage: { label: 'Press', title: 'Ani and her work in the press', description: 'Book launches, stage productions and creative projects.' },
     },
   },
   ru: {
     browse: 'Разделы архива', read: 'Читать интервью', readArticle: 'Читать публикацию', watch: 'Смотреть видео', archive: 'Открыть архивный номер',
     language: { hy: 'На армянском', en: 'На английском', ru: 'На русском' }, page: 'стр.', guest: 'Собеседник',
     cover: 'обложка книги', coverSource: 'Источник обложки', catalogue: 'Сведения о книге', publisher: 'Издательство', pages: 'Страниц', sources: 'Источники о книге',
-    profiles: 'Профессиональные страницы',
+    profiles: 'Профессиональные страницы', search: 'Поиск по интервью и публикациям', searchHint: 'Ищите имя, тему или издание на армянском, английском или русском.', clearSearch: 'Очистить поиск', results: '{count} из {total} материалов', empty: 'Ничего не найдено. Попробуйте другое имя или тему.',
     categories: {
-      interview: { title: 'Интервью с Ани', description: 'Ани о своих книгах, сценариях и творческой работе.' },
-      journalism: { title: 'Интервью и статьи Ани', description: 'Ани Магакян в роли интервьюера и автора публикаций.' },
-      coverage: { title: 'Пресса об Ани и её работах', description: 'Презентации книг, спектакли и творческие проекты.' },
+      interview: { label: 'С Ани', title: 'Интервью с Ани', description: 'Ани о своих книгах, сценариях и творческой работе.' },
+      journalism: { label: 'Интервью Ани', title: 'Интервью, которые провела Ани', description: 'Беседы Ани Магакян с писателями, деятелями искусства и другими специалистами.' },
+      coverage: { label: 'Пресса', title: 'Пресса об Ани и её работах', description: 'Презентации книг, спектакли и творческие проекты.' },
     },
   },
 };
@@ -110,7 +110,7 @@ function localizedValue(value, locale) {
   return typeof value === 'object' && value !== null ? value[locale] ?? value.hy ?? '' : value;
 }
 
-function bookCard(book, locale) {
+function bookCard(book, locale, eager = false) {
   const labels = archiveCopy[locale];
   const cover = book.cover;
   const sourceItems = book.sources?.length ? book.sources : book.source ? [{ label: labels.catalogue, url: book.source }] : [];
@@ -119,7 +119,7 @@ function bookCard(book, locale) {
     ...(book.pages ? [[labels.pages, book.pages]] : []),
     ...(book.isbn ? [['ISBN', book.isbn]] : []),
   ];
-  const figure = cover ? `<figure class="book-cover"><div class="book-cover-stage"><img src="${esc(cover.src.startsWith('/') ? `${basePath}${cover.src}` : cover.src)}" width="${cover.width}" height="${cover.height}" alt="${esc(`${book.titles[locale]} — ${labels.cover}`)}" loading="lazy" decoding="async"></div>${cover.source ? `<figcaption><a href="${esc(cover.source)}" target="_blank" rel="noopener noreferrer">${esc(labels.coverSource)}${cover.credit ? ` · ${esc(cover.credit)}` : ''}</a></figcaption>` : ''}</figure>` : '';
+  const figure = cover ? `<figure class="book-cover"><div class="book-cover-stage"><img src="${esc(cover.src.startsWith('/') ? `${basePath}${cover.src}` : cover.src)}" width="${cover.width}" height="${cover.height}" alt="${esc(`${book.titles[locale]} — ${labels.cover}`)}" loading="${eager ? 'eager' : 'lazy'}"${eager ? ' fetchpriority="high"' : ''} decoding="async"></div>${cover.source ? `<figcaption><a href="${esc(cover.source)}" target="_blank" rel="noopener noreferrer">${esc(labels.coverSource)}${cover.credit ? ` · ${esc(cover.credit)}` : ''}</a></figcaption>` : ''}</figure>` : '';
   return `<article class="book-card${cover ? '' : ' book-card-without-cover'}" id="${esc(book.slug)}">${figure}<div class="book-details"><p class="kicker">${esc(book.year)} <span aria-hidden="true">·</span> ${esc(book.format[locale])}</p><h2>${esc(book.titles[locale])}</h2><p class="book-description">${esc(book.descriptions[locale])}</p>${facts.length ? `<dl class="book-facts">${facts.map(([label, value]) => `<div><dt>${esc(label)}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl>` : ''}${book.editionNote ? `<p class="edition-note">${esc(book.editionNote[locale])}</p>` : ''}${sourceItems.length ? `<div class="book-sources"><h3>${esc(labels.sources)}</h3><ul>${sourceItems.map((source) => `<li><a href="${esc(source.url)}" target="_blank" rel="noopener noreferrer">${esc(source.label)} <span aria-hidden="true">↗</span></a></li>`).join('')}</ul></div>` : ''}</div></article>`;
 }
 
@@ -132,21 +132,27 @@ function mediaHref(item) {
 
 function mediaCard(item, locale) {
   const labels = archiveCopy[locale];
-  const linkLabel = item.format === 'archive' ? labels.archive : item.format === 'video' ? labels.watch : item.category === 'interview' ? labels.read : labels.readArticle;
+  const linkLabel = item.format === 'archive' ? labels.archive : item.format === 'video' ? labels.watch : item.category === 'coverage' ? labels.readArticle : labels.read;
   const guest = localizedValue(item.guest, locale);
-  return `<article class="media-entry" id="${esc(item.id)}"><div class="media-entry-meta"><span class="media-outlet">${esc(item.outlet)}</span>${item.date ? `<span class="media-date">${item.dateLabel ? `${esc(localizedValue(item.dateLabel, locale))} ` : ''}<time datetime="${esc(item.date)}">${esc(writingDate(item.date, locale))}</time></span>` : ''}<span>${esc(labels.language[item.language])}${item.page ? ` · ${esc(labels.page)} ${esc(item.page)}` : ''}</span></div><div class="media-entry-copy"><h3><a href="${esc(mediaHref(item))}" target="_blank" rel="noopener noreferrer">${esc(item.titles[locale])}</a></h3>${guest ? `<p class="media-guest">${esc(labels.guest)} · <span${/[\u0530-\u058F]/.test(guest) ? ' lang="hy"' : ''}>${esc(guest)}</span></p>` : ''}<p>${esc(item.summaries[locale])}</p><a class="archive-read" href="${esc(mediaHref(item))}" target="_blank" rel="noopener noreferrer">${esc(linkLabel)} <span aria-hidden="true">↗</span></a></div></article>`;
+  const searchText = [...Object.values(item.titles), ...(typeof item.guest === 'object' && item.guest ? Object.values(item.guest) : [item.guest]), item.outlet, item.summaries[locale]].filter(Boolean).join(' ');
+  return `<article class="media-entry" id="${esc(item.id)}" data-archive-search="${esc(searchText)}"><div class="media-entry-meta"><span class="media-outlet">${esc(item.outlet)}</span>${item.date ? `<span class="media-date">${item.dateLabel ? `${esc(localizedValue(item.dateLabel, locale))} ` : ''}<time datetime="${esc(item.date)}">${esc(writingDate(item.date, locale))}</time></span>` : ''}<span>${esc(labels.language[item.language])}${item.page ? ` · ${esc(labels.page)} ${esc(item.page)}` : ''}</span></div><div class="media-entry-copy"><h3><a href="${esc(mediaHref(item))}" target="_blank" rel="noopener noreferrer">${esc(item.titles[locale])}</a></h3>${guest ? `<p class="media-guest">${esc(labels.guest)} · <span${/[\u0530-\u058F]/.test(guest) ? ' lang="hy"' : ''}>${esc(guest)}</span></p>` : ''}<p>${esc(item.summaries[locale])}</p><a class="archive-read" href="${esc(mediaHref(item))}" target="_blank" rel="noopener noreferrer">${esc(linkLabel)} <span aria-hidden="true">↗</span></a></div></article>`;
 }
 
 function mediaArchive(locale) {
   const labels = archiveCopy[locale];
   const groups = Object.entries(labels.categories).map(([category, copy]) => ({ category, ...copy, items: mediaItems.filter((item) => item.category === category) })).filter((group) => group.items.length);
-  return `<nav class="archive-nav" aria-label="${esc(labels.browse)}">${groups.map((group) => `<a href="#${group.category}">${esc(group.title)} <span>${group.items.length}</span></a>`).join('')}</nav>${groups.map((group) => `<section class="media-group" aria-labelledby="${group.category}"><header class="media-group-heading"><h2 id="${group.category}">${esc(group.title)}</h2><p>${esc(group.description)}</p></header><div class="media-list">${group.items.map((item) => mediaCard(item, locale)).join('')}</div></section>`).join('')}`;
+  return `<nav class="archive-nav" aria-label="${esc(labels.browse)}">${groups.map((group) => `<a href="#${group.category}" aria-label="${esc(group.title)}">${esc(group.label)} <span>${group.items.length}</span></a>`).join('')}</nav><div class="archive-search-controls" hidden><form class="archive-search" role="search" aria-label="${esc(labels.search)}"><label class="archive-search-label" for="archive-search-input">${esc(labels.search)}</label><div class="archive-search-field"><input class="archive-search-input" id="archive-search-input" type="search" autocomplete="off" aria-describedby="archive-search-hint" aria-controls="archive-results"><button class="archive-search-clear" type="button" hidden>${esc(labels.clearSearch)}</button></div><p id="archive-search-hint">${esc(labels.searchHint)}</p></form><p class="archive-result-count" role="status" aria-live="polite" aria-atomic="true" data-result-template="${esc(labels.results)}"></p></div><div class="archive-results" id="archive-results">${groups.map((group) => `<section class="media-group" aria-labelledby="${group.category}"><header class="media-group-heading"><h2 id="${group.category}">${esc(group.title)}</h2><p>${esc(group.description)}</p></header><div class="media-list">${group.items.map((item) => mediaCard(item, locale)).join('')}</div></section>`).join('')}<p class="archive-empty" hidden>${esc(labels.empty)}</p></div>`;
 }
 
-function layout({ locale, tail, seoTitle, description, body, nodes, image }) {
+function layout({ locale, tail, seoTitle, description, body, nodes, image, imageAlt, imageWidth, imageHeight }) {
   const ui = interfaceCopy[locale];
   const canonical = absoluteUrl(locale, tail);
   const jsonLd = { '@context': 'https://schema.org', '@graph': nodes };
+  const socialImage = image || `${siteUrl}/og.png`;
+  const isDefaultImage = socialImage === `${siteUrl}/og.png`;
+  const socialImageAlt = isDefaultImage ? { hy: 'Անի Մաղաքյանի ստեղծագործական արխիվի շապիկը', en: 'Cover of Ani Maghakyan’s creative archive', ru: 'Обложка творческого архива Ани Магакян' }[locale] : imageAlt || seoTitle;
+  const socialWidth = isDefaultImage ? 1200 : imageWidth;
+  const socialHeight = isDefaultImage ? 630 : imageHeight;
   return `<!doctype html>
 <html lang="${esc(locales[locale].lang)}"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
@@ -157,14 +163,14 @@ ${Object.keys(locales).map((code) => `<link rel="alternate" hreflang="${locales[
 <link rel="alternate" hreflang="x-default" href="${esc(absoluteUrl('hy', tail))}">
 <meta property="og:type" content="${tail.startsWith('projects/') ? 'article' : 'website'}"><meta property="og:title" content="${esc(seoTitle)}">
 <meta property="og:description" content="${esc(description)}"><meta property="og:url" content="${esc(canonical)}"><meta property="og:site_name" content="Ani Maghakyan">
-<meta property="og:locale" content="${{hy:'hy_AM',en:'en_US',ru:'ru_RU'}[locale]}"><meta property="og:image" content="${esc(image || `${siteUrl}/og.png`)}">
-<meta name="twitter:card" content="summary_large_image"><link rel="icon" href="${basePath}/favicon.svg" type="image/svg+xml">
+<meta property="og:locale" content="${{hy:'hy_AM',en:'en_US',ru:'ru_RU'}[locale]}"><meta property="og:image" content="${esc(socialImage)}"><meta property="og:image:alt" content="${esc(socialImageAlt)}">${socialWidth && socialHeight ? `<meta property="og:image:width" content="${socialWidth}"><meta property="og:image:height" content="${socialHeight}">` : ''}
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(seoTitle)}"><meta name="twitter:description" content="${esc(description)}"><meta name="twitter:image" content="${esc(socialImage)}"><meta name="twitter:image:alt" content="${esc(socialImageAlt)}"><link rel="icon" href="${basePath}/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="${basePath}/site-theme.css">${['books', 'press'].includes(tail) ? `<link rel="stylesheet" href="${basePath}/content-archive.css">` : ''}<script src="${basePath}/site-interactions.js" defer></script><script src="${basePath}/design-interactions.js" defer></script>
 <script type="application/ld+json">${JSON.stringify(jsonLd).replaceAll('<', '\\u003c')}</script>
-</head><body data-page="${esc(tail)}"><a class="skip-link" href="#main-content">${esc(ui.skip)}</a><div class="shell">
+</head><body data-page="${esc(tail)}"><a class="skip-link" href="#main-content">${esc(ui.skip)}</a>
 <header class="masthead"><a class="brand" href="${esc(pageHref(locale))}">Ani Maghakyan.</a><nav class="topnav" aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav>
 <nav class="languages" aria-label="${esc(ui.languages)}">${Object.keys(locales).map((code) => `<a href="${esc(pageHref(code, tail))}" hreflang="${locales[code].lang}" lang="${locales[code].lang}" aria-label="${esc(locales[code].label)}"${code === locale ? ' aria-current="page"' : ''}>${code.toUpperCase()}</a>`).join('')}</nav>
-<details class="mobile-menu"><summary aria-label="${esc(ui.menu)}"><span class="menu-icon" aria-hidden="true"></span></summary><nav aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav></details></header>
+<details class="mobile-menu"><summary aria-label="${esc(ui.menu)}"><span class="menu-icon" aria-hidden="true"></span></summary><nav aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav></details></header><div class="shell">
 ${body}
 <footer class="footer"><nav class="footer-nav" aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav><div class="footer-info"><a href="${esc(pageHref(locale))}">Ani Maghakyan · Maghakian Scripts</a><span>${esc(ui.updated)} <time datetime="${pageUpdatedIso(tail)}">${pageUpdatedIso(tail)}</time></span></div></footer>
 </div></body></html>`;
@@ -222,7 +228,7 @@ ${parts.length ? `<section class="related"><h2>${esc(ui.season)}</h2>${cardGrid(
 ${related.length ? `<section class="related"><h2>${esc(ui.related)}</h2>${cardGrid(related, locale)}</section>` : ''}
 ${serviceLinks(locale, basePath, services.filter((service) => service.related.includes(project.slug)).map((service) => service.slug))}
 <div class="cta"><a class="secondary" href="${esc(pageHref(locale))}#filmography">${esc(locales[locale].backLabel)}</a></div></article>${sourceList(locale, sourceItems)}</section></main>`;
-  return layout({ locale, tail, seoTitle, description, body, nodes, image });
+  return layout({ locale, tail, seoTitle, description, body, nodes, image, imageAlt: `${title} — ${project.year}`, imageWidth: originalPoster?.width, imageHeight: originalPoster?.height });
 }
 
 function hubPage(hub, locale) {
@@ -231,6 +237,13 @@ function hubPage(hub, locale) {
   const tail = hub.slug;
   const canonical = absoluteUrl(locale, tail);
   const title = hub.titles[locale];
+  const seoTitle = tail === 'books' ? {
+    hy: 'Անի Մաղաքյանի գրքերը՝ «Տակնուվրա», «Ժամանակավոր կանգառ»',
+    en: 'Books by Ani Maghakyan — Taknuvra & Temporary Stop',
+    ru: 'Книги Ани Магакян — «Такнувра» и «Временная остановка»',
+  }[locale] : title;
+  const visibleBooks = [...books].sort((a, b) => Number(b.year) - Number(a.year));
+  const shareBook = tail === 'books' ? visibleBooks.find((book) => book.cover) : null;
   const crumbs = breadcrumbs(locale, title, tail);
   const descriptions = {
     projects: {hy:'Անի Մաղաքյանի 47 աշխատանքը՝ սերիալներ, ֆիլմեր, ներկայացումներ և մանկական նախագծեր։ Ընտրեք նախագիծը՝ մանրամասները և դիտման հղումը գտնելու համար։',en:'Explore 47 works by Ani Maghakyan across television, film, theatre and children’s stories. Find project details and viewing links.',ru:'47 работ Ани Магакян: сериалы, фильмы, спектакли и детские проекты. Выберите работу, чтобы узнать подробности и найти ссылку на просмотр.'},
@@ -238,6 +251,8 @@ function hubPage(hub, locale) {
     'work-with-ani': {hy:t.contactText,en:t.contactText,ru:t.contactText},
   };
   const description = (descriptions[tail] ?? hub.descriptions)[locale];
+  const displayTitle = tail === 'press' ? { hy: 'Հարցազրույցներ և մամուլ', en: 'Interviews & press', ru: 'Интервью и пресса' }[locale] : title;
+  const introduction = tail === 'press' ? { hy: 'Զրույցներ Անիի հետ, նրա վարած հարցազրույցներն ու աշխատանքների արձագանքները։', en: 'Conversations with Ani, interviews she conducted and coverage of her work.', ru: 'Беседы с Ани, её интервью с другими авторами и публикации о её работах.' }[locale] : description;
   const nodes = [
     { '@type': tail === 'about' ? 'ProfilePage' : tail === 'work-with-ani' ? 'ContactPage' : 'CollectionPage', '@id': `${canonical}#page`, url: canonical, name: title, description, inLanguage: locales[locale].lang, dateModified: pageUpdatedIso(tail), isPartOf: { '@id': `${siteUrl}/#website` }, about: { '@id': personId }, breadcrumb: { '@id': `${canonical}#breadcrumbs` }, ...(tail === 'about' ? {mainEntity:{'@id':personId}} : {}) },
     personNode(), crumbs.node,
@@ -255,9 +270,9 @@ function hubPage(hub, locale) {
     nodes[0].mainEntity = { '@id': `${canonical}#writings` };
     nodes[0].isBasedOn = writingBlogUrl;
   } else if (tail === 'books') {
-    article = `<div class="book-gallery">${books.map((book) => bookCard(book, locale)).join('')}</div>`;
+    article = `<div class="book-gallery">${visibleBooks.map((book, index) => bookCard(book, locale, index === 0)).join('')}</div>`;
     nodes.push(...books.map((book) => bookSchema(book, locale, siteUrl, personId)));
-    nodes.push({ '@type': 'ItemList', '@id': `${canonical}#books`, numberOfItems: books.length, itemListElement: books.map((book, index) => ({ '@type': 'ListItem', position: index + 1, item: { '@id': `${siteUrl}/#book-${book.slug}` } })) });
+    nodes.push({ '@type': 'ItemList', '@id': `${canonical}#books`, numberOfItems: visibleBooks.length, itemListElement: visibleBooks.map((book, index) => ({ '@type': 'ListItem', position: index + 1, item: { '@id': `${siteUrl}/#book-${book.slug}` } })) });
     nodes[0].mainEntity = { '@id': `${canonical}#books` };
     sources = [];
   } else if (tail === 'about') {
@@ -277,8 +292,8 @@ function hubPage(hub, locale) {
   }
   const sidebar = tail === 'writings' ? `<aside class="writing-aside"><p class="kicker">${esc(writingCopy[locale].kicker)}</p><p>${esc(writingCopy[locale].intro)}</p><p>${esc(writingCopy[locale].language)}</p><a href="${writingBlogUrl}" target="_blank" rel="noopener noreferrer">${esc(writingCopy[locale].all)}</a><a href="${esc(pageHref(locale, 'books'))}">${esc(sectionLabel(locale, 'books'))}</a></aside>` : tail === 'press' ? `<aside class="archive-profiles" aria-labelledby="profiles-heading"><h2 id="profiles-heading">${esc(archiveCopy[locale].profiles)}</h2><ul>${sources.map((source) => `<li><a href="${esc(source.url)}" target="_blank" rel="noopener noreferrer">${esc(source.label)} <span aria-hidden="true">↗</span></a></li>`).join('')}</ul></aside>` : sourceList(locale, sources);
   const content = tail === 'projects' ? `<section class="index-content">${article}</section>` : ['books', 'press'].includes(tail) ? `<div class="content-archive ${tail === 'books' ? 'books-archive' : 'press-archive'}">${article}${sidebar}</div>` : `<section class="content"><div class="prose">${article}</div>${sidebar}</section>`;
-  const body = `<main id="main-content">${crumbs.html}<section class="hero${tail === 'about' ? '' : ' single'}"><div><p class="kicker">${esc(sectionLabel(locale, tail))}</p><h1>${esc(title)}</h1><p class="dek">${esc(description)}</p></div>${tail === 'about' ? `<figure class="hero-media author-media"><img src="${basePath}${siteImagePreviews('portrait')[1].src}" srcset="${esc(siteImageSrcSet('portrait', basePath))}" sizes="(max-width: 760px) calc(100vw - 32px), 480px" alt="${esc(t.title)}" width="1279" height="1919" decoding="async"></figure>` : ''}</section>${content}</main>`;
-  return layout({locale,tail,seoTitle:title,description,body,nodes});
+  const body = `<main id="main-content">${crumbs.html}<section class="hero${tail === 'about' ? '' : ' single'}"><div><p class="kicker">${esc(sectionLabel(locale, tail))}</p><h1>${esc(displayTitle)}</h1><p class="dek">${esc(introduction)}</p></div>${tail === 'about' ? `<figure class="hero-media author-media"><img src="${basePath}${siteImagePreviews('portrait')[1].src}" srcset="${esc(siteImageSrcSet('portrait', basePath))}" sizes="(max-width: 760px) calc(100vw - 32px), 480px" alt="${esc(t.title)}" width="1279" height="1919" decoding="async"></figure>` : ''}</section>${content}</main>`;
+  return layout({ locale, tail, seoTitle, description, body, nodes, ...(shareBook ? { image: shareBook.cover.src.startsWith('/') ? `${siteUrl}${shareBook.cover.src}` : shareBook.cover.src, imageAlt: `${shareBook.titles[locale]} — ${archiveCopy[locale].cover}`, imageWidth: shareBook.cover.width, imageHeight: shareBook.cover.height } : {}) });
 }
 
 for (const locale of Object.keys(locales)) {

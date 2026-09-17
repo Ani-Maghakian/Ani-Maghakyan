@@ -19,7 +19,8 @@ test("exports all localized pages with valid structured data", async () => {
     assert.match(html, /<meta[^>]+name=["']description["']/);
     assert.match(html, /47/);
     assert.match(html, /#filmography/);
-    assert.match(html, /#sources/);
+    assert.match(html, /id="sources"/); // Preserve the existing homepage section anchor.
+    assert.match(html, /href="[^\"]*press\//); // Navigation now opens the full media archive.
     assert.match(html, /ani-3180-web\.jpg/);
     assert.match(html, /Armenian Museum of Moscow/);
     assert.doesNotMatch(html, /\/_vinext\/image\?/);
@@ -117,7 +118,7 @@ test("exports repaired project media, links and OKE naming", async () => {
   }
 
   for (const verifiedUrlPart of [
-    "watch?v=iIn9qu4Phls",
+    "watch?v=tqXaUXqvRu4",
     "watch?v=TTRAx2ID01c",
     "watch?v=sNbNHBkiCpU",
     "watch?v=DDosY4yJooE",

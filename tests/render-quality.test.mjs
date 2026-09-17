@@ -1,12 +1,26 @@
 import assert from 'node:assert/strict';
 import { readFile, readdir, stat } from 'node:fs/promises';
 import { resolve } from 'node:path';
+import { createHash } from 'node:crypto';
 import test from 'node:test';
 import { services, serviceHub } from '../lib/services.mjs';
 import { collectSeoUrls } from '../scripts/submit-indexnow-seo.mjs';
 
 const root = resolve('dist/client');
 const read = (path) => readFile(resolve(root, path, 'index.html'), 'utf8');
+
+test('shared layout and behavior URLs match the deployed asset bytes', async () => {
+  for (const page of ['', 'books', 'press', 'en/press', 'ru/books', 'services/screenwriting', 'projects/paper-dream']) {
+    const html = await read(page);
+    const urls = [...html.matchAll(/(?:href|src)="([^\"]*(?:site-theme\.css|content-archive\.css|site-interactions\.js|design-interactions\.js)(?:\?[^\"]*)?)"/g)].map((match) => new URL(match[1], 'https://example.com'));
+    assert.ok(urls.some((url) => url.pathname.endsWith('/site-theme.css')), page);
+    for (const url of urls) {
+      const filename = url.pathname.split('/').at(-1);
+      const hash = createHash('sha256').update(await readFile(resolve(root, filename))).digest('hex').slice(0, 12);
+      assert.equal(url.searchParams.get('v'), hash, `${page}: ${filename} must refresh when its contents change`);
+    }
+  }
+});
 
 async function collectFiles(dir, suffix) {
   const found = [];

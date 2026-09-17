@@ -3,7 +3,7 @@ import { dirname, resolve } from 'node:path';
 import { projects, locales, localizedPath } from './seo-page-data.mjs';
 import { serviceHub, services, serviceCopy } from '../lib/services.mjs';
 import { interfaceCopy, publicContactEmail, sectionLinks, pageUpdatedIso } from '../lib/site-copy.mjs';
-import { siteLinks } from '../lib/profile-content.mjs';
+import { copy, siteLinks } from '../lib/profile-content.mjs';
 import { serviceLinks, inquiryBrief } from './service-fragments.mjs';
 
 const [owner = '', repositoryName = ''] = (process.env.GITHUB_REPOSITORY ?? '').split('/');
@@ -91,13 +91,13 @@ ${Object.keys(locales).map((code) => `<link rel="alternate" hreflang="${locales[
 <meta property="og:type" content="website"><meta property="og:title" content="${esc(seoTitle)}">
 <meta property="og:description" content="${esc(description)}"><meta property="og:url" content="${esc(canonical)}"><meta property="og:site_name" content="Ani Maghakyan">
 <meta property="og:locale" content="${{ hy: 'hy_AM', en: 'en_US', ru: 'ru_RU' }[locale]}"><meta property="og:image" content="${siteUrl}/og.png">
-<meta name="twitter:card" content="summary_large_image"><link rel="icon" href="${basePath}/favicon.svg" type="image/svg+xml">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="${esc(copy[locale].title)}"><meta name="twitter:title" content="${esc(seoTitle)}"><meta name="twitter:description" content="${esc(description)}"><meta name="twitter:image" content="${siteUrl}/og.png"><meta name="twitter:image:alt" content="${esc(copy[locale].title)}"><meta name="twitter:card" content="summary_large_image"><link rel="icon" href="${basePath}/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="${basePath}/site-theme.css"><script src="${basePath}/site-interactions.js" defer></script><script src="${basePath}/design-interactions.js" defer></script>
 <script type="application/ld+json">${JSON.stringify(jsonLd).replaceAll('<', '\\u003c')}</script>
-</head><body data-page="${esc(tail)}"><a class="skip-link" href="#main-content">${esc(ui.skip)}</a><div class="shell">
+</head><body data-page="${esc(tail)}"><a class="skip-link" href="#main-content">${esc(ui.skip)}</a>
 <header class="masthead"><a class="brand" href="${esc(pageHref(locale))}">Ani Maghakyan.</a><nav class="topnav" aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav>
 <nav class="languages" aria-label="${esc(ui.languages)}">${Object.keys(locales).map((code) => `<a href="${esc(pageHref(code, tail))}" hreflang="${locales[code].lang}" lang="${locales[code].lang}" aria-label="${esc(locales[code].label)}"${code === locale ? ' aria-current="page"' : ''}>${code.toUpperCase()}</a>`).join('')}</nav>
-<details class="mobile-menu"><summary aria-label="${esc(ui.menu)}"><span class="menu-icon" aria-hidden="true"></span></summary><nav aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav></details></header>
+<details class="mobile-menu"><summary aria-label="${esc(ui.menu)}"><span class="menu-icon" aria-hidden="true"></span></summary><nav aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav></details></header><div class="shell">
 ${body}
 <footer class="footer"><nav class="footer-nav" aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav><div class="footer-info"><a href="${esc(pageHref(locale))}">Ani Maghakyan · Maghakian Scripts</a><span>${esc(ui.updated)} <time datetime="${pageUpdatedIso(tail)}">${pageUpdatedIso(tail)}</time></span></div></footer>
 </div></body></html>`;

@@ -93,7 +93,7 @@
 .filter-button[aria-pressed=true]{background:linear-gradient(135deg,#ffffff40,#ffffff16),#35423c99;color:#fff5ef;border-color:#fff5efb3;box-shadow:inset 0 0 0 1px #fff5ef50,0 3px 12px #0002;}
 
 /* Scroll progress is written by design-interactions.js; no timed entrance delay. */
-.scroll-text.scroll-text{color:#fff3f0;opacity:calc(.7 + var(--reveal,1)*.3);translate:0 calc((1 - var(--reveal,1))*24px);}
+.scroll-text.scroll-text{color:#fff3f0;opacity:calc(.7 + var(--reveal,1)*.3);translate:none;}
 .scroll-image{scale:var(--image-scale,1);clip-path:inset(var(--image-inset,0%) round 12px);filter:brightness(calc(.78 + var(--reveal,1)*.22));}
 .scroll-card{translate:0 calc((1 - var(--reveal,1))*28px);}
 .scroll-text.scroll-text:focus-within,.scroll-card:focus-within{opacity:1;translate:none;}
@@ -111,3 +111,17 @@ a:focus-visible .scroll-image{scale:1;clip-path:none;filter:none;}
 
 .featured-poster-backdrop img{width:100%;height:100%;object-fit:cover;}
 .landscape-copy .hero-tagline{font-size:clamp(17px,2vw,22px);margin:0 auto 16px;color:#fff3f0;}
+
+/* Inner-page navigation spans the viewport without a 100vw scrollbar overhang. */
+body>.masthead{margin-inline:0;width:100%;padding-inline:max(32px,calc((100% - 1200px)/2));gap:20px}
+.masthead .topnav{gap:16px;min-width:0}
+.masthead .topnav a,.primary-nav a{min-height:44px;display:inline-flex;align-items:center}
+.masthead .brand,.masthead .languages,.masthead .mobile-menu{flex-shrink:0}
+.prose p,.dek{ text-wrap:pretty }
+.site-footer>div:first-child{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px 18px}
+.writing-preview article{display:flex;flex-direction:column}
+.writing-preview .writing-read{align-self:flex-start;margin-top:auto}
+:lang(hy) h2,:lang(hy) h3{letter-spacing:-.015em}
+@media(max-width:1280px){body>.masthead .topnav{display:none}body>.masthead .mobile-menu{display:block}}
+@media(max-width:760px){body>.masthead{padding-inline:18px;gap:8px}}
+@media(max-width:440px){body>.masthead{gap:5px}}

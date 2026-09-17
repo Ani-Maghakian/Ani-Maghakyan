@@ -236,7 +236,7 @@ export const projects = [
     },
     "episodes": 24,
     "poster": "/posters/tghte-erazank.webp",
-    "watchUrl": "https://www.youtube.com/watch?v=iIn9qu4Phls",
+    "watchUrl": "https://www.youtube.com/watch?v=tqXaUXqvRu4",
     "watchKind": "youtube",
     "roles": {
       "hy": "Սցենարիստ",
@@ -268,7 +268,7 @@ export const projects = [
     "sources": [
       {
         "label": "Official / primary video",
-        "url": "https://www.youtube.com/watch?v=iIn9qu4Phls"
+        "url": "https://www.youtube.com/watch?v=tqXaUXqvRu4"
       },
       {
         "label": "Seoul International Drama Awards — 2020 entry",
@@ -2366,7 +2366,7 @@ export const projects = [
     },
     "episodes": null,
     "poster": null,
-    "watchUrl": "https://www.monk3.com/films",
+    "watchUrl": "https://www.monk3.com/white-shirt",
     "watchKind": "platform",
     "roles": {
       "hy": "Անի Մաղաքյանի պաշտոնական սցենարային/ստեղծագործական արխիվ",
@@ -2398,7 +2398,7 @@ export const projects = [
     "sources": [
       {
         "label": "Official / primary project destination",
-        "url": "https://www.monk3.com/films"
+        "url": "https://www.monk3.com/white-shirt"
       }
     ]
   },
@@ -2730,9 +2730,9 @@ export const hubs = [
       "ru": "Книги Ани Магакян"
     },
     "descriptions": {
-      "hy": "Անի Մաղաքյանի երկու գրքերը՝ «Ժամանակավոր կանգառ» և «Տակնուվրա»։ Շապիկներ, բովանդակության նկարագրություն, հրատարակությունների տվյալներ և գրքերի հղումներ։",
-      "en": "Explore Ani Maghakyan’s two books, Temporary Stop and Taknuvra (Upside Down): book covers, descriptions, publication details and catalogue links.",
-      "ru": "Две книги Ани Магакян — «Временная остановка» и «Такнувра» («Вверх дном»): обложки, описание, сведения об изданиях и ссылки на книги."
+      "hy": "Անի Մաղաքյանի գրքերը՝ «Ժամանակավոր կանգառ» և «Տակնուվրա»։ Պատմվածքների ժողովածուներ, հրատարակությունների տվյալներ, ISBN-ներ և գրախանութների հղումներ։",
+      "en": "Discover Ani Maghakyan’s books, Temporary Stop and Taknuvra (Upside Down): short-story collections, edition details, ISBNs and bookshop links.",
+      "ru": "Книги Ани Магакян — «Временная остановка» и «Такнувра» («Вверх дном»): сборники рассказов, сведения об изданиях, ISBN и ссылки на книжные магазины."
     },
     "sources": [
       {

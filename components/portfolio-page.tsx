@@ -17,6 +17,7 @@ import { originalProjectPosters, posterNotes, posterPreviews, posterSrcSet } fro
 import { writings, writingCopy } from "@/lib/writings.mjs";
 import { services } from "@/lib/services.mjs";
 import { books } from "@/lib/books.mjs";
+import { mediaItems } from "@/lib/media-archive.mjs";
 
 type Filter = "all" | ProjectKind;
 
@@ -152,6 +153,13 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
     .filter((project) => project.featuredRank)
     .sort((a, b) => (a.featuredRank ?? 0) - (b.featuredRank ?? 0));
   const filters = Object.keys(t.filters) as Filter[];
+  const latestBooks = [...books].sort((a, b) => Number(b.year) - Number(a.year));
+  const pressPreview = ["interview", "journalism", "coverage"].map((category) => mediaItems.find((item) => item.category === category)).filter((item) => item !== undefined);
+  const pressLabels = {
+    hy: { title: "Հարցազրույցներ և մամուլ", intro: "Անիի հետ զրույցներ, նրա վարած հարցազրույցներն ու աշխատանքների արձագանքները։", browse: "Բոլոր հարցազրույցներն ու հրապարակումները", interview: "Անիի հետ", journalism: "Անիի վարած հարցազրույցները", coverage: "Մամուլում", details: "Նյութի մասին", nav: "Հարցազրույցներ" },
+    en: { title: "Interviews & press", intro: "Conversations with Ani, interviews she conducted and coverage of her work.", browse: "All interviews and publications", interview: "With Ani", journalism: "Interviews by Ani", coverage: "In the press", details: "About the story", nav: "Interviews" },
+    ru: { title: "Интервью и пресса", intro: "Беседы с Ани, её интервью с другими авторами и публикации о её работах.", browse: "Все интервью и публикации", interview: "С Ани", journalism: "Интервью Ани", coverage: "В прессе", details: "О материале", nav: "Интервью" },
+  }[locale];
 
   return (
     <div className="site-shell" id="top" lang={locale === "hy" ? "hy-AM" : locale}>
@@ -166,10 +174,10 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
         <nav className="primary-nav" aria-label={t.primaryNavLabel}>
           <a href="#selected">{t.nav.work}</a>
           <a href="#filmography">{t.nav.filmography}</a>
+          <a href={`${localeRoot}books/`}>{t.booksTitle}</a>
           <a href={`${localeRoot}writings/`}>{sectionLinks.find((item) => item.slug === "writings")?.labels[locale]}</a>
-          <a href={`${localeRoot}services/`}>{sectionLinks.find((item) => item.slug === "services")?.labels[locale] ?? "Services"}</a>
           <a href="#about">{t.nav.about}</a>
-          <a href="#sources">{t.nav.sources}</a>
+          <a href={`${localeRoot}press/`}>{pressLabels.nav}</a>
           <a href="#contact">{t.nav.contact}</a>
         </nav>
 
@@ -371,13 +379,13 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
         <section className="books-section section-frame" id="books" aria-labelledby="books-title">
           <div className="section-heading"><h2 id="books-title">{t.booksTitle}</h2><p>{{hy:"«Ժամանակավոր կանգառ» և «Տակնուվրա»՝ Անի Մաղաքյանի արձակը։",en:"Temporary Stop and Taknuvra — prose by Ani Maghakyan.",ru:"«Временная остановка» и «Такнувра» — проза Ани Магакян."}[locale]}</p></div>
           <div className="book-preview-grid">
-            {books.map((book) => (
+            {latestBooks.map((book) => (
               <a className="book-preview" key={book.slug} href={`${localeRoot}books/#${book.slug}`}>
                 {book.cover && <figure className="book-preview-cover">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={`${basePath}${book.cover.src}`} width={book.cover.width} height={book.cover.height} alt={`${book.titles[locale]} — ${{hy:"գրքի շապիկ",en:"book cover",ru:"обложка книги"}[locale]}`} loading="lazy" decoding="async" />
                 </figure>}
-                <div><p className="kicker">{book.year} · {book.format[locale]}</p><h3>{book.titles[locale]}</h3><span className="writing-read">{{hy:"Գրքի մասին",en:"Explore the book",ru:"О книге"}[locale]}<ArrowUpRight className="ui-icon" aria-hidden="true" /></span></div>
+                <div><p className="kicker">{book.year} · {book.format[locale]}</p><h3>{book.titles[locale]}</h3><p className="book-preview-description">{book.slug === "temporary-stop" ? {hy:"Արձակ ստեղծագործությունների ժողովածու՝ հրատարակված Երևանում, «Վան Արյան» հրատարակչության կողմից։",en:"A collection of short fiction published in Yerevan by Van Aryan.",ru:"Сборник короткой прозы, выпущенный в Ереване издательством «Ван Арьян»."}[locale] : {hy:"Պատմվածքներ և մենախոսություններ՝ «Մի օր բոլորը վերադառնում են» ենթավերնագրով։",en:"Stories and monologues subtitled “One Day Everyone Returns.”",ru:"Рассказы и монологи с подзаголовком «Однажды все возвращаются»."}[locale]}</p><span className="writing-read">{{hy:"Գրքի մասին",en:"Explore the book",ru:"О книге"}[locale]}<ArrowUpRight className="ui-icon" aria-hidden="true" /></span></div>
               </a>
             ))}
           </div>
@@ -403,14 +411,20 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
         </section>
 
         <section className="sources-section section-frame" id="sources" aria-labelledby="sources-title">
-          <div className="section-heading"><p className="eyebrow">{t.sourcesKicker}</p><div><h2 id="sources-title">{t.sourcesTitle}</h2><p>{t.sourcesIntro}</p></div></div>
-          <ol className="source-grid">
+          <div className="section-heading"><div><h2 id="sources-title">{pressLabels.title}</h2><p>{pressLabels.intro}</p></div><a className="writing-browse" href={`${localeRoot}press/`}>{pressLabels.browse}<ArrowUpRight className="ui-icon" aria-hidden="true" /></a></div>
+          <div className="press-preview-grid">
+            {pressPreview.map((item) => <article className="press-preview" key={item.id}>
+              <p className="kicker">{pressLabels[item.category as "interview" | "journalism" | "coverage"]}</p>
+              <h3><a href={`${localeRoot}press/#${item.id}`}>{item.titles[locale]}</a></h3>
+              <p>{item.summaries[locale]}</p>
+              <div className="press-preview-footer"><span>{item.outlet}</span><a className="archive-read" href={`${localeRoot}press/#${item.id}`}>{pressLabels.details}<ArrowUpRight className="ui-icon" aria-hidden="true" /></a></div>
+            </article>)}
+          </div>
+          <details className="source-directory"><summary>{t.sourcesTitle}</summary><ul>
             {sourceLinks.map((source) => (
-              <li key={source.id}><span className="source-number">{padded(source.id)}</span><div><span className="source-kind">{source.kind[locale]}</span><h3>{source.label}</h3><p>{source.note[locale]}</p></div><ExternalLink href={source.href}>{t.visitSource}</ExternalLink></li>
+              <li key={source.id}><a href={source.href} target="_blank" rel="noopener noreferrer">{source.label}<ArrowUpRight className="ui-icon" aria-hidden="true" /></a><span>{source.kind[locale]}</span></li>
             ))}
-          </ol>
-          <a className="writing-browse" href={`${localeRoot}press/`}>{{hy:"Բոլոր հարցազրույցներն ու հրապարակումները",en:"Browse interviews and publications",ru:"Все интервью и публикации"}[locale]}<ArrowUpRight className="ui-icon" aria-hidden="true" /></a>
-          <p className="source-method">{t.sourcesMethod}</p><span className="section-tab" aria-hidden="true">05 / 07</span>
+          </ul></details>
         </section>
 
         <section className="faq-section section-frame" aria-labelledby="faq-title">

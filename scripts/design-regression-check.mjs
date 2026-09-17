@@ -8,8 +8,8 @@ for (const url of urls) {
   const tail = new URL(url).pathname.slice(prefix.length);
   const html = readFileSync(`${base}/${tail}index.html`, 'utf8');
   const document = new JSDOM(html).window.document;
-  assert(document.querySelector('link[href$="/site-theme.css"]'), url);
-  assert(document.querySelector('script[src$="/design-interactions.js"]'), url);
+  assert([...document.querySelectorAll('link[href]')].some((el) => new URL(el.href, url).pathname.endsWith('/site-theme.css')), url);
+  assert([...document.querySelectorAll('script[src]')].some((el) => new URL(el.src, url).pathname.endsWith('/design-interactions.js')), url);
   assert(!document.querySelector('link[href$="/inner-pages.css"]'), url);
   for (const el of document.querySelectorAll('img[src^="/"]')) {
     const source = el.getAttribute('src').replace(prefix, '');

@@ -67,7 +67,7 @@ export function createMetadata(locale: Locale): Metadata {
   return {
     title: titles[locale],
     description: descriptions[locale],
-    applicationName: "Ani Maghakyan Filmography",
+    applicationName: "Ani Maghakyan",
     authors: [{ name: "Ani Maghakyan" }],
     creator: "Maghakian Scripts",
     publisher: "Maghakian Scripts",
@@ -139,18 +139,6 @@ export function structuredData(locale: Locale) {
     },
   }));
 
-  const knownFor = projects
-    .filter((project) => project.featuredRank)
-    .sort((a, b) => (a.featuredRank ?? 0) - (b.featuredRank ?? 0))
-    .map((project) => ({
-      "@type": project.kind === "series" ? "TVSeries" : project.kind === "film" ? "Movie" : "CreativeWork",
-      name: project.title[locale],
-      alternateName: [project.title.hy, project.title.en, project.title.ru].filter(
-        (value, index, values) => values.indexOf(value) === index,
-      ),
-      ...(pageUrl ? { url: `${pageUrl}projects/${project.seoSlug}/` } : {}),
-    }));
-
   return {
     "@context": "https://schema.org",
     "@graph": [
@@ -158,8 +146,8 @@ export function structuredData(locale: Locale) {
         "@type": "WebSite",
         ...(websiteId ? { "@id": websiteId } : {}),
         ...(siteUrl ? { url: `${siteUrl}/` } : {}),
-        name: "Ani Maghakyan — Official Filmography",
-        alternateName: ["Անի Մաղաքյան — պաշտոնական ֆիլմագրություն", "Ани Магакян — официальная фильмография"],
+        name: "Ani Maghakyan",
+        alternateName: ["Անի Մաղաքյան", "Ани Магакян", "Ani Maghakian"],
         inLanguage: ["hy-AM", "en", "ru"],
         publisher: orgId ? { "@id": orgId } : { "@type": "Organization", name: "Maghakian Scripts" },
       },
@@ -167,7 +155,7 @@ export function structuredData(locale: Locale) {
         "@type": "Person",
         ...(personId ? { "@id": personId } : {}),
         name: localized.title,
-        alternateName: ["Անի Մաղաքյան", "Ani Maghakyan", "Ани Магакян", "Ani Hamlet Maghakyan"],
+        alternateName: ["Անի Մաղաքյան", "Ani Maghakyan", "Ани Магакян", "Ani Maghakian", "Ani Hamlet Maghakyan"],
         birthDate: "1988-06-03",
         birthPlace: { "@type": "Place", name: "Vanadzor, Armenia" },
         jobTitle: ["Screenwriter", "Showrunner", "Producer", "Author"],
@@ -188,9 +176,8 @@ export function structuredData(locale: Locale) {
           name: `${source.label}: ${source.note[locale]}`,
           url: source.href,
         })),
-        knowsLanguage: ["Armenian", "Russian", "English"],
+        knowsLanguage: ["hy", "ru", "en"],
         knowsAbout: ["Screenwriting", "Television drama", "Film", "Theatre", "Story development"],
-        knownFor,
         worksFor: orgId ? { "@id": orgId } : { "@type": "Organization", name: "Maghakian Scripts" },
         alumniOf: [
           { "@type": "EducationalOrganization", name: "Caucasus Institute" },
