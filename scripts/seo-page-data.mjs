@@ -2678,14 +2678,14 @@ export const hubs = [
   {
     "slug": "press",
     "titles": {
-      "hy": "Աղբյուրներ, հարցազրույցներ և մամուլ",
-      "en": "Press, Interviews & Sources",
-      "ru": "Пресса, интервью и источники"
+      "hy": "Անի Մաղաքյան․ հարցազրույցներ և մամուլ",
+      "en": "Ani Maghakyan: Interviews & Press",
+      "ru": "Ани Магакян: интервью и публикации"
     },
     "descriptions": {
-      "hy": "Անի Մաղաքյանի մասին անկախ և ոլորտային աղբյուրների հավաքածու՝ կենսագրության, ստեղծագործական մեթոդի և ընտրված նախագծերի հեղինակային տվյալների ստուգման համար։",
-      "en": "A curated evidence hub of independent editorial and industry sources covering Ani Maghakyan’s biography, creative process and selected writing/production credits.",
-      "ru": "Собрание независимых редакционных и отраслевых источников об Ани Магакян: биография, творческий метод и подтверждение отдельных сценарных и производственных титров."
+      "hy": "Հարցազրույցներ Անի Մաղաքյանի հետ, նրա վարած հարցազրույցներն ու հեղինակային հրապարակումները։ Գրքեր, սցենարական աշխատանք և մամուլի անդրադարձներ՝ սկզբնաղբյուրների հղումներով։",
+      "en": "Interviews with Ani Maghakyan, interviews she conducted and her journalism. Explore her books, screenwriting and press coverage with links to the original sources.",
+      "ru": "Интервью с Ани Магакян, беседы, которые она провела, и её журналистские работы. Книги, сценарное творчество и публикации со ссылками на первоисточники."
     },
     "sources": [
       {
@@ -2730,9 +2730,9 @@ export const hubs = [
       "ru": "Книги Ани Магакян"
     },
     "descriptions": {
-      "hy": "Պաշտոնական արխիվը ներառում է «Ժամանակավոր կանգառ» պատմվածքների ժողովածուն (2010) և «Տակնուվրա. Մի օրում բոլորը վերադառնում են» վեպը (2021)։ Հրատարակչական/գրավաճառքային արտաքին աղբյուրները ներկայացվում են առանձին՝ որպես հաստատում։",
-      "en": "The official archive lists Temporary Stop, a short-story collection (2010), and Topsy-Turvy: Everyone Returns in One Day, a novel (2021). Independent bookseller/catalogue records are presented separately as supporting evidence.",
-      "ru": "Официальный архив включает сборник рассказов «Временная остановка» (2010) и роман «Вверх дном. За один день возвращаются все» (2021). Внешние книжные каталоги приводятся отдельно как подтверждающие источники."
+      "hy": "Անի Մաղաքյանի երկու գրքերը՝ «Ժամանակավոր կանգառ» և «Տակնուվրա»։ Շապիկներ, բովանդակության նկարագրություն, հրատարակությունների տվյալներ և գրքերի հղումներ։",
+      "en": "Explore Ani Maghakyan’s two books, Temporary Stop and Taknuvra (Upside Down): book covers, descriptions, publication details and catalogue links.",
+      "ru": "Две книги Ани Магакян — «Временная остановка» и «Такнувра» («Вверх дном»): обложки, описание, сведения об изданиях и ссылки на книги."
     },
     "sources": [
       {

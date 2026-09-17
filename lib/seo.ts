@@ -14,15 +14,15 @@ export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "
 export const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 const descriptions: Record<Locale, string> = {
-  hy: "Անի Մաղաքյան՝ «Էլենի օրագիրը» և «84-ի ամառը» սերիալների սցենարիստ։ Պաշտոնական կայք՝ կենսագրություն, սերիալներ, ֆիլմեր, 47 նախագծի ֆիլմագրություն և հարցազրույցներ։",
-  en: "Explore Ani Maghakyan’s biography, TV series and films, including Elen’s Diary and Summer of ’84. Official filmography with 47 projects and interviews.",
-  ru: "Ани Магакян — сценарист «Дневника Элен» и «Лета ’84». Биография, сериалы, фильмы, интервью и фильмография из 47 проектов на официальном сайте.",
+  hy: "Անի Մաղաքյան՝ գրող և «Էլենի օրագիրը», «84-ի ամառը» սերիալների սցենարիստ։ Կենսագրություն, 47 նախագծի ֆիլմագրություն, երկու գիրք և հարցազրույցներ։",
+  en: "Ani Maghakyan, author and screenwriter of Elen’s Diary and Summer of ’84. Explore her biography, 47 screen and stage projects, two books and interviews.",
+  ru: "Ани Магакян — писатель и сценарист «Дневника Элен» и «Лета ’84». Биография, 47 экранных и театральных проектов, две книги и интервью.",
 };
 
 const titles: Record<Locale, string> = {
-  hy: "Անի Մաղաքյան — սցենարիստ, շոուռաներ, պրոդյուսեր | Ֆիլմագրություն",
-  en: "Ani Maghakyan — Screenwriter, Showrunner & Producer | Filmography",
-  ru: "Ани Магакян — сценарист, шоураннер, продюсер | Фильмография",
+  hy: "Անի Մաղաքյան — գրող և սցենարիստ | Գրքեր և ֆիլմագրություն",
+  en: "Ani Maghakyan — Author & Screenwriter | Books & Filmography",
+  ru: "Ани Магакян — писатель и сценарист | Книги и фильмография",
 };
 
 const languageTags: Record<Locale, string> = {

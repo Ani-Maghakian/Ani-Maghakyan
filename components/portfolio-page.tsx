@@ -16,6 +16,7 @@ import { siteImages, siteImagePreviews, siteImageSrcSet } from "@/lib/site-image
 import { originalProjectPosters, posterNotes, posterPreviews, posterSrcSet } from "@/lib/project-posters.mjs";
 import { writings, writingCopy } from "@/lib/writings.mjs";
 import { services } from "@/lib/services.mjs";
+import { books } from "@/lib/books.mjs";
 
 type Filter = "all" | ProjectKind;
 
@@ -367,6 +368,21 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
           <span className="section-tab" aria-hidden="true">04 / 07</span>
         </section>
 
+        <section className="books-section section-frame" id="books" aria-labelledby="books-title">
+          <div className="section-heading"><h2 id="books-title">{t.booksTitle}</h2><p>{{hy:"«Ժամանակավոր կանգառ» և «Տակնուվրա»՝ Անի Մաղաքյանի արձակը։",en:"Temporary Stop and Taknuvra — prose by Ani Maghakyan.",ru:"«Временная остановка» и «Такнувра» — проза Ани Магакян."}[locale]}</p></div>
+          <div className="book-preview-grid">
+            {books.map((book) => (
+              <a className="book-preview" key={book.slug} href={`${localeRoot}books/#${book.slug}`}>
+                {book.cover && <figure className="book-preview-cover">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={`${basePath}${book.cover.src}`} width={book.cover.width} height={book.cover.height} alt={`${book.titles[locale]} — ${{hy:"գրքի շապիկ",en:"book cover",ru:"обложка книги"}[locale]}`} loading="lazy" decoding="async" />
+                </figure>}
+                <div><p className="kicker">{book.year} · {book.format[locale]}</p><h3>{book.titles[locale]}</h3><span className="writing-read">{{hy:"Գրքի մասին",en:"Explore the book",ru:"О книге"}[locale]}<ArrowUpRight className="ui-icon" aria-hidden="true" /></span></div>
+              </a>
+            ))}
+          </div>
+        </section>
+
         <section className="writing-section section-frame" id="writings" aria-labelledby="writings-title">
           <div className="writing-heading">
             <div><p className="eyebrow">{literary.kicker}</p><h2 id="writings-title">{literary.title}</h2><p>{literary.intro}</p></div>
@@ -393,6 +409,7 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
               <li key={source.id}><span className="source-number">{padded(source.id)}</span><div><span className="source-kind">{source.kind[locale]}</span><h3>{source.label}</h3><p>{source.note[locale]}</p></div><ExternalLink href={source.href}>{t.visitSource}</ExternalLink></li>
             ))}
           </ol>
+          <a className="writing-browse" href={`${localeRoot}press/`}>{{hy:"Բոլոր հարցազրույցներն ու հրապարակումները",en:"Browse interviews and publications",ru:"Все интервью и публикации"}[locale]}<ArrowUpRight className="ui-icon" aria-hidden="true" /></a>
           <p className="source-method">{t.sourcesMethod}</p><span className="section-tab" aria-hidden="true">05 / 07</span>
         </section>
 

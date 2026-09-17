@@ -2,9 +2,11 @@ import assert from 'node:assert/strict';
 import { readFile, access } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import test from 'node:test';
+import { JSDOM } from 'jsdom';
 import { projects, hubs, localizedPath } from '../scripts/seo-page-data.mjs';
 import { services } from '../lib/services.mjs';
 import { interfaceCopy, publicContactEmail, resultLabel, pageUpdatedIso } from '../lib/site-copy.mjs';
+import { mediaItems } from '../lib/media-archive.mjs';
 
 const codes = ['hy', 'en', 'ru'];
 const root = resolve('dist/client');
@@ -107,16 +109,42 @@ test('project facts and schema agree on series, seasons and author identity', as
 test('book and press hubs contain their own content and consistent book editions', async () => {
   for (const code of codes) {
     const books = await readPage(code, 'books');
-    assert.equal((books.match(/class="book-card"/g) ?? []).length, 2);
+    const bookDocument = new JSDOM(books).window.document;
+    assert.equal(bookDocument.querySelectorAll('.book-card').length, 2);
     assert.doesNotMatch(books, /class="project-grid/);
     assert.match(books, /9789939050690/);
+    assert.match(books, /9789939812953/);
+    assert.match(books, /9789939894065/);
     assert.match(books, /2021/);
     const bookNodes = graph(books).filter((node) => node['@type'] === 'Book');
     const homeBooks = graph(await readPage(code)).filter((node) => node['@type'] === 'Book');
     assert.deepEqual(bookNodes, homeBooks);
     assert.equal(bookNodes[1].datePublished, '2024');
+    assert.equal(bookNodes[0].datePublished, '2010');
+    assert.equal(bookNodes[0].numberOfPages, 172);
+    const siteRoot = new URL(graph(await readPage(code)).find((node) => node['@type'] === 'WebSite').url).pathname;
+    for (const image of bookDocument.querySelectorAll('.book-cover img')) {
+      assert.ok(image.alt && image.width > 0 && image.height > 0);
+      const imagePath = new URL(image.getAttribute('src'), 'https://example.com').pathname;
+      assert.ok(imagePath.startsWith(siteRoot));
+      await access(resolve(root, imagePath.slice(siteRoot.length)));
+    }
     const press = await readPage(code, 'press');
-    assert.match(press, /class="press-list"/);
+    const pressDocument = new JSDOM(press).window.document;
+    assert.equal(pressDocument.querySelectorAll('.media-entry').length, mediaItems.length);
+    for (const category of ['interview', 'journalism', 'coverage']) assert.ok(pressDocument.getElementById(category));
+    const archive = graph(press).find((node) => node['@type'] === 'ItemList');
+    assert.equal(archive.numberOfItems, mediaItems.length);
+    const personId = graph(press).find((node) => node['@type'] === 'Person')['@id'];
+    for (const media of mediaItems) {
+      const entry = pressDocument.getElementById(media.id);
+      assert.ok(entry.textContent.includes(media.titles[code]));
+      assert.equal(entry.querySelector('h3 a').getAttribute('href'), media.url);
+      const work = archive.itemListElement.find(({ item }) => item['@id'].endsWith(`#${media.id}`)).item;
+      if (media.category === 'journalism') assert.equal(work.author['@id'], personId);
+      else { assert.equal(work.author, undefined); assert.equal(work.about['@id'], personId); }
+      if (media.dateLabel) assert.ok(entry.textContent.includes(media.dateLabel[code]));
+    }
     assert.doesNotMatch(press, /class="project-grid/);
     for (const hub of hubs) assert.match(await readPage(code, hub.slug), /BreadcrumbList/);
   }

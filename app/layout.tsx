@@ -26,6 +26,7 @@ export default function RootLayout({
     <html lang="hy-AM" suppressHydrationWarning>
       <head>
         <link rel="stylesheet" href={`${basePath}/site-theme.css`} />
+        <link rel="stylesheet" href={`${basePath}/content-archive.css`} />
         <link rel="preconnect" href="https://i.ytimg.com" crossOrigin="anonymous" />
       </head>
       <body>{children}</body>
