@@ -1,7 +1,8 @@
 import { mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
-import { projects, hubs, locales, localizedPath, allSeoPageTails, updatedIso } from './seo-page-data.mjs';
-import { interfaceCopy, sectionLinks, publicContactEmail } from '../lib/site-copy.mjs';
+import { projects, hubs, locales, localizedPath, allSeoPageTails } from './seo-page-data.mjs';
+import { interfaceCopy, sectionLinks, publicContactEmail, pageUpdatedIso } from '../lib/site-copy.mjs';
+import { siteImagePreviews, siteImageSrcSet } from '../lib/site-images.mjs';
 import { copy, siteLinks, sourceLinks } from '../lib/profile-content.mjs';
 import { books, bookSchema } from '../lib/books.mjs';
 import { projectStories, projectSummary, relatedProjects } from '../lib/project-editorial.mjs';
@@ -90,7 +91,7 @@ ${Object.keys(locales).map((code) => `<link rel="alternate" hreflang="${locales[
 <nav class="languages" aria-label="${esc(ui.languages)}">${Object.keys(locales).map((code) => `<a href="${esc(pageHref(code, tail))}" hreflang="${locales[code].lang}" lang="${locales[code].lang}" aria-label="${esc(locales[code].label)}"${code === locale ? ' aria-current="page"' : ''}>${code.toUpperCase()}</a>`).join('')}</nav>
 <details class="mobile-menu"><summary aria-label="${esc(ui.menu)}"><span class="menu-icon" aria-hidden="true"></span></summary><nav aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav></details></header>
 ${body}
-<footer class="footer"><nav class="footer-nav" aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav><div class="footer-info"><a href="${esc(pageHref(locale))}">Ani Maghakyan · Maghakian Scripts</a><span>${esc(ui.updated)} <time datetime="${updatedIso}">${updatedIso}</time></span></div></footer>
+<footer class="footer"><nav class="footer-nav" aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav><div class="footer-info"><a href="${esc(pageHref(locale))}">Ani Maghakyan · Maghakian Scripts</a><span>${esc(ui.updated)} <time datetime="${pageUpdatedIso(tail)}">${pageUpdatedIso(tail)}</time></span></div></footer>
 </div></body></html>`;
 }
 
@@ -100,8 +101,9 @@ function projectPage(project, locale) {
   const title = project.titles[locale];
   const canonical = absoluteUrl(locale, tail);
   const story = projectStories[project.slug];
-  const description = projectSummary(project, locale);
-  const seoTitle = `${title} (${project.year}) — ${copy[locale].title}`;
+  const synopsis = projectSummary(project, locale);
+  const description = story?.descriptions?.[locale] ?? synopsis;
+  const seoTitle = story?.seoTitles?.[locale] ?? `${title} (${project.year}) — ${copy[locale].title}`;
   const crumbs = breadcrumbs(locale, title, tail, true);
   const image = projectImage(project);
   const originalPoster = originalProjectPosters[project.slug];
@@ -117,7 +119,7 @@ function projectPage(project, locale) {
   const seriesId = `${absoluteUrl(locale, 'projects/elens-diary')}#work`;
   const workNode = {
     '@type': isDiary2 ? 'TVSeason' : project.type, '@id': `${canonical}#work`, url: canonical, name: title,
-    alternateName: uniqueTitles(project), description, image, inLanguage: 'hy',
+    alternateName: uniqueTitles(project), description: synopsis, image, inLanguage: 'hy',
     ...(project.year.includes('–') ? { temporalCoverage: project.year.replace('–', '/') } : { datePublished: project.year }),
     contributor: { '@id': personId }, citation: [...new Set(sourceItems.map((s) => s.url))],
     ...(knownRole ? { author: { '@id': personId } } : {}),
@@ -130,13 +132,14 @@ function projectPage(project, locale) {
     ...(project.slug === 'summer-of-84' ? { creator: { '@id': personId }, producer: { '@id': personId } } : {}),
   };
   const nodes = [
-    { '@type': 'WebPage', '@id': `${canonical}#webpage`, url: canonical, name: seoTitle, description, inLanguage: locales[locale].lang, dateModified: updatedIso, mainEntity: { '@id': `${canonical}#work` }, isPartOf: { '@id': `${siteUrl}/#website` }, breadcrumb: { '@id': `${canonical}#breadcrumbs` } },
+    { '@type': 'WebPage', '@id': `${canonical}#webpage`, url: canonical, name: seoTitle, description, inLanguage: locales[locale].lang, dateModified: pageUpdatedIso(tail), mainEntity: { '@id': `${canonical}#work` }, isPartOf: { '@id': `${siteUrl}/#website` }, breadcrumb: { '@id': `${canonical}#breadcrumbs` } },
     workNode, crumbs.node, personNode(),
   ];
   const watch = project.watchUrl ? `<a data-track="watch_project" data-project="${project.slug}" href="${esc(project.watchUrl)}" target="_blank" rel="noopener noreferrer">${esc(locales[locale].watchLabel)}</a>` : '';
   const body = `<main id="main-content">${crumbs.html}<section class="hero"><div><p class="kicker">${esc(format)} · ${esc(project.year)}</p><h1>${esc(title)}</h1><p class="dek">${esc(description)}</p><div class="cta">${watch}<a class="secondary" href="${esc(pageHref(locale, 'work-with-ani'))}">${esc(ui.collaborate)}</a></div><p class="aliases">${esc(uniqueTitles(project).join(' · '))}</p></div>
 <figure class="hero-media${originalProjectPosters[project.slug] ? ' original-poster' : ''}"><span class="media-fallback" aria-hidden="true">${esc(title)}</span><img src="${esc(projectMediaSrc(project))}"${responsivePoster} alt="${esc(`${title} — ${project.year}`)}" width="${originalProjectPosters[project.slug]?.width ?? 640}" height="${originalProjectPosters[project.slug]?.height ?? 400}" loading="eager" decoding="async">${originalProjectPosters[project.slug] ? `<figcaption>${posterNotes[project.slug]?.[locale] ? `${esc(posterNotes[project.slug][locale])} · ` : ''}<a href="${esc(projectMediaSrc(project))}" target="_blank" rel="noopener noreferrer">${esc({hy:'Պաստառը՝ ամբողջ չափով',en:'View the full poster',ru:'Открыть афишу в полном размере'}[locale])}</a></figcaption>` : ''}</figure></section>
 <section class="content"><article class="prose"><h2>${esc(ui.details)}</h2><dl class="meta">${facts.map(([label,value]) => `<div><dt>${esc(label)}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl>
+${isDiary ? `<h2>${esc(ui.story)}</h2><p>${esc(synopsis)}</p><h2>${esc(ui.credit)}</h2><p>${esc(project.summaries[locale])}</p>` : ''}
 ${isDiary ? `<p id="season-1" class="credit-note">${esc({hy:'1-ին եթերաշրջան՝ 197 սերիա։ 2-րդ եթերաշրջան՝ 224 սերիա։ Ընդամենը՝ 421 սերիա՝ ըստ հեղինակային ֆիլմագրության։',en:'Season 1: 197 episodes. Season 2: 224 episodes. Total: 421 episodes in the author filmography.',ru:'Сезон 1 — 197 серий. Сезон 2 — 224 серии. Всего — 421 серия по авторской фильмографии.'}[locale])}</p>` : ''}
 ${story?.note ? `<p class="credit-note">${esc(story.note[locale])}</p>` : ''}
 ${story ? `<p class="source-ref"><a href="${esc(story.source.url)}" target="_blank" rel="noopener noreferrer">${esc(story.source.label)}</a></p>` : ''}
@@ -163,7 +166,7 @@ function hubPage(hub, locale) {
   };
   const description = (descriptions[tail] ?? hub.descriptions)[locale];
   const nodes = [
-    { '@type': tail === 'about' ? 'ProfilePage' : tail === 'work-with-ani' ? 'ContactPage' : 'CollectionPage', '@id': `${canonical}#page`, url: canonical, name: title, description, inLanguage: locales[locale].lang, dateModified: updatedIso, isPartOf: { '@id': `${siteUrl}/#website` }, about: { '@id': personId }, breadcrumb: { '@id': `${canonical}#breadcrumbs` }, ...(tail === 'about' ? {mainEntity:{'@id':personId}} : {}) },
+    { '@type': tail === 'about' ? 'ProfilePage' : tail === 'work-with-ani' ? 'ContactPage' : 'CollectionPage', '@id': `${canonical}#page`, url: canonical, name: title, description, inLanguage: locales[locale].lang, dateModified: pageUpdatedIso(tail), isPartOf: { '@id': `${siteUrl}/#website` }, about: { '@id': personId }, breadcrumb: { '@id': `${canonical}#breadcrumbs` }, ...(tail === 'about' ? {mainEntity:{'@id':personId}} : {}) },
     personNode(), crumbs.node,
   ];
   let article = '';
@@ -196,7 +199,7 @@ function hubPage(hub, locale) {
   }
   const sidebar = tail === 'writings' ? `<aside class="writing-aside"><p class="kicker">${esc(writingCopy[locale].kicker)}</p><p>${esc(writingCopy[locale].intro)}</p><p>${esc(writingCopy[locale].language)}</p><a href="${writingBlogUrl}" target="_blank" rel="noopener noreferrer">${esc(writingCopy[locale].all)}</a><a href="${esc(pageHref(locale, 'books'))}">${esc(sectionLabel(locale, 'books'))}</a></aside>` : sourceList(locale, sources);
   const content = tail === 'projects' ? `<section class="index-content">${article}</section>` : `<section class="content"><div class="prose">${article}</div>${sidebar}</section>`;
-  const body = `<main id="main-content">${crumbs.html}<section class="hero${tail === 'about' ? '' : ' single'}"><div><p class="kicker">${esc(sectionLabel(locale, tail))}</p><h1>${esc(title)}</h1><p class="dek">${esc(description)}</p></div>${tail === 'about' ? `<figure class="hero-media author-media"><img src="${basePath}/ani-3180-web.jpg" alt="${esc(t.title)}" width="1279" height="1919" decoding="async"></figure>` : ''}</section>${content}</main>`;
+  const body = `<main id="main-content">${crumbs.html}<section class="hero${tail === 'about' ? '' : ' single'}"><div><p class="kicker">${esc(sectionLabel(locale, tail))}</p><h1>${esc(title)}</h1><p class="dek">${esc(description)}</p></div>${tail === 'about' ? `<figure class="hero-media author-media"><img src="${basePath}${siteImagePreviews('portrait')[1].src}" srcset="${esc(siteImageSrcSet('portrait', basePath))}" sizes="(max-width: 760px) calc(100vw - 32px), 480px" alt="${esc(t.title)}" width="1279" height="1919" decoding="async"></figure>` : ''}</section>${content}</main>`;
   return layout({locale,tail,seoTitle:title,description,body,nodes});
 }
 
@@ -224,7 +227,7 @@ if (existsSync(sitemapPath)) {
   for (const tail of allSeoPageTails()) {
     for (const locale of Object.keys(locales)) {
       const loc = absoluteUrl(locale, tail);
-      entries.push(`  <url>\n    <loc>${esc(loc)}</loc>\n    <lastmod>${updatedIso}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>${tail.startsWith("projects/") ? "0.85" : tail === "projects" ? "0.9" : "0.75"}</priority>\n    <xhtml:link rel="alternate" hreflang="hy-AM" href="${esc(absoluteUrl("hy", tail))}" />\n    <xhtml:link rel="alternate" hreflang="en" href="${esc(absoluteUrl("en", tail))}" />\n    <xhtml:link rel="alternate" hreflang="ru" href="${esc(absoluteUrl("ru", tail))}" />\n    <xhtml:link rel="alternate" hreflang="x-default" href="${esc(absoluteUrl("hy", tail))}" />\n  </url>`);
+      entries.push(`  <url>\n    <loc>${esc(loc)}</loc>\n    <lastmod>${pageUpdatedIso(tail)}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>${tail.startsWith("projects/") ? "0.85" : tail === "projects" ? "0.9" : "0.75"}</priority>\n    <xhtml:link rel="alternate" hreflang="hy-AM" href="${esc(absoluteUrl("hy", tail))}" />\n    <xhtml:link rel="alternate" hreflang="en" href="${esc(absoluteUrl("en", tail))}" />\n    <xhtml:link rel="alternate" hreflang="ru" href="${esc(absoluteUrl("ru", tail))}" />\n    <xhtml:link rel="alternate" hreflang="x-default" href="${esc(absoluteUrl("hy", tail))}" />\n  </url>`);
     }
   }
   const block = `${start}\n${entries.join("\n")}\n${end}`;

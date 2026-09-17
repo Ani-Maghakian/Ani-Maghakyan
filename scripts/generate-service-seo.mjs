@@ -1,8 +1,8 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
-import { projects, locales, localizedPath, updatedIso } from './seo-page-data.mjs';
+import { projects, locales, localizedPath } from './seo-page-data.mjs';
 import { serviceHub, services, serviceCopy } from '../lib/services.mjs';
-import { interfaceCopy, publicContactEmail, sectionLinks } from '../lib/site-copy.mjs';
+import { interfaceCopy, publicContactEmail, sectionLinks, pageUpdatedIso } from '../lib/site-copy.mjs';
 import { siteLinks } from '../lib/profile-content.mjs';
 import { serviceLinks, inquiryBrief } from './service-fragments.mjs';
 
@@ -99,7 +99,7 @@ ${Object.keys(locales).map((code) => `<link rel="alternate" hreflang="${locales[
 <nav class="languages" aria-label="${esc(ui.languages)}">${Object.keys(locales).map((code) => `<a href="${esc(pageHref(code, tail))}" hreflang="${locales[code].lang}" lang="${locales[code].lang}" aria-label="${esc(locales[code].label)}"${code === locale ? ' aria-current="page"' : ''}>${code.toUpperCase()}</a>`).join('')}</nav>
 <details class="mobile-menu"><summary aria-label="${esc(ui.menu)}"><span class="menu-icon" aria-hidden="true"></span></summary><nav aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav></details></header>
 ${body}
-<footer class="footer"><nav class="footer-nav" aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav><div class="footer-info"><a href="${esc(pageHref(locale))}">Ani Maghakyan · Maghakian Scripts</a><span>${esc(ui.updated)} <time datetime="${updatedIso}">${updatedIso}</time></span></div></footer>
+<footer class="footer"><nav class="footer-nav" aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav><div class="footer-info"><a href="${esc(pageHref(locale))}">Ani Maghakyan · Maghakian Scripts</a><span>${esc(ui.updated)} <time datetime="${pageUpdatedIso(tail)}">${pageUpdatedIso(tail)}</time></span></div></footer>
 </div></body></html>`;
 }
 
@@ -152,7 +152,7 @@ function serviceHubPage(locale) {
   const nodes = [
     {
       '@type': 'CollectionPage', '@id': `${canonical}#page`, url: canonical, name: title,
-      description: serviceHub.descriptions[locale], inLanguage: locales[locale].lang, dateModified: updatedIso,
+      description: serviceHub.descriptions[locale], inLanguage: locales[locale].lang, dateModified: pageUpdatedIso(tail),
       isPartOf: { '@id': `${siteUrl}/#website` }, about: { '@id': personId }, mainEntity: { '@id': itemListId }, breadcrumb: { '@id': `${canonical}#breadcrumbs` },
     },
     {
@@ -181,7 +181,7 @@ function servicePage(service, locale) {
   const nodes = [
     {
       '@type': 'WebPage', '@id': `${canonical}#page`, url: canonical, name: title,
-      description: service.descriptions[locale], inLanguage: locales[locale].lang, dateModified: updatedIso,
+      description: service.descriptions[locale], inLanguage: locales[locale].lang, dateModified: pageUpdatedIso(tail),
       isPartOf: { '@id': `${siteUrl}/#website` }, about: { '@id': serviceId }, mainEntity: { '@id': serviceId }, breadcrumb: { '@id': `${canonical}#breadcrumbs` },
     },
     {
@@ -215,7 +215,7 @@ if (existsSync(sitemapPath)) {
   for (const tail of serviceTails) {
     for (const locale of Object.keys(locales)) {
       const loc = absoluteUrl(locale, tail);
-      entries.push(`  <url>\n    <loc>${esc(loc)}</loc>\n    <lastmod>${updatedIso}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>${tail === 'services' ? '0.9' : '0.85'}</priority>\n    <xhtml:link rel="alternate" hreflang="hy-AM" href="${esc(absoluteUrl('hy', tail))}" />\n    <xhtml:link rel="alternate" hreflang="en" href="${esc(absoluteUrl('en', tail))}" />\n    <xhtml:link rel="alternate" hreflang="ru" href="${esc(absoluteUrl('ru', tail))}" />\n    <xhtml:link rel="alternate" hreflang="x-default" href="${esc(absoluteUrl('hy', tail))}" />\n  </url>`);
+      entries.push(`  <url>\n    <loc>${esc(loc)}</loc>\n    <lastmod>${pageUpdatedIso(tail)}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>${tail === 'services' ? '0.9' : '0.85'}</priority>\n    <xhtml:link rel="alternate" hreflang="hy-AM" href="${esc(absoluteUrl('hy', tail))}" />\n    <xhtml:link rel="alternate" hreflang="en" href="${esc(absoluteUrl('en', tail))}" />\n    <xhtml:link rel="alternate" hreflang="ru" href="${esc(absoluteUrl('ru', tail))}" />\n    <xhtml:link rel="alternate" hreflang="x-default" href="${esc(absoluteUrl('hy', tail))}" />\n  </url>`);
     }
   }
   const block = `${start}\n${entries.join('\n')}\n${end}`;

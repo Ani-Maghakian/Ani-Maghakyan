@@ -4,7 +4,7 @@ import { resolve } from 'node:path';
 import test from 'node:test';
 import { projects, hubs, localizedPath } from '../scripts/seo-page-data.mjs';
 import { services } from '../lib/services.mjs';
-import { interfaceCopy, publicContactEmail, resultLabel, updatedIso } from '../lib/site-copy.mjs';
+import { interfaceCopy, publicContactEmail, resultLabel, pageUpdatedIso } from '../lib/site-copy.mjs';
 
 const codes = ['hy', 'en', 'ru'];
 const root = resolve('dist/client');
@@ -36,9 +36,12 @@ test('every sitemap URL has a unique canonical, translated navigation and valid 
   assert.equal(urls.length, expectedCount);
   assert.equal(new Set(urls).size, expectedCount);
   const base = new URL(urls[0]);
-  assert.ok([...sitemap.matchAll(/<lastmod>(.*?)<\/lastmod>/g)].every((match) => match[1] === updatedIso));
+  const dates = new Map([...sitemap.matchAll(/<url>\s*<loc>(.*?)<\/loc>\s*<lastmod>(.*?)<\/lastmod>/g)].map((match) => [match[1], match[2]]));
+  assert.equal(new Set(dates.values()).size, 2, 'an unchanged page keeps its earlier content date');
   for (const url of urls) {
     const relative = new URL(url).pathname.slice(base.pathname.length);
+    const tail = relative.replace(/^(en|ru)\//, '').replace(/\/$/, '');
+    assert.equal(dates.get(url), pageUpdatedIso(tail), url);
     const html = await readFile(resolve(root, relative, 'index.html'), 'utf8');
     assert.ok(html.includes(`rel="canonical" href="${url}"`), url);
     assert.match(html, /aria-current="page"/);
