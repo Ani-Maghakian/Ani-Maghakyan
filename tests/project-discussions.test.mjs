@@ -1,153 +1,88 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
-import { discussionCopy, integrateHtml, pageIdentity, validateConfig, mailto } from '../lib/project-discussions.mjs';
-import { createHandler, validateSubmission } from '../supabase/functions/project-discussions/handler.mjs';
+import { buildIssueDraft, parseIssueBody, REPOSITORY, MAX_PREFILL_URL } from '../public/project-discussions-core.js';
+import { discussionCopy, discussionFragment, integrateHtml, pageIdentity, validateConfig, mailto } from '../lib/project-discussions.mjs';
+import { opinionFromIssue, validateOpinions } from '../lib/project-opinions.mjs';
 
-const config = { enabled: true, endpoint: 'https://exampleproject.supabase.co/functions/v1/project-discussions', contactEmail: 'maghaqyan@gmail.com' };
-const valid = { project: 'mi-gexecik-or', author: 'Visitor', body: 'A thoughtful comment.', language: 'hy', parent_id: null, request_id: '42d3a8b3-4e69-4a72-92d5-347ae6fb3c7b', consent: true, website: '' };
-const origin = 'https://ani-maghakian.github.io';
-function setup(override = {}, responder = () => new Response(JSON.stringify({ status: 'pending' }))) {
-  const calls = [];
-  const env = { SUPABASE_URL: 'https://exampleproject.supabase.co', SUPABASE_SERVICE_ROLE_KEY: 'test-server-only-secret-not-a-real-key', DISCUSSION_SUBMISSIONS_READY: 'true', DISCUSSION_TRUSTED_IP_HEADER: 'x-test-trusted-ip', ...override };
-  const handler = createHandler({ getEnv: (name) => env[name], fetch: async (url, options) => { calls.push({ url, options }); return responder(url, options); } });
-  return { handler, calls };
+const config = { enabled: true, provider: 'github-issues', repository: REPOSITORY, contactEmail: 'maghaqyan@gmail.com' };
+const base = { repository: REPOSITORY, project: 'mi-gexecik-or', locale: 'hy', name: 'Test reader', body: 'Fixture text, not a public review.', consent: true };
+const approved = { id: 'gh-101', project: base.project, locale: 'hy', name: '<b>Test reader</b>', body: '<script>alert(1)</script> Not a real review.', parent: '', source: `https://github.com/${REPOSITORY}/issues/101`, createdAt: '2026-09-17T10:00:00Z', approvedAt: '2026-09-17T11:00:00Z', reviewedBy: 'Ani-Maghakian', sourceSha256: 'a'.repeat(64) };
+
+for (const locale of ['hy', 'en', 'ru']) {
+  test(`${locale}: draft round trip and correct public repository`, () => {
+    const result = buildIssueDraft({ ...base, locale });
+    const url = new URL(result.url);
+    assert.equal(url.origin, 'https://github.com');
+    assert.equal(url.pathname, `/${REPOSITORY}/issues/new`);
+    assert.deepEqual([...url.searchParams.keys()], ['title', 'body']);
+    assert.equal(url.searchParams.get('title'), '[site-opinion:mi-gexecik-or]');
+    assert.equal(parseIssueBody(url.searchParams.get('body')).locale, locale);
+    assert.equal(result.manualCopy, false);
+  });
+  test(`${locale}: accessible form and honest handoff, shared reviewed thread`, () => {
+    const html = discussionFragment(base.project, locale, config, [approved]);
+    assert.ok(html.includes(discussionCopy[locale].notice));
+    assert.match(html, /name="consent" type="checkbox" required/);
+    assert.match(html, /id="opinion-gh-101"/);
+    assert.match(html, /&lt;script&gt;alert\(1\)&lt;\/script&gt;/);
+    assert.doesNotMatch(html, /<script>alert/);
+    assert.doesNotMatch(html, /supabase|data-endpoint|fetch\(/i);
+  });
 }
-function post(value = valid, headers = {}) {
-  return new Request(config.endpoint, { method: 'POST', headers: { Origin: origin, 'Content-Type': 'application/json', 'x-test-trusted-ip': '192.0.2.1', ...headers }, body: JSON.stringify(value) });
-}
-function html(locale = 'hy', project = true) {
-  const prefix = locale === 'hy' ? '' : locale + '/';
-  const path = project ? 'projects/mi-gexecik-or/' : '';
-  const old = { hy: 'Քննարկել նախագիծը', en: 'Discuss a project', ru: 'Обсудить проект' }[locale];
-  return `<!doctype html><html lang="${locale}"><head><link rel="canonical" href="${origin}/Ani-Maghakyan/${prefix}${path}"><script type="application/ld+json">{"text":"${old}"}</script></head><body><main><h1>Title</h1><a class="secondary" href="/Ani-Maghakyan/${prefix}work-with-ani/">${old}</a><a data-track="contact_instagram" href="https://www.instagram.com/maghakianscripts/" target="_blank">Instagram contact</a><a class="profile" href="https://www.instagram.com/maghakianscripts/">Social profile</a><a href="https://www.youtube.com/watch?v=official">Watch</a></main></body></html>`;
-}
-
-test('language-independent project identity, including localized pages', () => {
-  for (const locale of ['hy', 'en', 'ru']) {
-    const prefix = locale === 'hy' ? '' : locale + '/';
-    assert.deepEqual(pageIdentity(prefix + 'projects/mi-gexecik-or/index.html'), { locale, tail: 'projects/mi-gexecik-or', project: 'mi-gexecik-or' });
-  }
-  assert.equal(pageIdentity('services/screenwriting/index.html').project, null);
+test('long multilingual text uses a copy/paste fallback, not a 414 or truncation', () => {
+  const result = buildIssueDraft({ ...base, body: 'Հայերեն '.repeat(370) });
+  assert.equal(result.manualCopy, true);
+  assert.ok(result.url.length < MAX_PREFILL_URL);
+  assert.equal(new URL(result.url).searchParams.has('body'), false);
+  assert.equal(parseIssueBody(result.body).body, 'Հայերեն '.repeat(370).trim());
 });
-
-test('each project discussion anchor stays local while business actions use approved mail', () => {
-  for (const locale of ['hy', 'en', 'ru']) {
-    const prefix = locale === 'hy' ? '' : locale + '/';
-    const result = integrateHtml(html(locale), prefix + 'projects/mi-gexecik-or/index.html', config);
-    assert.match(result, /href="#discussion" data-track="view_discussion"/);
-    assert.match(result, /data-project="mi-gexecik-or"/);
-    assert.ok(result.includes(discussionCopy[locale].heading));
-    assert.match(result, /href="mailto:maghaqyan@gmail.com\?subject=/);
-    assert.doesNotMatch(result, /data-track="contact_instagram"/);
-    assert.match(result, /class="profile" href="https:\/\/www.instagram.com\/maghakianscripts\/"/);
-    assert.match(result, /href="https:\/\/www.youtube.com\/watch\?v=official"/);
-    assert.match(result, /href="\/Ani-Maghakyan\/project-discussions.css/);
-    assert.equal(integrateHtml(result, prefix + 'projects/mi-gexecik-or/index.html', config), result);
-    assert.equal(result.match(/<script type="application\/ld\+json">.*?<\/script>/)[0], html(locale).match(/<script type="application\/ld\+json">.*?<\/script>/)[0]);
+test('consent, size, project, repository, locale and control characters are validated', () => {
+  for (const changes of [{ consent: false }, { name: 'a' }, { body: 'x' }, { body: 'x'.repeat(3001) }, { name: 'x\ny' }, { body: 'hello\u0000world' }, { locale: 'de' }, { project: '../../bad' }, { repository: 'evil/repo' }, { parent: 'javascript:x' }]) {
+    assert.throws(() => buildIssueDraft({ ...base, ...changes }));
   }
 });
-
-test('homepage is a business proposal, not a discussion of an unspecified project', () => {
-  const result = integrateHtml(html('en', false), 'en/index.html', config);
-  assert.doesNotMatch(result, /id="discussion"/);
-  assert.match(result, /Send a collaboration proposal/);
-  assert.ok(mailto('hy').startsWith('mailto:maghaqyan@gmail.com?subject='));
+test('unpublished visitor text has no local storage, backend requests or analytics', () => {
+  const script = readFileSync('public/project-discussions.js', 'utf8');
+  assert.doesNotMatch(script, /localStorage|sessionStorage|fetch\(|XMLHttpRequest|sendBeacon|gtag\(/);
+  assert.match(script, /link\.removeAttribute\('href'\)/);
+  assert.match(script, /It has not been submitted|not submission/);
 });
-
-test('disabled integration never displays a dummy submission form or backend endpoint', () => {
-  const result = integrateHtml(html(), 'projects/mi-gexecik-or/index.html', { ...config, enabled: false, endpoint: '' });
-  assert.doesNotMatch(result, /<form data-discussion-form/);
-  assert.match(result, /data-enabled="false"/);
-  assert.doesNotMatch(result, /exampleproject.supabase/);
+test('disabled new comments retain published opinions without a dummy form', () => {
+  const html = discussionFragment(base.project, 'en', { ...config, enabled: false }, [approved]);
+  assert.doesNotMatch(html, /<form/);
+  assert.match(html, /id="opinion-gh-101"/);
 });
-
-test('configuration fails closed on missing endpoint, credentials, wrong provider, or recipient', () => {
-  for (const endpoint of ['', 'http://exampleproject.supabase.co/functions/v1/project-discussions', 'https://evil.example/functions/v1/project-discussions', config.endpoint + '?secret=bad', 'https://user:pass@exampleproject.supabase.co/functions/v1/project-discussions']) {
-    assert.throws(() => validateConfig({ ...config, endpoint }));
-  }
-  assert.throws(() => validateConfig({ ...config, contactEmail: 'other@example.com' }));
+test('configuration rejects external backends and wrong contact', () => {
+  assert.equal(validateConfig(config), config);
+  for (const patch of [{ endpoint: 'https://example.com' }, { provider: 'supabase' }, { repository: 'wrong/repo' }, { contactEmail: 'wrong@example.com' }]) assert.throws(() => validateConfig({ ...config, ...patch }));
 });
-
-test('visitor cannot set status, moderator role, parent shape, or bypass consent', () => {
-  for (const change of [{ status: 'approved' }, { role: 'admin' }, { consent: false }, { project: '../admin' }, { parent_id: 'wrong' }, { author: ' ' }, { body: 'a' }, { language: 'de' }, { website: 'spam' }, { body: 'a'.repeat(3001) }, { author: 'ab\ncd' }]) {
-    assert.throws(() => validateSubmission({ ...valid, ...change }));
-  }
-  assert.equal(validateSubmission({ ...valid, body: '<script>alert(1)</script>' }).body, '<script>alert(1)</script>');
+test('routing preserves canonical, metadata, JS and source links', () => {
+  const html = '<html><head><link rel="canonical" href="https://ani-maghakian.github.io/Ani-Maghakyan/en/projects/mi-gexecik-or/"><script type="application/ld+json">{"x":1}</script></head><body><main><h1>Mi Gexecik Or</h1><a class="secondary" href="/work-with-ani/">Discuss a project</a><a href="https://youtube.com/watch?v=x">Watch</a></main></body></html>';
+  const result = integrateHtml(html, 'en/projects/mi-gexecik-or/index.html', config);
+  assert.match(result, /href="#discussion"/);
+  assert.ok(result.includes('<script type="application/ld+json">{"x":1}</script>'));
+  assert.match(result, /href="https:\/\/youtube.com\/watch\?v=x"/);
+  assert.ok(result.includes(mailto('en', 'Mi Gexecik Or')));
+  assert.equal(integrateHtml(result, 'en/projects/mi-gexecik-or/index.html', config), result);
+  assert.equal(pageIdentity('ru/projects/mi-gexecik-or/index.html').project, base.project);
 });
-
-test('anonymous valid submission returns pending only after storage responds', async () => {
-  const { handler, calls } = setup();
-  const response = await handler(post());
-  assert.equal(response.status, 202);
-  assert.deepEqual(await response.json(), { status: 'pending' });
-  assert.equal(calls.length, 1);
-  const args = JSON.parse(calls[0].options.body);
-  assert.equal(args.p_project, valid.project);
-  assert.equal(args.p_parent, null);
-  assert.match(args.p_actor_hash, /^[0-9a-f]{64}$/);
-  assert.equal(args.status, undefined);
-  assert.ok(!calls[0].options.body.includes('192.0.2.1'));
-  assert.equal(response.headers.get('Access-Control-Allow-Origin'), origin);
+test('unknown, duplicate, orphaned and cross-project approved records fail closed', () => {
+  validateOpinions([approved], new Set([base.project]));
+  assert.throws(() => validateOpinions([approved], new Set(['other-project'])));
+  assert.throws(() => validateOpinions([approved, approved]));
+  assert.throws(() => validateOpinions([{ ...approved, parent: 'gh-999' }]));
+  assert.throws(() => validateOpinions([approved, { ...approved, id: 'gh-102', source: `https://github.com/${REPOSITORY}/issues/102`, project: 'other-project', parent: approved.id }]));
 });
-
-test('different language pages query the same project key', async () => {
-  const { handler, calls } = setup({}, () => new Response(JSON.stringify({ items: [], next_cursor: null })));
-  for (const locale of ['hy', 'en', 'ru']) {
-    const response = await handler(new Request(config.endpoint + '?project=mi-gexecik-or', { headers: { Origin: origin, 'Accept-Language': locale } }));
-    assert.equal(response.status, 200);
-  }
-  assert.equal(new Set(calls.map((call) => call.options.body)).size, 1);
+test('only an explicit reviewed issue snapshot is publishable', () => {
+  const issue = { number: 101, html_url: approved.source, title: '[site-opinion:mi-gexecik-or]', created_at: approved.createdAt, body: buildIssueDraft(base).body };
+  const result = opinionFromIssue(issue, 'Ani-Maghakian', approved.approvedAt, approved.sourceSha256);
+  validateOpinions([result]);
+  assert.equal(result.body, base.body);
+  assert.throws(() => opinionFromIssue({ ...issue, html_url: 'https://example.com' }, 'Ani-Maghakian', approved.approvedAt, approved.sourceSha256));
+  assert.throws(() => opinionFromIssue({ ...issue, pull_request: {} }, 'Ani-Maghakian', approved.approvedAt, approved.sourceSha256));
 });
-
-test('missing settings or untrusted origin cannot store data', async () => {
-  for (const env of [{ SUPABASE_SERVICE_ROLE_KEY: '' }, { DISCUSSION_SUBMISSIONS_READY: 'false' }, { DISCUSSION_TRUSTED_IP_HEADER: '' }]) {
-    const { handler, calls } = setup(env);
-    assert.equal((await handler(post())).status, 503);
-    assert.equal(calls.length, 0);
-  }
-  const { handler, calls } = setup();
-  assert.equal((await handler(post(valid, { Origin: 'https://attacker.example' }))).status, 403);
-  assert.equal(calls.length, 0);
-});
-
-test('oversized, malformed and privileged writes fail without hitting database', async () => {
-  const { handler, calls } = setup();
-  assert.equal((await handler(post({ ...valid, status: 'approved' }))).status, 400);
-  assert.equal((await handler(post({ ...valid, body: 'a'.repeat(21000) }))).status, 413);
-  assert.equal((await handler(new Request(config.endpoint, { method: 'DELETE', headers: { Origin: origin } }))).status, 405);
-  assert.equal(calls.length, 0);
-});
-
-test('storage failure never becomes success and never exposes internal error text', async () => {
-  const { handler } = setup({}, () => new Response(JSON.stringify({ message: 'private SQL details and secret' }), { status: 500 }));
-  const response = await handler(post());
-  assert.equal(response.status, 503);
-  const body = await response.text();
-  assert.ok(!body.includes('private'));
-  assert.ok(!body.includes('secret'));
-});
-
-test('rate limit produces retry response, not an accepted comment', async () => {
-  const { handler } = setup({}, () => new Response(JSON.stringify({ message: 'rate_limited' }), { status: 400 }));
-  const response = await handler(post());
-  assert.equal(response.status, 429);
-  assert.equal(response.headers.get('Retry-After'), '600');
-});
-
-test('invalid cursor cannot reach database', async () => {
-  const { handler, calls } = setup();
-  const response = await handler(new Request(config.endpoint + '?project=mi-gexecik-or&after=invalid', { headers: { Origin: origin } }));
-  assert.equal(response.status, 400);
-  assert.equal(calls.length, 0);
-});
-
-test('migration declares default-deny permissions and parent-publication filtering', () => {
-  const sql = readFileSync(new URL('../supabase/migrations/202609170001_project_discussions.sql', import.meta.url), 'utf8');
-  assert.equal((sql.match(/enable row level security/g) || []).length, 4);
-  assert.match(sql, /from public, anon, authenticated/);
-  assert.match(sql, /parent\.status = 'approved'/);
-  assert.doesNotMatch(sql, /grant\s+(?:all|insert|update|delete).*\bto\s+(?:anon|authenticated)/i);
-  assert.match(sql, /pg_advisory_xact_lock/);
-  assert.match(sql, /'pending', p_request_id, p_digest/);
+test('published snapshots are valid and contain no synthetic QA fixtures', () => {
+  const records = validateOpinions(JSON.parse(readFileSync('data/project-opinions.json', 'utf8')));
+  for (const record of records) assert.ok(!record.body.includes('Fixture text, not a public review.') && !record.body.includes('Not a real review.'));
 });

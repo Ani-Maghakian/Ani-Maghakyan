@@ -67,3 +67,6 @@
 @media (prefers-reduced-motion: reduce) {
   .project-discussion { scroll-behavior: auto; }
 }
+.project-discuss-link { font-size: .8em; text-decoration: underline; margin-inline-start: .4em; }
+.project-discussion [data-handoff] { border: 1px solid currentColor; padding: 1rem; }
+.project-discussion [data-long-draft] { display: grid; gap: .75rem; margin-block: 1rem; }

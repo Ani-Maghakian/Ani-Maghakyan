@@ -1,167 +1,100 @@
-# Project discussions and business email
+# Project opinions — no Supabase or paid service
 
-Implementation prepared on 2026-09-17 against commit
-`dafae459000823f516ce5bcbd168e484f8393601` in
-`Ani-Maghakian/Ani-Maghakyan`.
+The owner's zero-spend instruction supersedes the earlier Supabase plan.
+This implementation uses the existing public GitHub repository and static Pages
+build. It does not create a database, subscribe to a service, install an app,
+expose API credentials, schedule polling or add a workflow. The obsolete
+Supabase implementation files are removed from this branch, not from Git history.
 
-## Status and scope
+## Visitor journey and deliberate trade-offs
 
-This is a feature implementation awaiting backend connection and acceptance, not
-confirmation of live comments. The public site's deployment has not been changed.
-Supabase was not connected when this version was prepared. No Supabase project,
-paid subscription, database migration, or real visitor comment was created.
-`project-discussions.config.json` deliberately ships with `enabled: false`.
+1. Discuss opens the project's own `#discussion` section.
+2. A visitor writes a name/pseudonym and opinion on the website. They must
+   acknowledge that GitHub publication is public, not a private moderation queue.
+3. Prepare comment validates a local draft; it sends nothing and says so.
+4. Continue on GitHub opens a new issue with the draft. The visitor needs a
+   GitHub account and must click Create there. For long drafts the site supplies
+   a complete copy/paste fallback instead of truncation or an oversized URL.
+5. The owner reviews the issue. Only an explicitly approved static snapshot is
+   committed to `data/project-opinions.json` and published by the existing build.
+6. All HY/EN/RU versions show the same project thread. Approved replies have one
+   level; additional reply chains and other-project references are rejected.
 
-The owner approved the public business address `maghaqyan@gmail.com`. Business
-proposal actions use that address. A project's Discuss action instead points to
-its own `#discussion` section. Source/viewing/book/social-profile links and
-language navigation retain their existing destinations.
+This is NOT anonymous on-site submission, a realtime chat or automatic
+publication. The final submit happens on GitHub. The raw GitHub issue and account
+are public even before site approval. These limitations are stated before the
+form. Names/pseudonyms are not presented as verified identities.
 
-The implementation adds one discussion per project slug across HY/EN/RU, names
-or pseudonyms without visitor accounts, plain-text comments, a consent checkbox,
-premoderation, and one level of replies. It does not add star ratings, fabricated
-reviews, marketing consent, uploads, or a public administrative interface.
+A draft-ready message is never a receipt. There is no localStorage persistence,
+third-party request on typing, token in browser code or visitor-text analytics.
+Short prefill URLs carry draft text to GitHub and can remain in browser history;
+users are told not to include personal information or unpublished scripts.
+GitHub issues may notify repository subscribers according to their settings.
 
-## Files and build integration
+## Owner moderation
 
-`npm run build` retains the existing build pipeline and appends
-`node scripts/integrate-project-discussions.mjs` after export optimization.
-The adapter reads the already generated HTML, changes the known contact/discuss
-anchor shapes, and adds scoped assets and the comment section. Existing inline
-scripts, canonical, hreflang and JSON-LD remain unchanged.
+Review actual visitor submissions in the repository's Issues tab. Search titles
+for `[site-opinion:`. A technical GitHub login or pseudonym is not evidence of
+identity or a genuine client relationship. Check spam, abuse, unrelated content,
+privacy and consent; do not reject a review simply because it is negative.
 
-This adapter keeps the existing framework, project URLs, design assets and
-workflow files intact. It is intentionally narrow: if upstream CTA markup or
-translations change, update the adapter's fixtures and tests. It does not attempt
-an unrestricted site-wide replacement of every link containing "contact".
+Obtain the actual issue JSON through an authorized GitHub read or the public
+issue API. Do not invent an issue number or turn this document into a review.
+After reading the complete source:
 
-The browser uses only the public Edge Function endpoint. It receives no service
-key, secret key or database credentials. Visitor text is rendered using
-`textContent`, is not placed in URLs, and is not retained in localStorage or sent
-by this feature to analytics.
+```sh
+node scripts/approve-project-opinion.mjs issue.json --approve YOUR_GITHUB_LOGIN
+```
 
-## Backend activation checklist
+The command validates the repository, project allow-list, issue title/body,
+lengths, reply parent, timestamps and uniqueness. It records a SHA-256 of the
+reviewed issue body and the reviewer/date, then writes a LOCAL JSON change only.
+Review that diff, run the ordinary build/tests, commit and deploy to publish.
+The source JSON file is an input, not executable code. No issue labels trigger
+automatic publication. An edited GitHub issue never silently changes an already
+approved website snapshot.
 
-1. Connect the owner's Supabase account and identify the intended owner-controlled
-   project. Do not create a paid plan or migrate an unrelated application.
-2. Inspect existing schema for naming conflicts. Apply
-   `supabase/migrations/202609170001_project_discussions.sql` in a development
-   environment first. The migration is transactional and intentionally fails on
-   conflicting existing objects instead of overwriting them.
-3. Populate the allow-list from the site's authoritative data:
-   `node scripts/generate-discussion-seed.mjs > discussion-seed.sql`.
-   Review and execute that SQL in the same project. The provided seed snapshot
-   contains the 47 slugs from the pinned production artifact; regenerate it if
-   source projects change. New projects must be explicitly added to this list.
-4. Deploy `supabase/functions/project-discussions`. Its `verify_jwt = false`
-   setting is intentional because guest comments do not require sign-in. It is
-   NOT an administrative endpoint. Direct table access and direct RPC execution
-   are revoked from `anon`, `authenticated` and `PUBLIC`.
-5. Configure server-only environment variables securely in Supabase, never in
-   chat or the public repository:
-   - Standard platform `SUPABASE_URL` and service-role/secret credentials.
-   - `DISCUSSION_ALLOWED_ORIGINS=https://ani-maghakian.github.io` (add only
-     explicitly approved preview origins).
-   - `DISCUSSION_TRUSTED_IP_HEADER`: set only after verifying which client-IP
-     header the deployed gateway overwrites. Do not assume arbitrary forwarded
-     headers are trustworthy. A missing header makes writes fail closed.
-   - `DISCUSSION_SUBMISSIONS_READY=true` only for the configured/tested backend.
-6. Run the live acceptance tests below. Review privacy/retention language against
-   the actual deployed provider, region and administration process. This document
-   does not certify legal compliance.
-7. Set the actual HTTPS function endpoint in `project-discussions.config.json`.
-   Enable submissions there only after acceptance, then merge and publish using
-   the existing site workflow. Verify the public version again.
+To reject an issue, do not import it; close or moderate it on GitHub as
+appropriate. To remove a website opinion, remove the JSON record and its replies,
+review, test, commit and deploy. GitHub's public source/history is separate:
+removing the displayed snapshot is not a promise of erasure from Git history,
+search caches or the original issue. Address those requests separately.
 
-Supabase CLI deployments should use the owner's authenticated CLI/session. Do
-not paste project secrets into a command stored in Git, an issue or a PR. The
-site's existing GitHub workflow does not need a service-role secret.
+Business proposals remain private emails to the owner-approved
+`maghaqyan@gmail.com`. Project viewing, book, source and language links are not
+converted into mail links.
 
-## Moderation and operation
+## Cost boundary
 
-In the owner's Supabase dashboard, open `public.discussion_comments` and filter
-`status = pending`, ordered by `created_at`. Approve by changing status to
-`approved`; the trigger sets `published_at`. Reject by setting `rejected`.
-Deleting a comment also deletes its replies. Withdrawing an approved root sends
-its approved replies back to pending, preventing replies from leaking after the
-root is hidden and requiring explicit reapproval after restoration.
+No Supabase, paid hosting, metered comment API, external widget installation or
+paid browser-automation run is needed by this feature. The repository remains
+public. Existing GitHub Pages and standard-runner workflows are unchanged.
+GitHub service limits and existing account storage allowances still apply; this
+is not a guarantee of unlimited usage or a billing audit of the whole account.
+Do not upgrade runners, account plans or storage without the owner's permission.
 
-Only trusted project administrators get dashboard access. Prefer separate
-administrator accounts and MFA. Visitors cannot call an approve/delete endpoint;
-none is exposed by this feature. Supabase dashboard users can edit data, so
-review project roles before activation. Negative opinions are not spam merely
-because they are negative.
+## Tests and release
 
-`discussion_moderation_log` records changes without copying comment text into the
-log. It records the authenticated database identity where available, otherwise
-the database session role; that fallback is not proof of which human clicked.
+Local checks: pure Node validation/routing/moderation tests; apply integration to
+an actual downloaded production artifact; compare canonical/hreflang/JSON-LD;
+offline Chromium form behavior at 390 and 1440 pixels. Do not equate these with a
+real visitor's authenticated GitHub submission or actual iPhone/Safari testing.
 
-Rate limits are enforced transactionally in SQL: at most five accepted writes
-per client hash per ten-minute bucket and 100 globally per hour. A pending queue
-cap adds a further bound. Idempotent retries use a UUID and server-HMAC digest.
-The raw client-IP header is not stored in these tables; expiring keyed hashes
-are used for rate limiting. Provider infrastructure logs have their own policies.
-These measures reduce abuse; they are not a guarantee against all spam or DoS.
-
-Review the queue routinely. Document retention with the owner before launch.
-Delete rejected comments after the agreed retention period and honor removal
-requests through the published email. Rate-limit rows are removed on subsequent
-writes after expiry; set up a scheduled purge in the owner's Supabase project if
-strict wall-clock removal is required. Approved comments and moderation logs do
-not have automatic expiry in this version. No email notifications were enabled.
-
-## Live acceptance still required
-
-- Apply migration and seed; verify they execute successfully on actual PostgreSQL.
-- An anonymous browser can submit a root and receives HTTP 202 only after storage.
-- A second anonymous browser cannot read pending/rejected content, including via
-  direct Data API queries and direct RPC calls.
-- The owner approves in the dashboard; a fresh browser sees the same comment on
-  HY, EN and RU pages. Reload confirms database persistence.
-- A reply attaches to an approved root in the same project; cross-project,
-  hidden-parent and nested replies are rejected.
-- Withdraw the root; replies disappear publicly. Delete the root; replies cannot
-  be fetched. Check the moderation log.
-- Attempt to submit `status=approved`, HTML-like text, an oversized body, duplicate
-  retries and excessive requests. Verify permissions, text-only rendering,
-  idempotency and rate limiting against the real backend.
-- Verify the trusted client-IP header cannot be chosen by the visitor.
-- Confirm failed writes leave the visitor's text in the form; no false success.
-- Test the full production CSS, keyboard flow, Safari/iPhone and Android, plus
-  mail links/copy fallback in configured and unconfigured email-client scenarios.
-- Verify GitHub CI, public deployment, rollback and owner access.
-
-## Checks actually performed for this implementation
-
-- Fourteen Node tests passed: identity/routing/localization, inactive-state safety,
-  config validation, input validation, pending-only responses, shared project
-  reads, missing configuration, invalid origins, oversized requests, backend
-  error handling, rate-limit response, cursor validation and migration permission
-  declarations. Database calls were mocked; the migration check was structural.
-- The adapter ran on a downloaded artifact of the pinned production deployment:
-  177 canonical pages, including 141 localized project pages. Canonical links,
-  hreflang and JSON-LD were compared before/after and preserved on all 177.
-- Six offline Chromium DOM scenarios passed using actual generated page markup:
-  queued-not-public submission, plain-text rendering of HTML-like input, reply
-  parent association, 503/429 text preservation, isolated component width and no
-  JavaScript errors. API responses were mocked in memory, not stored in Supabase.
-- A normal browser test against a local HTTP server was blocked by the environment
-  (`ERR_BLOCKED_BY_ADMINISTRATOR`). No network-policy bypass was attempted. The
-  offline DOM tests are not a substitute for full-site browser or device QA.
-
-Do not describe these checks as completed live persistence, real-device testing,
-full-site accessibility acceptance, or final release approval.
+Release requires the ordinary GitHub lint, TypeScript, build and existing tests.
+After deployment check the live project discussion section and email route.
+Do not seed the public page with synthetic reviews. An authenticated visitor
+submit and a real moderation cycle remain separate acceptance checks unless
+actually executed and recorded.
 
 ## Rollback
 
-Set `enabled` to false and rebuild to stop rendering submission forms. To undo
-this feature entirely, revert its commit and redeploy the previous site version.
-Do not drop database tables as part of a code rollback. First export and protect
-existing comments; deletion of stored visitor data requires a separate decision.
+Set `enabled` to false to stop new drafts while keeping approved opinions
+readable, or revert the feature commit. Keep source snapshots for review; do not
+silently delete opinions. Existing canonical URLs and site metadata remain
+unchanged. The feature adds no automatic database migration or secret to revoke.
 
-## Primary references checked 2026-09-17
+## Technical references checked 2026-09-17
 
-- https://supabase.com/docs/guides/functions/auth
-- https://supabase.com/docs/guides/functions/auth-headers
-- https://supabase.com/docs/guides/functions/secrets
-- https://supabase.com/docs/guides/database/secure-data
+- GitHub issue URL query: https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/creating-an-issue
+- GitHub plans: https://docs.github.com/en/get-started/learning-about-github/githubs-plans
+- Actions billing and standard/public runners: https://docs.github.com/en/billing/concepts/product-billing/github-actions
