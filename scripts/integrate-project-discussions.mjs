@@ -18,6 +18,7 @@ for (const name of assetNames) {
   copyFileSync(path, join(root, name));
 }
 const suffix = `?v=${digest.digest('hex').slice(0, 12)}`;
+const inlineCss = readFileSync(resolve('public/project-discussions.css'), 'utf8');
 writeFileSync(join(root, 'project-discussions.js'), readFileSync(resolve('public/project-discussions.js'), 'utf8').replace("'./project-discussions-core.js'", `"./project-discussions-core.js${suffix}"`));
 function files(directory) {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) =>
@@ -28,7 +29,7 @@ let projects = 0;
 for (const path of files(root).filter((path) => path.endsWith('.html'))) {
   const original = readFileSync(path, 'utf8');
   const name = relative(root, path);
-  const html = integrateHtml(original, name, config, suffix, opinions);
+  const html = integrateHtml(original, name, config, suffix, opinions, inlineCss);
   if (html === original) continue;
   writeFileSync(path, html);
   pages++;

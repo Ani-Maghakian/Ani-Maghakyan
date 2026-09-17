@@ -45,7 +45,7 @@ test('consent, size, project, repository, locale and control characters are vali
 test('unpublished visitor text has no local storage, backend requests or analytics', () => {
   const script = readFileSync('public/project-discussions.js', 'utf8');
   assert.doesNotMatch(script, /localStorage|sessionStorage|fetch\(|XMLHttpRequest|sendBeacon|gtag\(/);
-  assert.match(script, /link\.removeAttribute\('href'\)/);
+  assert.match(script, /link\.href = 'https:\/\/github\.com\/Ani-Maghakian\/Ani-Maghakyan\/issues\/new'/);
   assert.match(script, /It has not been submitted|not submission/);
 });
 test('disabled new comments retain published opinions without a dummy form', () => {
@@ -85,4 +85,15 @@ test('only an explicit reviewed issue snapshot is publishable', () => {
 test('published snapshots are valid and contain no synthetic QA fixtures', () => {
   const records = validateOpinions(JSON.parse(readFileSync('data/project-opinions.json', 'utf8')));
   for (const record of records) assert.ok(!record.body.includes('Fixture text, not a public review.') && !record.body.includes('Not a real review.'));
+});
+
+// A handoff is a real destination even before preparation, never a href-less pseudo-link.
+test('idle handoff has no visitor text and release CSS adds no blocking request', () => {
+  const html = '<html><head><link rel="canonical" href="https://ani-maghakian.github.io/Ani-Maghakyan/projects/mi-gexecik-or/"></head><body><main><h1>Project</h1></main></body></html>';
+  const css = readFileSync('public/project-discussions.css', 'utf8');
+  const result = integrateHtml(html, 'projects/mi-gexecik-or/index.html', config, '?v=test', [], css);
+  assert.match(result, /href="https:\/\/github\.com\/Ani-Maghakian\/Ani-Maghakyan\/issues\/new" data-github-handoff/);
+  assert.match(result, /<style data-project-discussion-styles>/);
+  assert.doesNotMatch(result, /<link[^>]*project-discussions\.css/);
+  assert.ok(result.includes('.project-discussion'));
 });

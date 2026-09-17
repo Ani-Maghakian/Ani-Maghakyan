@@ -17,7 +17,8 @@ for (const root of document.querySelectorAll('[data-project-discussion]')) {
 
   function resetHandoff() {
     handoff.hidden = true;
-    link.removeAttribute('href');
+    // Keep a real, non-draft destination; hide it and discard all prior visitor text.
+    link.href = 'https://github.com/Ani-Maghakian/Ani-Maghakyan/issues/new';
     copyField.value = '';
     status.textContent = '';
   }

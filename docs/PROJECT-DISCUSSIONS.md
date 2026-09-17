@@ -98,3 +98,18 @@ unchanged. The feature adds no automatic database migration or secret to revoke.
 - GitHub issue URL query: https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/creating-an-issue
 - GitHub plans: https://docs.github.com/en/get-started/learning-about-github/githubs-plans
 - Actions billing and standard/public runners: https://docs.github.com/en/billing/concepts/product-billing/github-actions
+
+## September 17 release quality correction
+
+The initial full run passed 56 tests but failed Lighthouse: the not-yet-prepared
+handoff anchor had no href and the new CSS added a render-blocking request.
+The idle link now has the real public issue-creation URL without draft text;
+editing clears the prior draft and hides the handoff. The small scoped CSS is
+inlined in generated HTML. All other links and metadata are preserved.
+
+Performance acceptance is explicitly aligned to section 14 of the owner's
+September 17 master brief: at least 90, median of three mobile-profile runs per
+page. This replaces the prior all-runs 100 performance threshold; it must not be
+reported as achieving 100. SEO, accessibility and best-practices retain the
+100 worst-run gates, and CLS adds an explicit maximum of 0.1 on every run.
+This is laboratory acceptance, not real-user Core Web Vitals certification.
