@@ -5,6 +5,7 @@ import test from 'node:test';
 import { services, serviceHub, serviceCopy } from '../lib/services.mjs';
 import { locales, localizedPath } from '../scripts/seo-page-data.mjs';
 import { serviceLinks } from '../scripts/service-fragments.mjs';
+import { discussionCopy, mailto } from '../lib/project-discussions.mjs';
 
 const root = resolve('dist/client');
 const esc = (text) => text.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
@@ -74,7 +75,9 @@ test('service inquiry, deliverables and FAQ content work in static HTML and matc
     for (const service of services) {
       const html = await readPage(locale, `services/${service.slug}`);
       const visible = main(html);
-      assert.ok(visible.includes('href="#project-brief"'));
+      // The owner chose direct email for business proposals, not an intermediate anchor.
+      assert.ok(visible.includes(`href="${esc(mailto(locale, service.headings[locale]))}"`));
+      assert.ok(visible.includes(esc(discussionCopy[locale].business)));
       assert.ok(visible.includes('id="project-brief"'));
       assert.ok(visible.includes(esc(serviceCopy[locale].brief)));
       for (const item of serviceCopy[locale].briefItems) assert.ok(visible.includes(esc(item)));
@@ -93,7 +96,8 @@ test('service inquiry, deliverables and FAQ content work in static HTML and matc
       const page = nodes.find((item) => item['@type'] === 'WebPage');
       assert.equal(node.mainEntityOfPage['@id'], page['@id']);
       assert.equal(page.mainEntity['@id'], node['@id']);
-      assert.ok(visible.includes('data-track="contact_instagram"'));
+      assert.ok(visible.includes('data-track="contact_email"'));
+      assert.doesNotMatch(visible, /data-track="contact_instagram"/);
     }
   }
 });
