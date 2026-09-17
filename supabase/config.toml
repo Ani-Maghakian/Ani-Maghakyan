@@ -1,0 +1,3 @@
+# Public read/submit endpoint. Moderation is restricted to the owner's Supabase dashboard.
+[functions.project-discussions]
+verify_jwt = false
