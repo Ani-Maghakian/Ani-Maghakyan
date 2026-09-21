@@ -221,7 +221,6 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
       <main id="main-content">
         <section className="landscape-hero" aria-labelledby="hero-title">
           <div className="landscape-copy">
-            <p className="eyebrow">MAGHAKIAN SCRIPTS</p>
             <h1 id="hero-title">{homeHero[locale].heading}</h1>
             <p className="hero-tagline">{homeHero[locale].tagline}</p>
             <p className="hero-intro">{homeHero[locale].intro}</p>

@@ -8,7 +8,7 @@
   const front = document.querySelector('.landscape-front');
   const clamp = value => Math.max(0, Math.min(1, value));
   const texts = [...document.querySelectorAll('main h2,.section-heading p,.featured-copy h3,.writing-preview h3,.prose>p,.prose>h3,.bio-lead,.author-intro p:not(.eyebrow):not(.roles),.writing-preview blockquote,.writing-entry blockquote')];
-  const images = [...document.querySelectorAll('.author-intro img,.featured-poster,.hero-media img,.catalog-poster')];
+  const images = [...document.querySelectorAll('.featured-poster,.hero-media img,.catalog-poster')];
   const cards = [...document.querySelectorAll('.writing-preview article,.book-card,.source-grid li,.service-card')];
   const targets = [...texts, ...images, ...cards];
   const active = new Set(targets);
@@ -36,9 +36,8 @@
       const p = still ? 1 : clamp((height * (isText ? .82 : .94) - top) / (height * (isText ? .47 : .49)));
       el.style.setProperty('--reveal', p.toFixed(4));
       if (el.classList.contains('scroll-image')) {
-        // Posters expand to their full original frame; portraits settle from a close-up.
-        const portrait = !!el.closest('.author-intro');
-        el.style.setProperty('--image-scale', String(portrait ? 1 + (1-p)*.08 : .96 + p*.04));
+        // Keep the founder portrait outside scroll-driven cropping and scaling.
+        el.style.setProperty('--image-scale', String(.96 + p*.04));
         el.style.setProperty('--image-inset', `${(1-p)*10}%`);
       }
     }
