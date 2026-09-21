@@ -6,7 +6,7 @@ import { originalProjectPosters } from '../lib/project-posters.mjs';
 import { writings } from '../lib/writings.mjs';
 
 const selected = ['elens-diary', 'paper-dream', 'dear-sahmi', 'special-class', 'addiction', 'summer-of-84', 'blockade', 'forest-cottage', 'if-i-danced-again', 'se-la-vi', 'hotel-grand', 'white-shirt'];
-const interaction = await readFile('public/home-interactions.js', 'utf8');
+const interaction = (await readFile('public/home-interactions.js', 'utf8')) + '\n' + (await readFile('public/design-interactions.js', 'utf8'));
 
 for (const locale of ['hy', 'en', 'ru']) {
   test(`${locale}: selection, original excerpts, language links and static interactions`, async () => {

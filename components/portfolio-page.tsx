@@ -1,3 +1,4 @@
+import { studioCopy, studioHeader, studioFooter } from "@/lib/studio.mjs";
 import type { ReactNode } from "react";
 import { ArrowUpRight, Play, Search, X } from "lucide-react";
 import {
@@ -11,8 +12,8 @@ import {
   type ProjectKind,
 } from "@/lib/content";
 import { basePath } from "@/lib/seo";
-import { interfaceCopy, sectionLinks, resultLabel, publicContactEmail, homeHero } from "@/lib/site-copy.mjs";
-import { siteImages, siteImagePreviews, siteImageSrcSet } from "@/lib/site-images.mjs";
+import { interfaceCopy, sectionLinks, resultLabel, publicContactEmail } from "@/lib/site-copy.mjs";
+import { siteImagePreviews, siteImageSrcSet } from "@/lib/site-images.mjs";
 import { originalProjectPosters, posterNotes, posterPreviews, posterSrcSet } from "@/lib/project-posters.mjs";
 import { writings, writingCopy } from "@/lib/writings.mjs";
 import { services } from "@/lib/services.mjs";
@@ -145,6 +146,7 @@ function interactionScript(locale: Locale) {
 
 export function PortfolioPage({ locale }: { locale: Locale }) {
   const t = copy[locale];
+  const studio = studioCopy[locale];
   const ui = interfaceCopy[locale];
   const literary = writingCopy[locale];
   const localeRoot = `${basePath}${locales[locale].href}`;
@@ -166,81 +168,23 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
       <div className="scroll-progress" aria-hidden="true" />
 
       <a className="skip-link" href="#main-content">{ui.skip}</a>
-      <header className="site-header">
-        <a className="wordmark" href="#top" aria-label={t.title}>
-          Ani Maghakyan.
-        </a>
-
-        <nav className="primary-nav" aria-label={t.primaryNavLabel}>
-          <a href="#selected">{t.nav.work}</a>
-          <a href="#filmography">{t.nav.filmography}</a>
-          <a href={`${localeRoot}books/`}>{t.booksTitle}</a>
-          <a href={`${localeRoot}writings/`}>{sectionLinks.find((item) => item.slug === "writings")?.labels[locale]}</a>
-          <a href="#about">{t.nav.about}</a>
-          <a href={`${localeRoot}press/`}>{pressLabels.nav}</a>
-          <a href="#contact">{t.nav.contact}</a>
-        </nav>
-
-        <nav className="language-nav" aria-label={t.languageNavLabel}>
-          {(Object.keys(locales) as Locale[]).map((code) => (
-            <a
-              key={code}
-              href={`${basePath}${locales[code].href}`}
-              hrefLang={locales[code].hrefLang}
-              aria-label={locales[code].label}
-              aria-current={code === locale ? "page" : undefined}
-            >
-              {locales[code].short}
-            </a>
-          ))}
-        </nav>
-
-        <details className="mobile-menu">
-          <summary aria-label={ui.menu}><span className="menu-icon" aria-hidden="true" /></summary>
-          <nav aria-label={t.primaryNavLabel}>
-            <div className="mobile-language-options" role="group" aria-label={t.languageNavLabel}>
-              {(Object.keys(locales) as Locale[]).map((code) => (
-                <a key={code} href={`${basePath}${locales[code].href}`} hrefLang={locales[code].hrefLang}
-                  aria-label={locales[code].label} aria-current={code === locale ? "page" : undefined}>
-                  {locales[code].short}
-                </a>
-              ))}
-            </div>
-            <a href="#selected">{t.nav.work}</a>
-            <a href="#filmography">{t.nav.filmography}</a>
-            <a href="#contact">{ui.collaborate}</a>
-            {sectionLinks.filter((item) => item.slug !== "projects" && item.slug !== "work-with-ani").map((item) => (
-              <a key={item.slug} href={`${localeRoot}${item.slug}/`}>{item.labels[locale]}</a>
-            ))}
-          </nav>
-        </details>
-      </header>
+      <header className="site-header" dangerouslySetInnerHTML={{ __html: studioHeader(locale, basePath) }} />
 
       <main id="main-content">
-        <section className="landscape-hero" aria-labelledby="hero-title">
-          <div className="landscape-copy" style={locale === "hy" ? { width: "min(1100px, calc(100% - 40px))" } : undefined}>
-            <p className="eyebrow">{t.title} · {t.eyebrow}</p>
-            <h1 id="hero-title">{locale === "hy" ? homeHero.hy.lines.map((line, index, lines) => (
-              <span className="hero-title-line" style={{ display: "block" }} key={line}>{line}{index < lines.length - 1 ? " " : ""}</span>
-            )) : homeHero[locale].heading}</h1>
-            <p className="hero-tagline">{homeHero[locale].tagline}</p>
-            <p className="hero-intro">{{hy:"Սերիալներ, ֆիլմեր, ներկայացումներ և մանկական պատմություններ՝ 2016 թվականից։",en:"Series, films, stage works and children’s stories since 2016.",ru:"Сериалы, фильмы, спектакли и детские истории с 2016 года."}[locale]}</p>
-            <div className="hero-actions"><a className="primary-action" href="#selected">{ui.work}</a><a className="secondary-action" href="#contact">{ui.collaborate}</a></div>
+        <section className="studio-hero section-frame" aria-labelledby="hero-title">
+          <div className="studio-hero-copy">
+            <p className="eyebrow">MAGHAKIAN SCRIPTS</p>
+            <h1 id="hero-title">{studio.headline}</h1>
+            <p className="studio-intro">{studio.intro}</p>
+            <div className="hero-actions"><a className="primary-action" data-track="start_project" href={`${localeRoot}work-with-ani/`}>{studio.start}</a><a className="secondary-action" href="#selected">{studio.selected}</a></div>
+            <a className="founder-link" href={`${localeRoot}about/`}>{studio.founded}</a>
           </div>
-          <div className="landscape-stage" aria-hidden="true">
-            {(["back", "middle", "front"] as const).map(layer => (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img key={layer} className={`landscape-layer landscape-${layer}`} src={`${basePath}${siteImagePreviews(layer)[1].src}`} srcSet={siteImageSrcSet(layer, basePath)} sizes="(min-width: 1700px) 1600px, 100vw" width={siteImages[layer].width} height={siteImages[layer].height} alt="" decoding="async" fetchPriority={layer === "back" ? "high" : "low"} />
-            ))}
-          </div>
-        </section>
-        <section className="author-intro section-frame" aria-labelledby="author-intro-title">
-          <figure>
+          <figure className="studio-portrait">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={`${basePath}${siteImagePreviews('portrait')[1].src}`} srcSet={siteImageSrcSet('portrait', basePath)} sizes="(max-width: 760px) calc(100vw - 32px), 400px" alt={t.imageAlt} width="1279" height="1919" loading="lazy" decoding="async" /></figure>
-          <div><p className="eyebrow">{t.aboutKicker}</p><h2 id="author-intro-title">{t.title}</h2><p className="roles">{t.roles}</p><p>{ui.shortIntro}</p><a className="secondary-action" href={`${localeRoot}about/`}>{t.nav.about}</a></div>
+            <img src={`${basePath}${siteImagePreviews('portrait')[1].src}`} srcSet={siteImageSrcSet('portrait', basePath)} sizes="(max-width: 760px) calc(100vw - 36px), 440px" alt={t.imageAlt} width="1279" height="1919" fetchPriority="high" decoding="async" />
+            <figcaption>{t.title} · {studio.founderRole}</figcaption>
+          </figure>
         </section>
-
         <section className="stats-strip section-frame" aria-label={ui.statistics}>
           {t.stats.map((stat, index) => (
             <div className="stat" key={stat.label}>
@@ -254,7 +198,7 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
         <section className="section-block section-frame" id="selected" aria-labelledby="selected-title">
           <div className="section-heading">
             <p className="eyebrow">{t.selectedKicker}</p>
-            <div><h2 id="selected-title">{t.selectedTitle}</h2><p>{t.selectedIntro}</p></div>
+            <div><h2 id="selected-title">{studio.selected}</h2><p>{t.selectedIntro}</p></div>
           </div>
 
           <div className="featured-grid" id="featured-projects">
@@ -309,6 +253,10 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
           <span className="section-tab" aria-hidden="true">02 / 07</span>
         </section>
 
+        <section className="studio-services section-frame" id="services" aria-labelledby="services-title">
+          <div className="section-heading"><p className="eyebrow">MAGHAKIAN SCRIPTS</p><h2 id="services-title">{studio.services}</h2><p>{studio.serviceIntro}</p></div>
+          <div className="service-index">{services.map((service, index) => <a key={service.slug} href={`${localeRoot}services/${service.slug}/`} data-track="service_view"><span className="service-number">{padded(index+1)}</span><h3>{service.names[locale]}</h3><p>{service.descriptions[locale]}</p><ArrowUpRight className="ui-icon" aria-hidden="true" /></a>)}</div>
+        </section>
         <section className="archive-section section-frame" id="filmography" aria-labelledby="archive-title">
           <div className="section-heading archive-heading">
             <p className="eyebrow">{t.archiveKicker}</p>
@@ -366,7 +314,7 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
 
         <section className="about-section section-frame" id="about" aria-labelledby="about-title">
           <div className="about-intro">
-            <p className="eyebrow">{t.aboutKicker}</p><h2 id="about-title">{t.aboutTitle}</h2><p className="bio-lead">{t.bio}</p><p className="bio-note">{t.philosophy}</p>
+            <p className="eyebrow">{studio.founderRole}</p><h2 id="about-title">{t.title}</h2><p className="bio-lead">{t.bio}</p><p className="bio-note">{t.philosophy}</p>
           </div>
           <div className="about-columns">
             <article><span className="column-number">01</span><h3>{t.educationTitle}</h3><ul>{t.education.map((item) => <li key={item}>{item}</li>)}</ul></article>
@@ -380,7 +328,7 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
           <div className="section-heading"><h2 id="books-title">{t.booksTitle}</h2><p>{{hy:"«Ժամանակավոր կանգառ» և «Տակնուվրա»՝ Անի Մաղաքյանի արձակը։",en:"Temporary Stop and Taknuvra — prose by Ani Maghakyan.",ru:"«Временная остановка» и «Такнувра» — проза Ани Магакян."}[locale]}</p></div>
           <div className="book-preview-grid">
             {latestBooks.map((book) => (
-              <a className="book-preview" key={book.slug} href={`${localeRoot}books/#${book.slug}`}>
+              <a className="book-preview" key={book.slug} href={`${localeRoot}books/${book.slug}/`}>
                 {book.cover && <figure className="book-preview-cover">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={`${basePath}${book.cover.src}`} width={book.cover.width} height={book.cover.height} alt={`${book.titles[locale]} — ${{hy:"գրքի շապիկ",en:"book cover",ru:"обложка книги"}[locale]}`} loading="lazy" decoding="async" />
@@ -436,7 +384,7 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
         </section>
 
         <section className="contact-section section-frame" id="contact" aria-labelledby="contact-title">
-          <p className="eyebrow">{t.contactKicker}</p><h2 id="contact-title">{t.contactTitle}</h2><p>{t.contactText}</p>
+          <p className="eyebrow">MAGHAKIAN SCRIPTS</p><h2 id="contact-title">{studio.start}</h2><p>{studio.contactIntro}</p><a className="primary-action" data-track="start_project" href={`${localeRoot}work-with-ani/`}>{studio.start}</a>
           <nav className="contact-services" aria-label={sectionLinks.find((item) => item.slug === "services")?.labels[locale]}>{services.map((service) => <a key={service.slug} data-track="view_service" data-service={service.slug} href={`${localeRoot}services/${service.slug}/`}>{service.names[locale]}</a>)}</nav>
           <p className="contact-hint">{ui.contactHint}</p>
           <div className="contact-actions">
@@ -448,7 +396,7 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
       </main>
 
       <footer className="site-footer section-frame">
-        <div><strong>A. MAGHAKYAN</strong><span>{t.roles}</span></div>
+        <div dangerouslySetInnerHTML={{ __html: studioFooter(locale, basePath) }} />
         <div className="footer-sources"><span>{t.sources}</span><ExternalLink href={siteLinks.imdb}>IMDb</ExternalLink><ExternalLink href={siteLinks.personalInstagram}>Instagram</ExternalLink><ExternalLink href={siteLinks.instagram}>Maghakian Scripts</ExternalLink></div>
         <div className="footer-meta"><time dateTime={updatedIso}>{t.updated}</time><a href="#top">{t.backTop}</a></div>
         <nav className="footer-hubs" data-seo-hub="ani" aria-label={ui.explore}><strong>{ui.explore}</strong>{sectionLinks.map((item) => <a key={item.slug} href={`${localeRoot}${item.slug}/`}>{item.labels[locale]}</a>)}</nav>

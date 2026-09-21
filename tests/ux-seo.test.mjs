@@ -6,6 +6,7 @@ import { JSDOM } from 'jsdom';
 import { projects, hubs, localizedPath } from '../scripts/seo-page-data.mjs';
 import { services } from '../lib/services.mjs';
 import { interfaceCopy, publicContactEmail, resultLabel, pageUpdatedIso } from '../lib/site-copy.mjs';
+import { books } from '../lib/books.mjs';
 import { mediaItems } from '../lib/media-archive.mjs';
 
 const codes = ['hy', 'en', 'ru'];
@@ -34,7 +35,7 @@ test('home navigation, project covers and book links are usable in exported HTML
 test('every sitemap URL has a unique canonical, translated navigation and valid internal links', async () => {
   const sitemap = await readFile(resolve(root, 'sitemap.xml'), 'utf8');
   const urls = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map((match) => match[1]);
-  const expectedCount = codes.length + ((projects.length + hubs.length + services.length + 1) * codes.length);
+  const expectedCount = codes.length + ((projects.length + hubs.length + books.length + services.length + 1) * codes.length);
   assert.equal(urls.length, expectedCount);
   assert.equal(new Set(urls).size, expectedCount);
   const base = new URL(urls[0]);

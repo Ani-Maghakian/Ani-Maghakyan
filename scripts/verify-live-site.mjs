@@ -1,4 +1,4 @@
-import { projects, hubs, locales, localizedPath } from './seo-page-data.mjs';
+import { allSeoPageTails, locales, localizedPath } from './seo-page-data.mjs';
 import { services, serviceHub } from '../lib/services.mjs';
 
 const siteUrl = String(process.env.SITE_URL || '').replace(/\/$/, '');
@@ -34,8 +34,7 @@ async function get(url, attempts = 6) {
 
 function expectedTails() {
   return [
-    ...projects.map((project) => `projects/${project.slug}`),
-    ...hubs.map((hub) => hub.slug),
+    ...allSeoPageTails(),
     serviceHub.slug,
     ...services.map((service) => `${serviceHub.slug}/${service.slug}`),
   ];

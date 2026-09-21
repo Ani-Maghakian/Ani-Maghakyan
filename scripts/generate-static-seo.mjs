@@ -50,9 +50,9 @@ ${urls.map(({ loc, priority }) => `  <url>
 </urlset>
 `;
 
-const llms = `# Ani Maghakyan
+const llms = `# Maghakian Scripts
 
-> Official multilingual portfolio and filmography of Armenian screenwriter, showrunner, producer and author Ani Maghakyan.
+> Screenwriting studio founded by Ani Maghakyan. Screenwriting, story development, showrunning and creative production; multilingual credits, books and interviews.
 
 - Canonical: ${siteUrl || "https://ani-maghakian.github.io/Ani-Maghakyan"}/
 - Armenian: ${siteUrl || "https://ani-maghakian.github.io/Ani-Maghakyan"}/
@@ -69,13 +69,13 @@ Use the canonical site for the current self-published filmography. Third-party s
 `;
 
 const manifest = {
-  name: "Ani Maghakyan — Filmography",
-  short_name: "A. Maghakyan",
-  description: "Official filmography of Armenian screenwriter Ani Maghakyan.",
+  name: "Maghakian Scripts",
+  short_name: "Maghakian Scripts",
+  description: "Screenwriting studio founded by Ani Maghakyan.",
   start_url: `${basePath || "."}/`,
   display: "standalone",
-  background_color: "#f1eadf",
-  theme_color: "#f1eadf",
+  background_color: "#080807",
+  theme_color: "#080807",
   icons: [{ src: `${basePath}/favicon.svg`, sizes: "any", type: "image/svg+xml" }],
 };
 

@@ -1,8 +1,9 @@
+import { studioCopy, studioHeader, studioFooter } from '../lib/studio.mjs';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { projects, locales, localizedPath } from './seo-page-data.mjs';
-import { serviceHub, services, serviceCopy } from '../lib/services.mjs';
-import { interfaceCopy, publicContactEmail, sectionLinks, pageUpdatedIso } from '../lib/site-copy.mjs';
+import { serviceHub, services } from '../lib/services.mjs';
+import { interfaceCopy, publicContactEmail, pageUpdatedIso } from '../lib/site-copy.mjs';
 import { copy, siteLinks } from '../lib/profile-content.mjs';
 import { serviceLinks, inquiryBrief } from './service-fragments.mjs';
 
@@ -41,14 +42,7 @@ function personNode() {
   };
 }
 
-function navLinks(locale, tail) {
-  return sectionLinks
-    .map((item) => {
-      const active = tail === item.slug || tail.startsWith(`${item.slug}/`);
-      return `<a href="${esc(pageHref(locale, item.slug))}"${active ? ' aria-current="page"' : ''}>${esc(item.labels[locale])}</a>`;
-    })
-    .join('');
-}
+
 
 function breadcrumbs(locale, title, tail, includeHub = false) {
   const ui = interfaceCopy[locale];
@@ -89,17 +83,15 @@ function layout({ locale, tail, seoTitle, description, body, nodes }) {
 ${Object.keys(locales).map((code) => `<link rel="alternate" hreflang="${locales[code].lang}" href="${esc(absoluteUrl(code, tail))}">`).join('\n')}
 <link rel="alternate" hreflang="x-default" href="${esc(absoluteUrl('hy', tail))}">
 <meta property="og:type" content="website"><meta property="og:title" content="${esc(seoTitle)}">
-<meta property="og:description" content="${esc(description)}"><meta property="og:url" content="${esc(canonical)}"><meta property="og:site_name" content="Ani Maghakyan">
+<meta property="og:description" content="${esc(description)}"><meta property="og:url" content="${esc(canonical)}"><meta property="og:site_name" content="Maghakian Scripts">
 <meta property="og:locale" content="${{ hy: 'hy_AM', en: 'en_US', ru: 'ru_RU' }[locale]}"><meta property="og:image" content="${siteUrl}/og.png">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="${esc(copy[locale].title)}"><meta name="twitter:title" content="${esc(seoTitle)}"><meta name="twitter:description" content="${esc(description)}"><meta name="twitter:image" content="${siteUrl}/og.png"><meta name="twitter:image:alt" content="${esc(copy[locale].title)}"><meta name="twitter:card" content="summary_large_image"><link rel="icon" href="${basePath}/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="${basePath}/site-theme.css"><script src="${basePath}/site-interactions.js" defer></script><script src="${basePath}/design-interactions.js" defer></script>
 <script type="application/ld+json">${JSON.stringify(jsonLd).replaceAll('<', '\\u003c')}</script>
 </head><body data-page="${esc(tail)}"><a class="skip-link" href="#main-content">${esc(ui.skip)}</a>
-<header class="masthead"><a class="brand" href="${esc(pageHref(locale))}">Ani Maghakyan.</a><nav class="topnav" aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav>
-<nav class="languages" aria-label="${esc(ui.languages)}">${Object.keys(locales).map((code) => `<a href="${esc(pageHref(code, tail))}" hreflang="${locales[code].lang}" lang="${locales[code].lang}" aria-label="${esc(locales[code].label)}"${code === locale ? ' aria-current="page"' : ''}>${code.toUpperCase()}</a>`).join('')}</nav>
-<details class="mobile-menu"><summary aria-label="${esc(ui.menu)}"><span class="menu-icon" aria-hidden="true"></span></summary><nav aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav></details></header><div class="shell">
+<header class="masthead">${studioHeader(locale, basePath, tail)}</header><div class="shell">
 ${body}
-<footer class="footer"><nav class="footer-nav" aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav><div class="footer-info"><a href="${esc(pageHref(locale))}">Ani Maghakyan · Maghakian Scripts</a><span>${esc(ui.updated)} <time datetime="${pageUpdatedIso(tail)}">${pageUpdatedIso(tail)}</time></span></div></footer>
+<footer class="footer">${studioFooter(locale, basePath)}</footer>
 </div></body></html>`;
 }
 
@@ -176,7 +168,7 @@ function servicePage(service, locale) {
     ru: { kicker: 'Услуга' },
   }[locale];
   const sections = service.sections[locale].map(([heading, items]) => `<section class="prose"><h2>${esc(heading)}</h2><ul>${items.map((item) => `<li>${esc(item)}</li>`).join('')}</ul></section>`).join('');
-  const body = `<main id="main-content">${crumbs.html}<section class="hero single"><div><p class="kicker">${esc(labels.kicker)}</p><h1>${esc(service.headings[locale])}</h1><p class="dek">${esc(service.descriptions[locale])}</p><div class="cta"><a href="#project-brief">${esc(serviceCopy[locale].discuss)}</a></div></div></section><section class="content"><div><article class="prose"><p>${esc(service.leads[locale])}</p></article>${sections}${projectCards(service, locale)}${serviceLinks(locale, basePath, service.next, "next")}${faq.html}<section class="prose" id="project-brief">${inquiryBrief(locale)}${contactCta(locale)}</section></div></section></main>`;
+  const body = `<main id="main-content">${crumbs.html}<section class="hero single"><div><p class="kicker">${esc(labels.kicker)}</p><h1>${esc(service.headings[locale])}</h1><p class="dek">${esc(service.descriptions[locale])}</p><div class="cta"><a href="${esc(pageHref(locale, 'work-with-ani'))}" data-track="start_project">${studioCopy[locale].start}</a></div></div></section><section class="content"><div><article class="prose"><p>${esc(service.leads[locale])}</p></article>${sections}${projectCards(service, locale)}${serviceLinks(locale, basePath, service.next, "next")}${faq.html}<section class="prose" id="project-brief">${inquiryBrief(locale)}<div class="cta"><a href="${esc(pageHref(locale, 'work-with-ani'))}">${studioCopy[locale].start}</a></div>${contactCta(locale)}</section></div></section></main>`;
   const serviceId = `${canonical}#service`;
   const nodes = [
     {

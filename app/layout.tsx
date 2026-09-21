@@ -3,8 +3,8 @@ import { basePath, siteUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
   metadataBase: siteUrl ? new URL(`${siteUrl}/`) : undefined,
-  title: "Ani Maghakyan",
-  description: "Ani Maghakyan — Armenian screenwriter, showrunner, producer and author.",
+  title: "Maghakian Scripts",
+  description: "Maghakian Scripts — a screenwriting studio founded by Ani Maghakyan.",
   manifest: `${basePath}/manifest.webmanifest`,
   icons: {
     icon: `${basePath}/favicon.svg`,

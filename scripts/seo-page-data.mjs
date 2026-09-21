@@ -1,3 +1,4 @@
+import { books as studioBooks } from '../lib/books.mjs';
 export { updatedIso } from "../lib/site-copy.mjs";
 import { writingHub } from '../lib/writings.mjs';
 
@@ -2768,5 +2769,6 @@ export function allSeoPageTails() {
   return [
     ...projects.map((item) => `projects/${item.slug}`),
     ...hubs.map((item) => item.slug),
+    ...studioBooks.map((book) => `books/${book.slug}`),
   ];
 }

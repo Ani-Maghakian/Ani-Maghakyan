@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Ani Maghakyan — Filmography",
-    short_name: "A. Maghakyan",
+    name: "Maghakian Scripts",
+    short_name: "Maghakian Scripts",
     description: "Official filmography of Armenian screenwriter Ani Maghakyan.",
     start_url: ".",
     display: "standalone",

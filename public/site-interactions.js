@@ -5,21 +5,6 @@ document.querySelectorAll('.hero-media img').forEach((image) => {
   if (image.complete && image.naturalWidth === 0) showFallback();
 });
 
-document.querySelectorAll('.mobile-menu').forEach((menu) => {
-  menu.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
-      menu.open = false;
-      menu.querySelector('summary').focus();
-    }
-  });
-  menu.addEventListener('click', (event) => {
-    if (event.target.closest('a')) menu.open = false;
-  });
-  document.addEventListener('click', (event) => {
-    if (!menu.contains(event.target)) menu.open = false;
-  });
-});
-
 // Keep the full media archive readable and linked when JavaScript is unavailable.
 document.querySelectorAll('.press-archive').forEach((archive) => {
   const controls = archive.querySelector('.archive-search-controls');

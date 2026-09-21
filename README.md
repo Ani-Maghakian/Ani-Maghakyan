@@ -67,3 +67,15 @@ npx tsc --noEmit
 Ֆիլմագրությունը՝ `lib/content.ts`, ընդհանուր եռալեզու տեքստերը՝ `lib/profile-content.mjs`, գրքերը՝ `lib/books.mjs`, աղբյուրներով լրացված նախագծերը՝ `lib/project-editorial.mjs`։ Գլխավոր էջի ոճերը՝ `app/globals.css`, ներքին էջերինը՝ `public/inner-pages.css`։
 
 Կատարված փոփոխությունները, ստուգումները և հետագա SEO աշխատանքի սահմանները նկարագրված են [փոփոխությունների գրառման մեջ](docs/ux-seo-improvements.md)։
+
+## Maghakian Scripts studio rebrand
+
+The public brand, navigation and localized studio copy are in `lib/studio.mjs`.
+The active CSS is `public/site-theme.css`, with book/press extensions in
+`public/content-archive.css`. Historical `app/cinematic*.css` and mobile repair
+files are no longer used. The existing 177 URLs remain, and six book detail
+pages bring the sitemap to 183 URLs.
+
+The project inquiry at `work-with-ani/` prepares a brief locally for review,
+copy/download or explicit sending through the visitor's email app. It does
+not claim server-side receipt. See `docs/design/studio-rebrand-2026-09-21.md`.
