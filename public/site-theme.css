@@ -122,8 +122,8 @@ a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,t
 .section-block,.archive-section,.about-section,.writing-section,.sources-section,.faq-section{padding-block:78px;border-bottom:1px solid var(--line)}
 
 .primary-action,.secondary-action,.contact-button,.cta a,.hero-actions a{display:inline-flex;gap:12px;align-items:center;justify-content:center;min-height:46px;padding:12px 22px;border:1px solid var(--line);border-radius:2px;background:#ffffff0c;font-size:14px;transition:background .2s,transform .2s}
-.primary-action,.contact-button,.cta a:not(.secondary){background:var(--ink);color:#151715;border-color:transparent}
-.primary-action:hover,.contact-button:hover,.cta a:not(.secondary):hover{background:#e4d5d0;color:#090a09;transform:translateY(-2px)}
+.primary-action,.hero-actions .primary-action,.contact-button,.cta a:not(.secondary){background:var(--ink);color:#151715;border-color:transparent}
+.primary-action:hover,.hero-actions .primary-action:hover,.contact-button:hover,.cta a:not(.secondary):hover{background:#e4d5d0;color:#090a09;transform:translateY(-2px)}
 .secondary-action:hover,.cta a.secondary:hover{background:#ffffff18;transform:translateY(-2px)}
 .hero-actions,.cta,.contact-actions{display:flex;justify-content:flex-start;gap:12px;flex-wrap:wrap;margin-top:28px}
 .external-link{display:inline-flex;gap:8px;align-items:center;text-decoration:underline;text-underline-offset:5px;font-size:14px}

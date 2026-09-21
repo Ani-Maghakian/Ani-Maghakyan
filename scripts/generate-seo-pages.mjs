@@ -22,7 +22,8 @@ const basePath = process.env.SITE_BASE_PATH ?? (process.env.GITHUB_ACTIONS === '
 const siteUrl = (process.env.SITE_URL || (owner ? `https://${owner}.github.io${basePath}` : 'https://ani-maghakian.github.io/Ani-Maghakyan')).replace(/\/$/, '');
 const output = resolve('dist/client');
 const personId = `${siteUrl}/#ani-maghakyan`;
-const contactEmail = publicContactEmail(process.env.CONTACT_EMAIL);
+const approvedContact = JSON.parse(readFileSync('project-discussions.config.json', 'utf8')).contactEmail;
+const contactEmail = publicContactEmail(process.env.CONTACT_EMAIL) || publicContactEmail(approvedContact);
 const esc = (value) => String(value ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 
 function absoluteUrl(locale, tail = '') {

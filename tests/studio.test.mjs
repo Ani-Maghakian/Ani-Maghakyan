@@ -15,7 +15,9 @@ for (const locale of ['hy','en','ru']) {
       const doc = new JSDOM(read(`${prefix}${tail}`)).window.document;
       const brand = doc.querySelector('header .brand');
       assert.equal(brand.querySelector('img').alt,'Maghakian Scripts');
-      assert.ok(brand.href.endsWith(`/Ani-Maghakyan/${prefix}`));
+      const canonical = new URL(doc.querySelector('link[rel=canonical]').href);
+      const localeHome = canonical.pathname.slice(0, canonical.pathname.length - tail.length);
+      assert.equal(new URL(brand.getAttribute('href'), canonical).pathname, localeHome);
       assert.ok(doc.querySelector('header').textContent.includes(studioCopy[locale].start));
       assert.equal(doc.querySelectorAll('.mobile-language-options a').length,3);
       assert.equal(doc.querySelectorAll('h1').length,1);
@@ -43,6 +45,7 @@ for (const locale of ['hy','en','ru']) {
     assert.equal(d.querySelector('.brief-preview img'),null);
     const url=new URL(d.querySelector('[data-send-brief]').href);
     assert.equal(url.protocol,'mailto:');
+    assert.ok(url.pathname.includes('@'),'Email handoff must include a configured recipient');
     assert.ok(url.searchParams.get('body').includes('<img src=x onerror=alert(1)>'));
     d.querySelector('[data-edit-brief]').click();
     assert.equal(form.hidden,false);
