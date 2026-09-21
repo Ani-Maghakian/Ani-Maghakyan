@@ -30,11 +30,11 @@ const homeInteractionSrc = `${basePath}/${interactionFilename}`.replace(/\/\/+/,
 const homeQualityStyle = "";
 // Version shared assets by their actual bytes so a fresh page cannot reuse stale
 // navigation, layout or archive behavior from a previous Pages deployment.
-const sharedAssets = ['site-theme.css', 'content-archive.css', 'site-interactions.js', 'design-interactions.js', 'inquiry.js'];
+const sharedAssets = ['site-theme.css', 'content-archive.css', 'site-interactions.js', 'design-interactions.js'];
 const sharedVersions = new Map(sharedAssets.map((name) => [name, createHash('sha256').update(name.endsWith('.css') ? stripEmbeddedHeroPayload(readFileSync(join(root, name), 'utf8')) : readFileSync(join(root, name))).digest('hex').slice(0, 12)]));
 
 function versionSharedAssets(html) {
-  return html.replace(/\b(href|src)=(["'])([^"']*\/)?(site-theme\.css|content-archive\.css|site-interactions\.js|design-interactions\.js|inquiry\.js)(?:\?v=[a-f0-9]+)?\2/g,
+  return html.replace(/\b(href|src)=(["'])([^"']*\/)?(site-theme\.css|content-archive\.css|site-interactions\.js|design-interactions\.js)(?:\?v=[a-f0-9]+)?\2/g,
     (_match, attribute, quote, prefix = '', filename) => `${attribute}=${quote}${prefix}${filename}?v=${sharedVersions.get(filename)}${quote}`);
 }
 

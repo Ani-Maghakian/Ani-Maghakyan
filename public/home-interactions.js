@@ -75,6 +75,13 @@
     anchor.closest('details')?.removeAttribute('open');
   });
 
+  document.querySelector('.mobile-menu')?.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      event.currentTarget.open = false;
+      event.currentTarget.querySelector('summary')?.focus();
+    }
+  });
+
   document.querySelectorAll('.featured-poster').forEach((image) => {
     const showFallback = () => { image.hidden = true; };
     image.addEventListener('error', showFallback, { once: true });

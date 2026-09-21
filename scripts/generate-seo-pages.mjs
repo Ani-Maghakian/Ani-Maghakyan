@@ -1,7 +1,3 @@
-import { services } from '../lib/services.mjs';
-import { serviceLinks } from './service-fragments.mjs';
-import { inquiryForm } from '../lib/inquiry.mjs';
-import { studioCopy, studioHeader, studioFooter } from '../lib/studio.mjs';
 import { mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { projects, hubs, locales, localizedPath, allSeoPageTails } from './seo-page-data.mjs';
@@ -13,8 +9,8 @@ import { mediaItems } from '../lib/media-archive.mjs';
 import { projectStories, projectSummary, relatedProjects } from '../lib/project-editorial.mjs';
 import { posterNotes, originalProjectPosters, posterSrcSet } from '../lib/project-posters.mjs';
 import { writings, writingCopy, writingBlogUrl, writingDate } from '../lib/writings.mjs';
-
-
+import { services } from '../lib/services.mjs';
+import { serviceLinks, inquiryBrief } from './service-fragments.mjs';
 
 const [owner = '', repositoryName = ''] = (process.env.GITHUB_REPOSITORY ?? '').split('/');
 const isUserOrOrgSite = Boolean(owner) && repositoryName === `${owner}.github.io`;
@@ -22,8 +18,7 @@ const basePath = process.env.SITE_BASE_PATH ?? (process.env.GITHUB_ACTIONS === '
 const siteUrl = (process.env.SITE_URL || (owner ? `https://${owner}.github.io${basePath}` : 'https://ani-maghakian.github.io/Ani-Maghakyan')).replace(/\/$/, '');
 const output = resolve('dist/client');
 const personId = `${siteUrl}/#ani-maghakyan`;
-const approvedContact = JSON.parse(readFileSync('project-discussions.config.json', 'utf8')).contactEmail;
-const contactEmail = publicContactEmail(process.env.CONTACT_EMAIL) || publicContactEmail(approvedContact);
+const contactEmail = publicContactEmail(process.env.CONTACT_EMAIL);
 const esc = (value) => String(value ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 
 function absoluteUrl(locale, tail = '') {
@@ -36,7 +31,9 @@ function pageHref(locale, tail = '') {
 }
 function diskPath(locale, tail = '') { return resolve(output, localizedPath(locale, tail), 'index.html'); }
 function sectionLabel(locale, slug) { return sectionLinks.find((s) => s.slug === slug).labels[locale]; }
-
+function navLinks(locale, tail) {
+  return sectionLinks.map((item) => `<a href="${esc(pageHref(locale, item.slug))}"${tail === item.slug ? ' aria-current="page"' : ''}>${esc(item.labels[locale])}</a>`).join('');
+}
 function personNode() {
   return { '@type': 'Person', '@id': personId, name: 'Ani Maghakyan', alternateName: ['Անի Մաղաքյան', 'Ани Магакян', 'Ani Maghakian'], url: `${siteUrl}/`, jobTitle: ['Screenwriter', 'Showrunner', 'Producer', 'Author'], sameAs: [siteLinks.imdb, siteLinks.personalInstagram, siteLinks.kinopoisk, siteLinks.elcinema] };
 }
@@ -68,7 +65,10 @@ function uniqueTitles(project) { return [...new Set(Object.values(project.titles
 function cardGrid(items, locale, className = 'related-grid') {
   return `<div class="${className}">${items.map((p) => `<a data-track="view_project" data-project="${esc(p.slug)}" href="${esc(pageHref(locale, `projects/${p.slug}`))}">${originalProjectPosters[p.slug] ? `<img class="catalog-poster" src="${esc(projectMediaSrc(p))}" srcset="${esc(posterSrcSet(p.slug, basePath))}" sizes="(max-width: 440px) 90vw, 320px" width="${originalProjectPosters[p.slug].width}" height="${originalProjectPosters[p.slug].height}" alt="${esc(p.titles[locale])}" loading="lazy" decoding="async">` : ''}<strong>${esc(p.titles[locale])}</strong><small>${esc(p.year)} · ${esc(p.slug === "elens-diary" ? {hy:"2 եթերաշրջան · 421 սերիա",en:"2 seasons · 421 episodes",ru:"2 сезона · 421 серия"}[locale] : p.credit[locale])}</small></a>`).join('')}</div>`;
 }
-
+function contactCta(locale) {
+  const ui = interfaceCopy[locale];
+  return `<div class="cta">${contactEmail ? `<a data-track="contact_email" href="mailto:${esc(contactEmail)}">${esc(ui.email)}</a>` : ''}<a data-track="contact_instagram" ${contactEmail ? 'class="secondary" ' : ''}href="${esc(siteLinks.instagram)}" target="_blank" rel="noopener noreferrer">${esc(ui.instagram)}</a></div>`;
+}
 
 const archiveCopy = {
   hy: {
@@ -162,16 +162,18 @@ function layout({ locale, tail, seoTitle, description, body, nodes, image, image
 ${Object.keys(locales).map((code) => `<link rel="alternate" hreflang="${locales[code].lang}" href="${esc(absoluteUrl(code, tail))}">`).join('\n')}
 <link rel="alternate" hreflang="x-default" href="${esc(absoluteUrl('hy', tail))}">
 <meta property="og:type" content="${tail.startsWith('projects/') ? 'article' : 'website'}"><meta property="og:title" content="${esc(seoTitle)}">
-<meta property="og:description" content="${esc(description)}"><meta property="og:url" content="${esc(canonical)}"><meta property="og:site_name" content="Maghakian Scripts">
+<meta property="og:description" content="${esc(description)}"><meta property="og:url" content="${esc(canonical)}"><meta property="og:site_name" content="Ani Maghakyan">
 <meta property="og:locale" content="${{hy:'hy_AM',en:'en_US',ru:'ru_RU'}[locale]}"><meta property="og:image" content="${esc(socialImage)}"><meta property="og:image:alt" content="${esc(socialImageAlt)}">${socialWidth && socialHeight ? `<meta property="og:image:width" content="${socialWidth}"><meta property="og:image:height" content="${socialHeight}">` : ''}
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(seoTitle)}"><meta name="twitter:description" content="${esc(description)}"><meta name="twitter:image" content="${esc(socialImage)}"><meta name="twitter:image:alt" content="${esc(socialImageAlt)}"><link rel="icon" href="${basePath}/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="${basePath}/site-theme.css">${(tail.startsWith('books') || tail === 'press') ? `<link rel="stylesheet" href="${basePath}/content-archive.css">` : ''}<script src="${basePath}/site-interactions.js" defer></script><script src="${basePath}/design-interactions.js" defer></script>
 <script type="application/ld+json">${JSON.stringify(jsonLd).replaceAll('<', '\\u003c')}</script>
 </head><body data-page="${esc(tail)}"><a class="skip-link" href="#main-content">${esc(ui.skip)}</a>
-<header class="masthead">${studioHeader(locale, basePath, tail)}</header><div class="shell">
+<header class="masthead"><a class="brand" href="${esc(pageHref(locale))}" aria-label="Maghakian Scripts — Home"><img src="${basePath}/brand/maghakian-scripts-light.svg" width="1230" height="390" alt="Maghakian Scripts"></a><nav class="topnav" aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav>
+<nav class="languages" aria-label="${esc(ui.languages)}">${Object.keys(locales).map((code) => `<a href="${esc(pageHref(code, tail))}" hreflang="${locales[code].lang}" lang="${locales[code].lang}" aria-label="${esc(locales[code].label)}"${code === locale ? ' aria-current="page"' : ''}>${code.toUpperCase()}</a>`).join('')}</nav>
+<details class="mobile-menu"><summary aria-label="${esc(ui.menu)}"><span class="menu-icon" aria-hidden="true"></span></summary><nav aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav></details></header><div class="shell">
 ${body}
-<footer class="footer">${studioFooter(locale, basePath)}</footer>
-</div>${tail === 'work-with-ani' ? `<script src="${basePath}/inquiry.js" defer></script>` : ''}</body></html>`;
+<footer class="footer"><nav class="footer-nav" aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav><div class="footer-info"><a href="${esc(pageHref(locale))}">Ani Maghakyan · Maghakian Scripts</a><span>${esc(ui.updated)} <time datetime="${pageUpdatedIso(tail)}">${pageUpdatedIso(tail)}</time></span></div></footer>
+</div></body></html>`;
 }
 
 function projectPage(project, locale) {
@@ -249,8 +251,8 @@ function hubPage(hub, locale) {
     'work-with-ani': {hy:t.contactText,en:t.contactText,ru:t.contactText},
   };
   const description = (descriptions[tail] ?? hub.descriptions)[locale];
-  const displayTitle = tail === 'work-with-ani' ? studioCopy[locale].start : tail === 'press' ? { hy: 'Հարցազրույցներ և մամուլ', en: 'Interviews & press', ru: 'Интервью и пресса' }[locale] : title;
-  const introduction = tail === 'work-with-ani' ? studioCopy[locale].contactIntro : tail === 'press' ? { hy: 'Զրույցներ Անիի հետ, նրա վարած հարցազրույցներն ու աշխատանքների արձագանքները։', en: 'Conversations with Ani, interviews she conducted and coverage of her work.', ru: 'Беседы с Ани, её интервью с другими авторами и публикации о её работах.' }[locale] : description;
+  const displayTitle = tail === 'press' ? { hy: 'Հարցազրույցներ և մամուլ', en: 'Interviews & press', ru: 'Интервью и пресса' }[locale] : title;
+  const introduction = tail === 'press' ? { hy: 'Զրույցներ Անիի հետ, նրա վարած հարցազրույցներն ու աշխատանքների արձագանքները։', en: 'Conversations with Ani, interviews she conducted and coverage of her work.', ru: 'Беседы с Ани, её интервью с другими авторами и публикации о её работах.' }[locale] : description;
   const nodes = [
     { '@type': tail === 'about' ? 'ProfilePage' : tail === 'work-with-ani' ? 'ContactPage' : 'CollectionPage', '@id': `${canonical}#page`, url: canonical, name: title, description, inLanguage: locales[locale].lang, dateModified: pageUpdatedIso(tail), isPartOf: { '@id': `${siteUrl}/#website` }, about: { '@id': personId }, breadcrumb: { '@id': `${canonical}#breadcrumbs` }, ...(tail === 'about' ? {mainEntity:{'@id':personId}} : {}) },
     personNode(), crumbs.node,
@@ -286,11 +288,10 @@ function hubPage(hub, locale) {
     nodes[0].mainEntity = {'@id':`${canonical}#articles`};
     sources = [{label:'IMDb',url:siteLinks.imdb},{label:'KinoPoisk',url:siteLinks.kinopoisk},{label:'elCinema',url:siteLinks.elcinema}];
   } else {
-    article = inquiryForm(locale, contactEmail) + serviceLinks(locale, basePath, services.map(service => service.slug));
-    sources = [];
+    article = `<h2>${esc(t.practiceTitle)}</h2><ul>${t.practice.map((item) => `<li>${esc(item)}</li>`).join('')}</ul>${serviceLinks(locale, basePath, services.map((service) => service.slug))}${inquiryBrief(locale)}${contactCta(locale)}<section class="related"><h2>${esc(t.selectedTitle)}</h2>${cardGrid(projects.filter((p) => ['elens-diary','summer-of-84','paper-dream'].includes(p.slug)),locale)}</section>`;
   }
-  const sidebar = tail === 'work-with-ani' ? '' : tail === 'writings' ? `<aside class="writing-aside"><p class="kicker">${esc(writingCopy[locale].kicker)}</p><p>${esc(writingCopy[locale].intro)}</p><p>${esc(writingCopy[locale].language)}</p><a href="${writingBlogUrl}" target="_blank" rel="noopener noreferrer">${esc(writingCopy[locale].all)}</a><a href="${esc(pageHref(locale, 'books'))}">${esc(sectionLabel(locale, 'books'))}</a></aside>` : tail === 'press' ? `<aside class="archive-profiles" aria-labelledby="profiles-heading"><h2 id="profiles-heading">${esc(archiveCopy[locale].profiles)}</h2><ul>${sources.map((source) => `<li><a href="${esc(source.url)}" target="_blank" rel="noopener noreferrer">${esc(source.label)} <span aria-hidden="true">↗</span></a></li>`).join('')}</ul></aside>` : sourceList(locale, sources);
-  const content = tail === 'projects' ? `<section class="index-content">${article}</section>` : ['books', 'press'].includes(tail) ? `<div class="content-archive ${tail === 'books' ? 'books-archive' : 'press-archive'}">${article}${sidebar}</div>` : `<section class="content"><div class="prose">${article}</div>${sidebar}</section>`;
+  const sidebar = tail === 'writings' ? `<aside class="writing-aside"><p class="kicker">${esc(writingCopy[locale].kicker)}</p><p>${esc(writingCopy[locale].intro)}</p><p>${esc(writingCopy[locale].language)}</p><a href="${writingBlogUrl}" target="_blank" rel="noopener noreferrer">${esc(writingCopy[locale].all)}</a><a href="${esc(pageHref(locale, 'books'))}">${esc(sectionLabel(locale, 'books'))}</a></aside>` : tail === 'press' ? `<aside class="archive-profiles" aria-labelledby="profiles-heading"><h2 id="profiles-heading">${esc(archiveCopy[locale].profiles)}</h2><ul>${sources.map((source) => `<li><a href="${esc(source.url)}" target="_blank" rel="noopener noreferrer">${esc(source.label)} <span aria-hidden="true">↗</span></a></li>`).join('')}</ul></aside>` : sourceList(locale, sources);
+  const content = tail === 'projects' ? `<section class="index-content">${article}</section>` : (tail.startsWith('books') || tail === 'press') ? `<div class="content-archive ${tail === 'books' ? 'books-archive' : 'press-archive'}">${article}${sidebar}</div>` : `<section class="content"><div class="prose">${article}</div>${sidebar}</section>`;
   const body = `<main id="main-content">${crumbs.html}<section class="hero${tail === 'about' ? '' : ' single'}"><div><p class="kicker">${esc(sectionLabel(locale, tail))}</p><h1>${esc(displayTitle)}</h1><p class="dek">${esc(introduction)}</p></div>${tail === 'about' ? `<figure class="hero-media author-media"><img src="${basePath}${siteImagePreviews('portrait')[1].src}" srcset="${esc(siteImageSrcSet('portrait', basePath))}" sizes="(max-width: 760px) calc(100vw - 32px), 480px" alt="${esc(t.title)}" width="1279" height="1919" decoding="async"></figure>` : ''}</section>${content}</main>`;
   return layout({ locale, tail, seoTitle, description, body, nodes, ...(shareBook ? { image: shareBook.cover.src.startsWith('/') ? `${siteUrl}${shareBook.cover.src}` : shareBook.cover.src, imageAlt: `${shareBook.titles[locale]} — ${archiveCopy[locale].cover}`, imageWidth: shareBook.cover.width, imageHeight: shareBook.cover.height } : {}) });
 }
@@ -301,7 +302,7 @@ function bookPage(book, locale) {
   const crumbs = breadcrumbs(locale, title, tail);
   const canonical = absoluteUrl(locale, tail);
   const author = copy[locale].title;
-  const body = `<main id="main-content">${crumbs.html}<section class="hero single"><div><p class="kicker">${studioCopy[locale].books} · ${book.year}</p><h1>${esc(title)}</h1><p class="dek"><a href="${pageHref(locale,'about')}">${esc(author)}</a></p></div></section><div class="content-archive book-detail">${bookCard(book,locale,true)}<nav class="footer-nav" aria-label="${studioCopy[locale].books}"><a href="${pageHref(locale,'books')}">${studioCopy[locale].books}</a><a href="${pageHref(locale,'writings')}">${studioCopy[locale].writing}</a></nav></div></main>`;
+  const body = `<main id="main-content">${crumbs.html}<section class="hero single"><div><p class="kicker">${copy[locale].booksTitle} · ${book.year}</p><h1>${esc(title)}</h1><p class="dek"><a href="${pageHref(locale,'about')}">${esc(author)}</a></p></div></section><div class="content-archive book-detail">${bookCard(book,locale,true)}<nav class="footer-nav" aria-label="${copy[locale].booksTitle}"><a href="${pageHref(locale,'books')}">${copy[locale].booksTitle}</a><a href="${pageHref(locale,'writings')}">${sectionLabel(locale, 'writings')}</a></nav></div></main>`;
   const nodes = [ { '@type':'WebPage', '@id':`${canonical}#page`, url:canonical, name:title, description:book.descriptions[locale], inLanguage:locales[locale].lang, mainEntity:{'@id':`${siteUrl}/#book-${book.slug}`}, isPartOf:{'@id':`${siteUrl}/#website`}, breadcrumb:{'@id':`${canonical}#breadcrumbs`} }, bookSchema(book,locale,siteUrl,personId), personNode(), crumbs.node ];
   return layout({locale,tail,seoTitle:`${title} — ${author}`,description:book.descriptions[locale],body,nodes,...(book.cover ? {image:`${siteUrl}${book.cover.src}`,imageAlt:title,imageWidth:book.cover.width,imageHeight:book.cover.height}: {})});
 }

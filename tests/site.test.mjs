@@ -33,7 +33,7 @@ test("exports all localized pages with valid structured data", async () => {
     for (const [, source] of scripts) {
       const data = JSON.parse(source);
       const types = data["@graph"].map((item) => item["@type"]);
-      assert.deepEqual(types, ["WebSite", "Person", "Organization", "WebPage", "Book", "Book", "FAQPage", "ItemList"]);
+      assert.deepEqual(types, ["WebSite", "Person", "Organization", "ProfilePage", "Book", "Book", "FAQPage", "ItemList"]);
     }
   }
 });
@@ -94,8 +94,8 @@ test("exports repaired project media, links and OKE naming", async () => {
   const hy = await readFile("dist/client/index.html", "utf8");
   const en = await readFile("dist/client/en/index.html", "utf8");
 
-  assert.match(hy, /class="studio-hero section-frame"/);
-  assert.match(hy, /class="studio-portrait"[\s\S]*?ani-portrait-display-640\.webp/);
+  assert.match(hy, /class="landscape-stage"/);
+  assert.match(hy, /class="author-intro section-frame"[\s\S]*?ani-portrait-display-640\.webp/);
   const portrait = await readFile('dist/client/ani-portrait-display-640.webp');
   const originalPortrait = await readFile('public/ani-3180-web.jpg');
   assert.ok(portrait.length > 0 && portrait.length < originalPortrait.length, 'the portrait variant is available and smaller than its source');

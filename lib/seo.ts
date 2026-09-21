@@ -1,4 +1,3 @@
-import { studioCopy } from "./studio.mjs";
 import { books, bookSchema } from "./books.mjs";
 import type { Metadata } from "next";
 import {
@@ -14,11 +13,16 @@ import {
 export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "";
 export const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
-const descriptions: Record<Locale, string> = { hy: studioCopy.hy.intro, en: studioCopy.en.intro, ru: studioCopy.ru.intro };
+const descriptions: Record<Locale, string> = {
+  hy: "Անի Մաղաքյան՝ գրող և «Էլենի օրագիրը», «84-ի ամառը» սերիալների սցենարիստ։ Կենսագրություն, 47 նախագծի ֆիլմագրություն, երկու գիրք և հարցազրույցներ։",
+  en: "Ani Maghakyan, author and screenwriter of Elen’s Diary and Summer of ’84. Explore her biography, 47 screen and stage projects, two books and interviews.",
+  ru: "Ани Магакян — писатель и сценарист «Дневника Элен» и «Лета ’84». Биография, 47 экранных и театральных проектов, две книги и интервью.",
+};
+
 const titles: Record<Locale, string> = {
-  hy: "Maghakian Scripts — Անի Մաղաքյանի սցենարական ստուդիա",
-  en: "Maghakian Scripts — Ani Maghakyan’s Screenwriting Studio",
-  ru: "Maghakian Scripts — сценарная студия Ани Магакян",
+  hy: "Անի Մաղաքյան — գրող և սցենարիստ | Գրքեր և ֆիլմագրություն",
+  en: "Ani Maghakyan — Author & Screenwriter | Books & Filmography",
+  ru: "Ани Магакян — писатель и сценарист | Книги и фильмография",
 };
 
 const languageTags: Record<Locale, string> = {
@@ -63,7 +67,7 @@ export function createMetadata(locale: Locale): Metadata {
   return {
     title: titles[locale],
     description: descriptions[locale],
-    applicationName: "Maghakian Scripts",
+    applicationName: "Ani Maghakyan",
     authors: [{ name: "Ani Maghakyan" }],
     creator: "Maghakian Scripts",
     publisher: "Maghakian Scripts",
@@ -75,13 +79,15 @@ export function createMetadata(locale: Locale): Metadata {
       ? { canonical, languages: languageAlternates }
       : undefined,
     openGraph: {
-      type: "website",
+      type: "profile",
       locale: openGraphLocale,
       alternateLocale: allOpenGraphLocales.filter((item) => item !== openGraphLocale),
       title: titles[locale],
       description: descriptions[locale],
-      siteName: "Maghakian Scripts",
+      siteName: "Ani Maghakyan",
       url: canonical,
+      firstName: "Ani",
+      lastName: "Maghakyan",
       images: image
         ? [{ url: image, width: 1200, height: 630, alt: localized.imageAlt }]
         : undefined,
@@ -140,7 +146,7 @@ export function structuredData(locale: Locale) {
         "@type": "WebSite",
         ...(websiteId ? { "@id": websiteId } : {}),
         ...(siteUrl ? { url: `${siteUrl}/` } : {}),
-        name: "Maghakian Scripts",
+        name: "Ani Maghakyan",
         alternateName: ["Անի Մաղաքյան", "Ани Магакян", "Ani Maghakian"],
         inLanguage: ["hy-AM", "en", "ru"],
         publisher: orgId ? { "@id": orgId } : { "@type": "Organization", name: "Maghakian Scripts" },
@@ -162,8 +168,8 @@ export function structuredData(locale: Locale) {
           { "@type": "Occupation", name: "Producer" },
           { "@type": "Occupation", name: "Author" },
         ],
-        url: siteUrl ? `${siteUrl}/${locale === "hy" ? "" : `${locale}/`}about/` : pageUrl,
-
+        url: siteUrl ? `${siteUrl}/` : pageUrl,
+        ...(profileId ? { mainEntityOfPage: { "@id": profileId } } : {}),
         sameAs: [siteLinks.imdb, siteLinks.personalInstagram, siteLinks.kinopoisk, siteLinks.elcinema],
         subjectOf: sourceLinks.slice(1).map((source) => ({
           "@type": "CreativeWork",
@@ -182,13 +188,12 @@ export function structuredData(locale: Locale) {
         "@type": "Organization",
         ...(orgId ? { "@id": orgId } : {}),
         name: "Maghakian Scripts",
-        ...(siteUrl ? { logo: `${siteUrl}/brand/maghakian-scripts-dark.svg` } : {}),
         ...(siteUrl ? { url: `${siteUrl}/` } : {}),
         sameAs: [siteLinks.instagram],
         founder: personId ? { "@id": personId } : { "@type": "Person", name: "Անի Մաղաքյան" },
       },
       {
-        "@type": "WebPage",
+        "@type": "ProfilePage",
         ...(profileId ? { "@id": profileId } : {}),
         url: pageUrl,
         name: titles[locale],
@@ -196,7 +201,7 @@ export function structuredData(locale: Locale) {
         dateModified: `${updatedIso}T00:00:00Z`,
         inLanguage: languageTags[locale],
         ...(websiteId ? { isPartOf: { "@id": websiteId } } : {}),
-        mainEntity: orgId ? { "@id": orgId } : { "@type": "Organization", name: "Maghakian Scripts" },
+        mainEntity: personId ? { "@id": personId } : { "@type": "Person", name: "Անի Մաղաքյան" },
         about: personId ? { "@id": personId } : { "@type": "Person", name: "Անի Մաղաքյան" },
         citation: sourceLinks.map((source) => source.href),
       },
