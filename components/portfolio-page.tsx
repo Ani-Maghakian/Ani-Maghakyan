@@ -168,9 +168,9 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
       <a className="skip-link" href="#main-content">{ui.skip}</a>
       <header className="site-header">
         <a className="wordmark" href={localeRoot} aria-label="Maghakian Scripts — Home">
-          {/* Original logo asset: preserve its proportions without image-loader rasterization. */}
+          {/* Vector wordmark: preserve native paths without image-loader rasterization. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={`${basePath}/brand/maghakian-scripts-light.svg`} width="1230" height="390" alt="Maghakian Scripts" />
+          <img src={`${basePath}/brand/maghakian-scripts-light.svg?v=vector-1`} width="1230" height="390" alt="Maghakian Scripts" />
         </a>
 
         <nav className="primary-nav" aria-label={t.primaryNavLabel}>
@@ -220,14 +220,12 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
 
       <main id="main-content">
         <section className="landscape-hero" aria-labelledby="hero-title">
-          <div className="landscape-copy" style={locale === "hy" ? { width: "min(1100px, calc(100% - 40px))" } : undefined}>
-            <p className="eyebrow">{t.title} · {t.eyebrow}</p>
-            <h1 id="hero-title">{locale === "hy" ? homeHero.hy.lines.map((line, index, lines) => (
-              <span className="hero-title-line" style={{ display: "block" }} key={line}>{line}{index < lines.length - 1 ? " " : ""}</span>
-            )) : homeHero[locale].heading}</h1>
+          <div className="landscape-copy">
+            <p className="eyebrow">MAGHAKIAN SCRIPTS</p>
+            <h1 id="hero-title">{homeHero[locale].heading}</h1>
             <p className="hero-tagline">{homeHero[locale].tagline}</p>
-            <p className="hero-intro">{{hy:"Սերիալներ, ֆիլմեր, ներկայացումներ և մանկական պատմություններ՝ 2016 թվականից։",en:"Series, films, stage works and children’s stories since 2016.",ru:"Сериалы, фильмы, спектакли и детские истории с 2016 года."}[locale]}</p>
-            <div className="hero-actions"><a className="primary-action" href="#selected">{ui.work}</a><a className="secondary-action" href="#contact">{ui.collaborate}</a></div>
+            <p className="hero-intro">{homeHero[locale].intro}</p>
+            <div className="hero-actions"><a className="primary-action" href={`${localeRoot}work-with-ani/`}>{homeHero[locale].start}</a><a className="secondary-action" href="#selected">{ui.work}</a></div>
           </div>
           <div className="landscape-stage" aria-hidden="true">
             {(["back", "middle", "front"] as const).map(layer => (
@@ -240,7 +238,7 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
           <figure>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={`${basePath}${siteImagePreviews('portrait')[1].src}`} srcSet={siteImageSrcSet('portrait', basePath)} sizes="(max-width: 760px) calc(100vw - 32px), 400px" alt={t.imageAlt} width="1279" height="1919" loading="lazy" decoding="async" /></figure>
-          <div><p className="eyebrow">{t.aboutKicker}</p><h2 id="author-intro-title">{t.title}</h2><p className="roles">{t.roles}</p><p>{ui.shortIntro}</p><a className="secondary-action" href={`${localeRoot}about/`}>{t.nav.about}</a></div>
+          <div><p className="eyebrow">{homeHero[locale].founderRole}</p><h2 id="author-intro-title">{t.title}</h2><p className="roles">{t.roles}</p><p>{ui.shortIntro}</p><a className="secondary-action" href={`${localeRoot}about/`}>{t.nav.about}</a></div>
         </section>
 
         <section className="stats-strip section-frame" aria-label={ui.statistics}>

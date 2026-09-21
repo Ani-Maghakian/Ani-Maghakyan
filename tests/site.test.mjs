@@ -33,7 +33,7 @@ test("exports all localized pages with valid structured data", async () => {
     for (const [, source] of scripts) {
       const data = JSON.parse(source);
       const types = data["@graph"].map((item) => item["@type"]);
-      assert.deepEqual(types, ["WebSite", "Person", "Organization", "ProfilePage", "Book", "Book", "FAQPage", "ItemList"]);
+      assert.deepEqual(types, ["WebSite", "Person", "Organization", "WebPage", "Book", "Book", "FAQPage", "ItemList"]);
     }
   }
 });

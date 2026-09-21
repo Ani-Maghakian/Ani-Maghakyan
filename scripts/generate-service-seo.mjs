@@ -95,7 +95,7 @@ ${Object.keys(locales).map((code) => `<link rel="alternate" hreflang="${locales[
 <link rel="stylesheet" href="${basePath}/site-theme.css"><script src="${basePath}/site-interactions.js" defer></script><script src="${basePath}/design-interactions.js" defer></script>
 <script type="application/ld+json">${JSON.stringify(jsonLd).replaceAll('<', '\\u003c')}</script>
 </head><body data-page="${esc(tail)}"><a class="skip-link" href="#main-content">${esc(ui.skip)}</a>
-<header class="masthead"><a class="brand" href="${esc(pageHref(locale))}" aria-label="Maghakian Scripts — Home"><img src="${basePath}/brand/maghakian-scripts-light.svg" width="1230" height="390" alt="Maghakian Scripts"></a><nav class="topnav" aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav>
+<header class="masthead"><a class="brand" href="${esc(pageHref(locale))}" aria-label="Maghakian Scripts — Home"><img src="${basePath}/brand/maghakian-scripts-light.svg?v=vector-1" width="1230" height="390" alt="Maghakian Scripts"></a><nav class="topnav" aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav>
 <nav class="languages" aria-label="${esc(ui.languages)}">${Object.keys(locales).map((code) => `<a href="${esc(pageHref(code, tail))}" hreflang="${locales[code].lang}" lang="${locales[code].lang}" aria-label="${esc(locales[code].label)}"${code === locale ? ' aria-current="page"' : ''}>${code.toUpperCase()}</a>`).join('')}</nav>
 <details class="mobile-menu"><summary aria-label="${esc(ui.menu)}"><span class="menu-icon" aria-hidden="true"></span></summary><nav aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav></details></header><div class="shell">
 ${body}

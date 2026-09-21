@@ -1,3 +1,4 @@
+import { homeHero } from "./site-copy.mjs";
 import { books, bookSchema } from "./books.mjs";
 import type { Metadata } from "next";
 import {
@@ -14,15 +15,15 @@ export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "
 export const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 const descriptions: Record<Locale, string> = {
-  hy: "Անի Մաղաքյան՝ գրող և «Էլենի օրագիրը», «84-ի ամառը» սերիալների սցենարիստ։ Կենսագրություն, 47 նախագծի ֆիլմագրություն, երկու գիրք և հարցազրույցներ։",
-  en: "Ani Maghakyan, author and screenwriter of Elen’s Diary and Summer of ’84. Explore her biography, 47 screen and stage projects, two books and interviews.",
-  ru: "Ани Магакян — писатель и сценарист «Дневника Элен» и «Лета ’84». Биография, 47 экранных и театральных проектов, две книги и интервью.",
+  hy: `${homeHero.hy.intro} ${homeHero.hy.tagline}`,
+  en: `${homeHero.en.intro} ${homeHero.en.tagline}`,
+  ru: `${homeHero.ru.intro} ${homeHero.ru.tagline}`,
 };
 
 const titles: Record<Locale, string> = {
-  hy: "Անի Մաղաքյան — գրող և սցենարիստ | Գրքեր և ֆիլմագրություն",
-  en: "Ani Maghakyan — Author & Screenwriter | Books & Filmography",
-  ru: "Ани Магакян — писатель и сценарист | Книги и фильмография",
+  hy: "Maghakian Scripts — սցենարական ստուդիա | Անի Մաղաքյան",
+  en: "Maghakian Scripts — Screenwriting Studio | Ani Maghakyan",
+  ru: "Maghakian Scripts — сценарная студия | Ани Магакян",
 };
 
 const languageTags: Record<Locale, string> = {
@@ -67,7 +68,7 @@ export function createMetadata(locale: Locale): Metadata {
   return {
     title: titles[locale],
     description: descriptions[locale],
-    applicationName: "Ani Maghakyan",
+    applicationName: "Maghakian Scripts",
     authors: [{ name: "Ani Maghakyan" }],
     creator: "Maghakian Scripts",
     publisher: "Maghakian Scripts",
@@ -79,15 +80,13 @@ export function createMetadata(locale: Locale): Metadata {
       ? { canonical, languages: languageAlternates }
       : undefined,
     openGraph: {
-      type: "profile",
+      type: "website",
       locale: openGraphLocale,
       alternateLocale: allOpenGraphLocales.filter((item) => item !== openGraphLocale),
       title: titles[locale],
       description: descriptions[locale],
-      siteName: "Ani Maghakyan",
+      siteName: "Maghakian Scripts",
       url: canonical,
-      firstName: "Ani",
-      lastName: "Maghakyan",
       images: image
         ? [{ url: image, width: 1200, height: 630, alt: localized.imageAlt }]
         : undefined,
@@ -146,7 +145,7 @@ export function structuredData(locale: Locale) {
         "@type": "WebSite",
         ...(websiteId ? { "@id": websiteId } : {}),
         ...(siteUrl ? { url: `${siteUrl}/` } : {}),
-        name: "Ani Maghakyan",
+        name: "Maghakian Scripts",
         alternateName: ["Անի Մաղաքյան", "Ани Магакян", "Ani Maghakian"],
         inLanguage: ["hy-AM", "en", "ru"],
         publisher: orgId ? { "@id": orgId } : { "@type": "Organization", name: "Maghakian Scripts" },
@@ -189,11 +188,12 @@ export function structuredData(locale: Locale) {
         ...(orgId ? { "@id": orgId } : {}),
         name: "Maghakian Scripts",
         ...(siteUrl ? { url: `${siteUrl}/` } : {}),
+        ...(siteUrl ? { logo: `${siteUrl}/brand/maghakian-scripts-light.svg?v=vector-1` } : {}),
         sameAs: [siteLinks.instagram],
         founder: personId ? { "@id": personId } : { "@type": "Person", name: "Անի Մաղաքյան" },
       },
       {
-        "@type": "ProfilePage",
+        "@type": "WebPage",
         ...(profileId ? { "@id": profileId } : {}),
         url: pageUrl,
         name: titles[locale],
@@ -201,7 +201,7 @@ export function structuredData(locale: Locale) {
         dateModified: `${updatedIso}T00:00:00Z`,
         inLanguage: languageTags[locale],
         ...(websiteId ? { isPartOf: { "@id": websiteId } } : {}),
-        mainEntity: personId ? { "@id": personId } : { "@type": "Person", name: "Անի Մաղաքյան" },
+        mainEntity: orgId ? { "@id": orgId } : { "@type": "Organization", name: "Maghakian Scripts" },
         about: personId ? { "@id": personId } : { "@type": "Person", name: "Անի Մաղաքյան" },
         citation: sourceLinks.map((source) => source.href),
       },
