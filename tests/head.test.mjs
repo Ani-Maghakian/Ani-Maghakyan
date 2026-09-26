@@ -21,7 +21,7 @@ test('all sitemap pages have working HEAD assets and consistent localized metada
       assert.equal(head.querySelectorAll(selector).length, 1, `${url.href}: ${selector}`);
     }
     assert.equal(head.querySelector('link[rel="canonical"]').href, url.href);
-    assert.equal(head.querySelector('meta[property="og:url"]').content, url.href);
+    assert.equal(new URL(head.querySelector('meta[property="og:url"]').content).href, url.href);
     for (const node of head.querySelectorAll('link[rel="manifest"], link[rel="icon"], link[rel="apple-touch-icon"]')) {
       const asset = new URL(node.getAttribute('href'), url);
       assert.equal(asset.origin, base.origin);
