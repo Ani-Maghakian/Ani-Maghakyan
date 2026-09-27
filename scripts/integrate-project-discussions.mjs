@@ -36,4 +36,4 @@ for (const path of files(root).filter((path) => path.endsWith('.html'))) {
   if (pageIdentity(name).project) projects++;
 }
 if (!pages) throw new Error('No eligible pages were changed; check for a duplicate integration or missing canonical URLs.');
-console.log(JSON.stringify({ contactEmail: config.contactEmail, pages, projectPages: projects, provider: config.provider, approvedOpinions: opinions.length }));
+console.log(JSON.stringify({ pages, projectPages: projects, provider: config.provider, approvedOpinions: opinions.length }));

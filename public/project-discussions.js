@@ -78,21 +78,3 @@ for (const root of document.querySelectorAll('[data-project-discussion]')) {
   });
 }
 
-for (const button of document.querySelectorAll('[data-copy-email]')) {
-  button.addEventListener('click', async () => {
-    const box = button.closest('[data-discussion-contact]');
-    const status = box.querySelector('[data-copy-status]');
-    const language = document.documentElement.lang.split('-')[0];
-    const labels = {
-      hy: ['Email-ը պատճենված է։', 'Ընտրեք և պատճենեք ցուցադրված հասցեն։'],
-      en: ['Email copied.', 'Select and copy the displayed address.'],
-      ru: ['Email скопирован.', 'Выделите и скопируйте указанный адрес.'],
-    }[language] || ['Email copied.', 'Select and copy the displayed address.'];
-    try {
-      await navigator.clipboard.writeText('maghaqyan@gmail.com');
-      status.textContent = labels[0];
-    } catch {
-      status.textContent = labels[1];
-    }
-  });
-}

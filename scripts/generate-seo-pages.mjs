@@ -246,7 +246,7 @@ function hubPage(hub, locale) {
   const shareBook = tail === 'books' ? visibleBooks.find((book) => book.cover) : null;
   const crumbs = breadcrumbs(locale, title, tail);
   const descriptions = {
-    projects: {hy:'Անի Մաղաքյանի 47 աշխատանքը՝ սերիալներ, ֆիլմեր, ներկայացումներ և մանկական նախագծեր։ Ընտրեք նախագիծը՝ մանրամասները և դիտման հղումը գտնելու համար։',en:'Explore 47 works by Ani Maghakyan across television, film, theatre and children’s stories. Find project details and viewing links.',ru:'47 работ Ани Магакян: сериалы, фильмы, спектакли и детские проекты. Выберите работу, чтобы узнать подробности и найти ссылку на просмотр.'},
+    projects: {hy:'Անի Մաղաքյանի 48 աշխատանքը՝ սերիալներ, ֆիլմեր, ներկայացումներ և մանկական նախագծեր։ Ընտրեք նախագիծը՝ մանրամասները և դիտման հղումը գտնելու համար։',en:'Explore 48 works by Ani Maghakyan across television, film, theatre and children’s stories. Find project details and viewing links.',ru:'48 работ Ани Магакян: сериалы, фильмы, спектакли и детские проекты. Выберите работу, чтобы узнать подробности и найти ссылку на просмотр.'},
     about: {hy:ui.shortIntro,en:ui.shortIntro,ru:ui.shortIntro},
     'work-with-ani': {hy:t.contactText,en:t.contactText,ru:t.contactText},
   };
@@ -368,3 +368,4 @@ if (existsSync(llmsPath)) {
 }
 
 console.log(`Generated ${allSeoPageTails().length * Object.keys(locales).length} standalone SEO pages (${projects.length} projects × ${Object.keys(locales).length} languages).`);
+

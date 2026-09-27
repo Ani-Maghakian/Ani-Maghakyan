@@ -1,6 +1,1 @@
-{
-  "enabled": true,
-  "provider": "github-issues",
-  "repository": "Ani-Maghakian/Ani-Maghakyan",
-  "contactEmail": "maghaqyan@gmail.com"
-}
+{"enabled":false,"provider":"github-issues","repository":"Ani-Maghakian/Ani-Maghakyan"}

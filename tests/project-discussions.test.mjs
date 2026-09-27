@@ -2,10 +2,10 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { buildIssueDraft, parseIssueBody, REPOSITORY, MAX_PREFILL_URL } from '../public/project-discussions-core.js';
-import { discussionCopy, discussionFragment, integrateHtml, pageIdentity, validateConfig, mailto } from '../lib/project-discussions.mjs';
+import { discussionCopy, discussionFragment, integrateHtml, pageIdentity, validateConfig } from '../lib/project-discussions.mjs';
 import { opinionFromIssue, validateOpinions } from '../lib/project-opinions.mjs';
 
-const config = { enabled: true, provider: 'github-issues', repository: REPOSITORY, contactEmail: 'maghaqyan@gmail.com' };
+const config = { enabled: true, provider: 'github-issues', repository: REPOSITORY };
 const base = { repository: REPOSITORY, project: 'mi-gexecik-or', locale: 'hy', name: 'Test reader', body: 'Fixture text, not a public review.', consent: true };
 const approved = { id: 'gh-101', project: base.project, locale: 'hy', name: '<b>Test reader</b>', body: '<script>alert(1)</script> Not a real review.', parent: '', source: `https://github.com/${REPOSITORY}/issues/101`, createdAt: '2026-09-17T10:00:00Z', approvedAt: '2026-09-17T11:00:00Z', reviewedBy: 'Ani-Maghakian', sourceSha256: 'a'.repeat(64) };
 
@@ -53,7 +53,7 @@ test('disabled new comments retain published opinions without a dummy form', () 
   assert.doesNotMatch(html, /<form/);
   assert.match(html, /id="opinion-gh-101"/);
 });
-test('configuration rejects external backends and wrong contact', () => {
+test('configuration rejects external backends and personal contacts', () => {
   assert.equal(validateConfig(config), config);
   for (const patch of [{ endpoint: 'https://example.com' }, { provider: 'supabase' }, { repository: 'wrong/repo' }, { contactEmail: 'wrong@example.com' }]) assert.throws(() => validateConfig({ ...config, ...patch }));
 });
@@ -63,7 +63,7 @@ test('routing preserves canonical, metadata, JS and source links', () => {
   assert.match(result, /href="#discussion"/);
   assert.ok(result.includes('<script type="application/ld+json">{"x":1}</script>'));
   assert.match(result, /href="https:\/\/youtube.com\/watch\?v=x"/);
-  assert.ok(result.includes(mailto('en', 'Mi Gexecik Or')));
+  assert.doesNotMatch(result, /mailto:/);
   assert.equal(integrateHtml(result, 'en/projects/mi-gexecik-or/index.html', config), result);
   assert.equal(pageIdentity('ru/projects/mi-gexecik-or/index.html').project, base.project);
 });
@@ -91,8 +91,8 @@ test('published snapshots are valid and contain no synthetic QA fixtures', () =>
 test('idle handoff has no visitor text and release CSS adds no blocking request', () => {
   const html = '<html><head><link rel="canonical" href="https://ani-maghakian.github.io/Ani-Maghakyan/projects/mi-gexecik-or/"></head><body><main><h1>Project</h1></main></body></html>';
   const css = readFileSync('public/project-discussions.css', 'utf8');
-  const result = integrateHtml(html, 'projects/mi-gexecik-or/index.html', config, '?v=test', [], css);
-  assert.match(result, /href="https:\/\/github\.com\/Ani-Maghakian\/Ani-Maghakyan\/issues\/new" data-github-handoff/);
+  const result = integrateHtml(html, 'projects/mi-gexecik-or/index.html', { ...config, enabled: false }, '?v=test', [], css);
+  assert.match(result, /New comments are temporarily disabled|Նոր կարծիքների ընդունումը/);
   assert.match(result, /<style data-project-discussion-styles>/);
   assert.doesNotMatch(result, /<link[^>]*project-discussions\.css/);
   assert.ok(result.includes('.project-discussion'));

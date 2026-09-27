@@ -62,7 +62,7 @@ export const projects = [
       "ru": "99 серий"
     },
     "episodes": 99,
-    "poster": null,
+    "poster": "/posters/the-stranger-submitted.webp",
     "watchUrl": "https://www.youtube.com/watch?v=T6nt8gOKoso",
     "watchKind": "youtube",
     "roles": {
@@ -116,7 +116,7 @@ export const projects = [
       "ru": "197 серий"
     },
     "episodes": 197,
-    "poster": "/posters/eleni-oragir.webp",
+    "poster": "/posters/elens-diary-submitted.webp",
     "watchUrl": "https://www.youtube.com/playlist?list=PLIdKbEnBj_B-mvF0PArmubgCmqOdv9rvT",
     "watchKind": "youtube",
     "roles": {
@@ -182,7 +182,7 @@ export const projects = [
       "ru": "224 серии"
     },
     "episodes": 224,
-    "poster": null,
+    "poster": "/posters/elens-diary-2-submitted.webp",
     "watchUrl": "https://www.youtube.com/watch?v=J9oQAJIiye8",
     "watchKind": "youtube",
     "roles": {
@@ -298,7 +298,7 @@ export const projects = [
       "ru": "198 серий"
     },
     "episodes": 198,
-    "poster": null,
+    "poster": "/posters/together-submitted.webp",
     "watchUrl": "https://www.youtube.com/watch?v=O06cuvk73MA",
     "watchKind": "youtube",
     "roles": {
@@ -352,7 +352,7 @@ export const projects = [
       "ru": "24 серии"
     },
     "episodes": 24,
-    "poster": null,
+    "poster": "/posters/toy-submitted.webp",
     "watchUrl": "https://www.youtube.com/watch?v=SOc5x1LOROU",
     "watchKind": "youtube",
     "roles": {
@@ -406,7 +406,7 @@ export const projects = [
       "ru": "24 серии"
     },
     "episodes": 24,
-    "poster": "/posters/antarri-tnakum.webp",
+    "poster": "/posters/forest-cottage-submitted.webp",
     "watchUrl": "https://www.youtube.com/watch?v=Q-uiVUBPy5k",
     "watchKind": "youtube",
     "roles": {
@@ -460,7 +460,7 @@ export const projects = [
       "ru": "148 серий"
     },
     "episodes": 148,
-    "poster": null,
+    "poster": "/posters/fragments-submitted.webp",
     "watchUrl": "https://www.youtube.com/watch?v=K3kISoAjN28",
     "watchKind": "youtube",
     "roles": {
@@ -514,7 +514,7 @@ export const projects = [
       "ru": "120 серий"
     },
     "episodes": 120,
-    "poster": null,
+    "poster": "/posters/hold-my-hand-submitted.webp",
     "watchUrl": "https://www.youtube.com/watch?v=r_UrgYomjhA",
     "watchKind": "youtube",
     "roles": {
@@ -568,7 +568,7 @@ export const projects = [
       "ru": "16 серий"
     },
     "episodes": 16,
-    "poster": null,
+    "poster": "/posters/we-are-two-sisters-submitted.webp",
     "watchUrl": "https://www.youtube.com/watch?v=QkCO6N7uK-k",
     "watchKind": "youtube",
     "roles": {
@@ -622,7 +622,7 @@ export const projects = [
       "ru": "90–99 серий"
     },
     "episodes": null,
-    "poster": "/posters/hatuk-dasaran.webp",
+    "poster": "/posters/special-class-submitted.webp",
     "watchUrl": "https://www.youtube.com/watch?v=IycLc4NiGgk",
     "watchKind": "youtube",
     "roles": {
@@ -676,7 +676,7 @@ export const projects = [
       "ru": "140 серий"
     },
     "episodes": 140,
-    "poster": null,
+    "poster": "/posters/special-class-2-submitted.webp",
     "watchUrl": "https://www.youtube.com/watch?v=qYIl-UJXMIM",
     "watchKind": "youtube",
     "roles": {
@@ -730,7 +730,7 @@ export const projects = [
       "ru": "24 серии"
     },
     "episodes": 24,
-    "poster": null,
+    "poster": "/posters/live-with-me-submitted.webp",
     "watchUrl": "https://kinodaran.com/hy/title/aprir_indz_het.html",
     "watchKind": "platform",
     "roles": {
@@ -784,7 +784,7 @@ export const projects = [
       "ru": "36 серий"
     },
     "episodes": 36,
-    "poster": null,
+    "poster": "/posters/stay-with-me-submitted.webp",
     "watchUrl": "https://kinodaran.com/hy/title/mna_indz_het.html",
     "watchKind": "platform",
     "roles": {
@@ -838,7 +838,7 @@ export const projects = [
       "ru": "61 серия"
     },
     "episodes": 61,
-    "poster": null,
+    "poster": "/posters/4-dreams-submitted.webp",
     "watchUrl": "https://www.youtube.com/watch?v=mFPB0EZOt_A",
     "watchKind": "youtube",
     "roles": {
@@ -892,7 +892,7 @@ export const projects = [
       "ru": "24 серии"
     },
     "episodes": 24,
-    "poster": null,
+    "poster": "/posters/forest-cottage-2-submitted.webp",
     "watchUrl": "https://www.youtube.com/watch?v=TgtC8Rmu9u0",
     "watchKind": "youtube",
     "roles": {
@@ -946,7 +946,7 @@ export const projects = [
       "ru": "10 серий"
     },
     "episodes": 10,
-    "poster": "https://i.ytimg.com/vi/TTRAx2ID01c/hqdefault.jpg",
+    "poster": "/posters/hotel-grand-submitted.webp",
     "watchUrl": "https://www.youtube.com/watch?v=TTRAx2ID01c",
     "watchKind": "youtube",
     "roles": {
@@ -1000,7 +1000,7 @@ export const projects = [
       "ru": "12 серий"
     },
     "episodes": 12,
-    "poster": null,
+    "poster": "/posters/hotel-grand-2-submitted.webp",
     "watchUrl": "https://www.youtube.com/watch?v=WzQRis3gNSc",
     "watchKind": "youtube",
     "roles": {
@@ -1054,7 +1054,7 @@ export const projects = [
       "ru": "12 серий"
     },
     "episodes": 12,
-    "poster": null,
+    "poster": "/posters/hotel-grand-3-submitted.webp",
     "watchUrl": "https://www.youtube.com/watch?v=5jh6TU4tI_Y",
     "watchKind": "youtube",
     "roles": {
@@ -1108,7 +1108,7 @@ export const projects = [
       "ru": "48 серий"
     },
     "episodes": 48,
-    "poster": null,
+    "poster": "/posters/looking-for-a-bride-submitted.webp",
     "watchUrl": "https://www.youtube.com/watch?v=bSontOUOe6Y",
     "watchKind": "youtube",
     "roles": {
@@ -1162,7 +1162,7 @@ export const projects = [
       "ru": "114 серий"
     },
     "episodes": 114,
-    "poster": null,
+    "poster": "/posters/against-each-other-submitted.webp",
     "watchUrl": "https://www.youtube.com/watch?v=pR1NupfAP1g",
     "watchKind": "youtube",
     "roles": {
@@ -1490,7 +1490,7 @@ export const projects = [
       "ru": "16 серий"
     },
     "episodes": 16,
-    "poster": null,
+    "poster": "/posters/los-khnamakhos-submitted.webp",
     "watchUrl": "https://www.armflix.com/los-engagement",
     "watchKind": "platform",
     "roles": {
@@ -1718,7 +1718,7 @@ export const projects = [
       "ru": "16 серий"
     },
     "episodes": 16,
-    "poster": null,
+    "poster": "/posters/sos-angeles-submitted.webp",
     "watchUrl": "https://www.armflix.com/sos-angeles",
     "watchKind": "platform",
     "roles": {
@@ -1934,7 +1934,7 @@ export const projects = [
       "ru": "16 серий"
     },
     "episodes": 16,
-    "poster": null,
+    "poster": "/posters/appsos-submitted.webp",
     "watchUrl": "https://www.armflix.com/app-sos",
     "watchKind": "platform",
     "roles": {
@@ -1988,7 +1988,7 @@ export const projects = [
       "ru": "116 серий"
     },
     "episodes": 116,
-    "poster": null,
+    "poster": "/posters/solved-cases-submitted.webp",
     "watchUrl": "https://www.youtube.com/watch?v=fZxxqgEjErA",
     "watchKind": "youtube",
     "roles": {
@@ -2042,7 +2042,7 @@ export const projects = [
       "ru": "16 серий"
     },
     "episodes": 16,
-    "poster": null,
+    "poster": "/posters/sosindz-submitted.webp",
     "watchUrl": "https://www.armflix.com/sos",
     "watchKind": "platform",
     "roles": {
@@ -2096,7 +2096,7 @@ export const projects = [
       "ru": "16 серий"
     },
     "episodes": 16,
-    "poster": null,
+    "poster": "/posters/after-you-submitted.webp",
     "watchUrl": "https://www.youtube.com/watch?v=elTUhl0v-yc",
     "watchKind": "youtube",
     "roles": {
@@ -2150,7 +2150,7 @@ export const projects = [
       "ru": "16 серий"
     },
     "episodes": 16,
-    "poster": null,
+    "poster": "/posters/soskali-submitted.webp",
     "watchUrl": "https://www.armflix.com/soscali",
     "watchKind": "platform",
     "roles": {
@@ -2204,7 +2204,7 @@ export const projects = [
       "ru": "16 серий"
     },
     "episodes": 16,
-    "poster": null,
+    "poster": "/posters/colonel-sos-submitted.webp",
     "watchUrl": "https://www.youtube.com/watch?v=XS5BEogIm7k",
     "watchKind": "youtube",
     "roles": {
@@ -2258,7 +2258,7 @@ export const projects = [
       "ru": "12 серий"
     },
     "episodes": 12,
-    "poster": null,
+    "poster": "/posters/oke-2-submitted.webp",
     "watchUrl": "https://www.tomsarkgh.am/hy/event/49673/Ok%C3%A9-2-1-%D5%AB%D5%B6-%D5%BD%D5%A5%D6%80%D5%AB%D5%A1%D5%B5%D5%AB-%D5%B6%D5%A1%D5%AD%D5%A1%D5%A4%D5%AB%D5%BF%D5%B8%D6%82%D5%B4-%D5%A4%D5%A5%D6%80%D5%A1%D5%BD.html",
     "watchKind": "platform",
     "roles": {
@@ -2478,7 +2478,7 @@ export const projects = [
       "ru": "16 серий"
     },
     "episodes": 16,
-    "poster": null,
+    "poster": "/posters/operation-sos-submitted.webp",
     "watchUrl": "https://www.armflix.com/operation-sos",
     "watchKind": "platform",
     "roles": {
@@ -2630,6 +2630,21 @@ export const projects = [
         "url": "https://www.shanttv.com/?lang=a"
       }
     ]
+  },
+  {
+    "id": 48, "slug": "sos-911", "year": "2026", "type": "TVSeries", "kind": "series",
+    "titles": { "hy": "Սոս 911", "en": "SOS 911", "ru": "Сос 911" },
+    "credit": { "hy": "16 սերիա", "en": "16 episodes", "ru": "16 серий" },
+    "episodes": 16, "poster": "/posters/sos-911-submitted.webp",
+    "watchUrl": "https://www.youtube.com/watch?v=F0OAWU_esqY", "watchKind": "youtube",
+    "roles": { "hy": "Սցենարիստ՝ Անի Մաղաքյան", "en": "Screenwriter: Ani Maghakyan", "ru": "Сценарист: Ани Магакян" },
+    "summaries": {
+      "hy": "«Սոս 911»-ը 2026 թվականի 16 մասանոց կատակերգական սերիալ է։ Armflix-ի պաշտոնական էջում Անի Մաղաքյանը նշված է որպես սցենարիստ։",
+      "en": "SOS 911 is a 2026 comedy series of 16 episodes. Armflix credits Ani Maghakyan as the screenwriter.",
+      "ru": "«Сос 911» — комедийный сериал 2026 года из 16 серий. На официальной странице Armflix Ани Магакян указана сценаристом."
+    },
+    "facts": { "hy": ["2026", "հեռուստասերիալ", "16 սերիա"], "en": ["2026", "television series", "16 episodes"], "ru": ["2026", "телесериал", "16 серий"] },
+    "sources": [{ "label": "Armflix — SOS 911", "url": "https://www.armflix.com/sos-911" }, { "label": "USArmenia TV — Episode 1", "url": "https://www.youtube.com/watch?v=F0OAWU_esqY" }]
   }
 ];
 
@@ -2643,9 +2658,9 @@ export const hubs = [
       "ru": "Ани Магакян — сериалы и фильмы | Фильмография"
     },
     "descriptions": {
-      "hy": "Անի Մաղաքյանի պաշտոնական նախագծային ինդեքսը՝ 47 աշխատանք մեկ crawlable կառուցվածքում։ Յուրաքանչյուր նախագիծ ունի առանձին էջ՝ անվան տարբերակներով, տարեթվով, ձևաչափով, արխիվային ծավալով, հասանելի պաշտոնական հղումով և հարակից նախագծերով։",
-      "en": "The official project index for Ani Maghakyan: 47 works in one crawlable hierarchy. Every project has a dedicated page with title variants, year, format, archive volume, available official destination, and related works.",
-      "ru": "Официальный индекс проектов Ани Магакян: 47 работ в единой доступной для поисковых систем структуре. У каждого проекта есть отдельная страница с вариантами названия, годом, форматом, объёмом архива, доступной официальной ссылкой и связанными работами."
+      "hy": "Անի Մաղաքյանի պաշտոնական նախագծային ինդեքսը՝ 48 աշխատանք մեկ crawlable կառուցվածքում։ Յուրաքանչյուր նախագիծ ունի առանձին էջ՝ անվան տարբերակներով, տարեթվով, ձևաչափով, արխիվային ծավալով, հասանելի պաշտոնական հղումով և հարակից նախագծերով։",
+      "en": "The official project index for Ani Maghakyan: 48 works in one crawlable hierarchy. Every project has a dedicated page with title variants, year, format, archive volume, available official destination, and related works.",
+      "ru": "Официальный индекс проектов Ани Магакян: 48 работ в единой доступной для поисковых систем структуре. У каждого проекта есть отдельная страница с вариантами названия, годом, форматом, объёмом архива, доступной официальной ссылкой и связанными работами."
     },
     "sources": []
   },
@@ -2772,3 +2787,4 @@ export function allSeoPageTails() {
     ...studioBooks.map((book) => `books/${book.slug}`),
   ];
 }
+

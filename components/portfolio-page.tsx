@@ -14,6 +14,7 @@ import { basePath } from "@/lib/seo";
 import { interfaceCopy, sectionLinks, resultLabel, publicContactEmail, homeHero } from "@/lib/site-copy.mjs";
 import { siteImages, siteImagePreviews, siteImageSrcSet } from "@/lib/site-images.mjs";
 import { originalProjectPosters, posterNotes, posterPreviews, posterSrcSet } from "@/lib/project-posters.mjs";
+import { archivePosters } from "@/lib/archive-posters.mjs";
 import { writings, writingCopy } from "@/lib/writings.mjs";
 import { services } from "@/lib/services.mjs";
 import { books } from "@/lib/books.mjs";
@@ -149,9 +150,23 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
   const literary = writingCopy[locale];
   const localeRoot = `${basePath}${locales[locale].href}`;
   const contactEmail = publicContactEmail(process.env.NEXT_PUBLIC_CONTACT_EMAIL);
-  const featured = projects
-    .filter((project) => project.featuredRank)
-    .sort((a, b) => (a.featuredRank ?? 0) - (b.featuredRank ?? 0));
+  const featuredPriority = [
+    'elens-diary', 'elens-diary-2', 'paper-dream', 'summer-of-84', 'dear-sahmi',
+    'se-la-vi', 'white-shirt', 'blockade', 'special-class', 'special-class-2',
+  ];
+  const featured = projects.filter((project) => project.featuredRank ||
+    ['elens-diary-2', 'special-class-2', 'hotel-grand-2', 'hotel-grand-3'].includes(project.seoSlug ?? ''))
+    .sort((a, b) => {
+      const aPriority = featuredPriority.indexOf(a.seoSlug ?? '');
+      const bPriority = featuredPriority.indexOf(b.seoSlug ?? '');
+      if (aPriority !== -1 || bPriority !== -1)
+        return (aPriority === -1 ? 100 : aPriority) - (bPriority === -1 ? 100 : bPriority);
+      const aHotel = ['hotel-grand', 'hotel-grand-2', 'hotel-grand-3'].indexOf(a.seoSlug ?? '');
+      const bHotel = ['hotel-grand', 'hotel-grand-2', 'hotel-grand-3'].indexOf(b.seoSlug ?? '');
+      if (aHotel !== -1 || bHotel !== -1)
+        return (aHotel === -1 ? 100 : aHotel) - (bHotel === -1 ? 100 : bHotel);
+      return (a.featuredRank ?? 99) - (b.featuredRank ?? 99);
+    });
   const filters = Object.keys(t.filters) as Filter[];
   const latestBooks = [...books].sort((a, b) => Number(b.year) - Number(a.year));
   const pressPreview = ["interview", "journalism", "coverage"].map((category) => mediaItems.find((item) => item.category === category)).filter((item) => item !== undefined);
@@ -224,7 +239,7 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
             <h1 id="hero-title">{homeHero[locale].heading}</h1>
             <p className="hero-tagline">{homeHero[locale].tagline}</p>
             <p className="hero-intro">{homeHero[locale].intro}</p>
-            <div className="hero-actions"><a className="primary-action" href={`${localeRoot}work-with-ani/`}>{homeHero[locale].start}</a><a className="secondary-action" href="#selected">{ui.work}</a></div>
+            <div className="hero-actions"><a className="primary-action" href="#studio-offer">{homeHero[locale].start}</a><a className="secondary-action" href="#selected">{ui.work}</a></div>
           </div>
           <div className="landscape-stage" aria-hidden="true">
             {(["back", "middle", "front"] as const).map(layer => (
@@ -308,6 +323,11 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
           <span className="section-tab" aria-hidden="true">02 / 07</span>
         </section>
 
+        <section className="studio-offer section-frame" id="studio-offer" aria-label={locale === 'hy' ? 'Ինչ ենք անում' : locale === 'ru' ? 'Что мы делаем' : 'What we do'}>
+          <h2>{locale === 'hy' ? 'Գաղափարից մինչև պատմություն՝ տարբեր ձևաչափերի համար։' : locale === 'ru' ? 'От идеи до истории для разных форматов.' : 'From idea to story, across formats.'}</h2>
+          <p>{locale === 'hy' ? 'Պատմության մշակում · սցենարագրություն · շոուռանինգ · ստեղծագործական պրոդյուսինգ' : locale === 'ru' ? 'Разработка истории · сценарий · шоураннинг · творческое продюсирование' : 'Story development · screenwriting · showrunning · creative production'}</p>
+        </section>
+
         <section className="archive-section section-frame" id="filmography" aria-labelledby="archive-title">
           <div className="section-heading archive-heading">
             <p className="eyebrow">{t.archiveKicker}</p>
@@ -335,15 +355,23 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
 
           <div className="filmography-table-wrap">
             <table className="filmography-table">
-              <thead><tr><th scope="col">{t.table.number}</th><th scope="col">{t.table.project}</th><th scope="col">{t.table.year}</th><th scope="col">{t.table.format}</th></tr></thead>
+              <thead><tr><th scope="col">{t.table.number}</th><th scope="col" aria-label="Poster" /><th scope="col">{t.table.project}</th><th scope="col">{t.table.year}</th><th scope="col">{t.table.format}</th></tr></thead>
               <tbody>
                 {projects.map((project) => {
                   const internalHref = projectPageHref(locale, project.seoSlug);
                   const searchable = [project.title.hy, project.title.en, project.title.ru, project.year, project.credit.hy, project.credit.en, project.credit.ru].join(" ").toLocaleLowerCase(locale);
                   return (
                     <tr id={`project-${project.id}`} key={project.id} data-project-row data-kind={project.kind} data-search={searchable}>
-                      <td data-label={t.table.number}>{padded(project.id)}</td>
-                      <th data-label={t.table.project} scope="row">
+                      <td className="archive-number" data-label={t.table.number}>{padded(project.id)}</td>
+                      <td className="archive-art-cell">
+                        <span className="archive-poster-frame">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img className="archive-poster-backdrop" src={`${basePath}${archivePosters[project.seoSlug as keyof typeof archivePosters]}`} alt="" aria-hidden="true" loading="lazy" decoding="async" />
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img className="archive-poster" src={`${basePath}${archivePosters[project.seoSlug as keyof typeof archivePosters]}`} alt="" loading="lazy" decoding="async" />
+                        </span>
+                      </td>
+                      <th className="archive-title-cell" data-label={t.table.project} scope="row">
                         <span className="project-title-cell">
                           {internalHref ? <a className="project-title-link" data-track="view_project" data-project={project.seoSlug} href={internalHref}>{project.title[locale]}</a> : <span>{project.title[locale]}</span>}
                           {project.watchUrl && (
@@ -351,8 +379,8 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
                           )}
                         </span>
                       </th>
-                      <td data-label={t.table.year}>{project.year}</td>
-                      <td data-label={t.table.format}>{project.credit[locale]}</td>
+                      <td className="archive-year" data-label={t.table.year}>{project.year}</td>
+                      <td className="archive-volume" data-label={t.table.format}>{project.credit[locale]}</td>
                     </tr>
                   );
                 })}
@@ -457,3 +485,4 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
     </div>
   );
 }
+

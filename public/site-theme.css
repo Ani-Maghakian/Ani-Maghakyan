@@ -125,3 +125,41 @@ body>.masthead{margin-inline:0;width:100%;padding-inline:max(32px,calc((100% - 1
 @media(max-width:1280px){body>.masthead .topnav{display:none}body>.masthead .mobile-menu{display:block}}
 @media(max-width:760px){body>.masthead{padding-inline:18px;gap:8px}}
 @media(max-width:440px){body>.masthead{gap:5px}}
+
+/* Full project posters with a blurred image echo, in the published archive. */
+.filmography-table-wrap{overflow:visible}
+.filmography-table,.filmography-table tbody{display:block;width:100%}
+.filmography-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.filmography-table tbody tr{position:relative;display:grid;grid-template-columns:44px 112px minmax(0,1fr) 120px 54px;align-items:center;gap:18px;min-height:162px;padding:18px 4px;border-bottom:1px solid #ffffff29;transition:background .22s ease}
+.filmography-table tbody tr:hover{background:#ffffff08}
+.filmography-table tbody tr[hidden]{display:none!important}
+.filmography-table td,.filmography-table th{display:block;min-width:0;padding:0;border:0}
+.filmography-table .archive-number{align-self:start;padding-top:5px;color:#989e9e;font-size:13px;letter-spacing:.04em}
+.filmography-table .archive-art-cell{width:112px}
+.archive-poster-frame{position:relative;isolation:isolate;display:block;width:112px;height:140px;overflow:hidden;background:#242829;border:1px solid #ffffff30;border-radius:7px}
+.archive-poster-frame img{display:block}
+.archive-poster-backdrop{position:absolute;inset:-16px;width:calc(100% + 32px);height:calc(100% + 32px);object-fit:cover;filter:blur(15px) brightness(.59) saturate(1.12);transform:scale(1.06)}
+.archive-poster{position:relative;z-index:1;width:100%;height:100%;object-fit:contain}
+.filmography-table .archive-title-cell{font-size:clamp(19px,2.4vw,27px);font-weight:500;line-height:1.25}
+.filmography-table .archive-title-cell .project-title-cell{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.filmography-table .archive-title-cell .project-watch-mini{display:grid;place-items:center;flex:none;width:50px;height:50px;border:1px solid #ffffff5c;border-radius:50%;background:#202426;color:#fff;box-shadow:inset 0 1px 2px #fff3}
+.filmography-table .archive-title-cell .project-watch-mini svg{width:21px;height:21px}
+.filmography-table .archive-year,.filmography-table .archive-volume{color:#adb2b1;font-size:14px}
+.studio-offer{display:grid;grid-template-columns:1fr 1fr;align-items:end;gap:28px;margin:44px auto 0;padding-block:48px;border-top:1px solid #ffffff30}
+.studio-offer h2{max-width:650px;margin:0;font-size:clamp(27px,3vw,43px);font-weight:500}
+.studio-offer p{max-width:460px;margin:0;color:var(--muted);line-height:1.65}
+#selected .featured-poster-backdrop{inset:-18px;overflow:hidden;opacity:.82;filter:blur(16px) brightness(.72) saturate(1.12)}
+#selected .featured-poster-backdrop img{display:block;width:100%;height:100%;object-fit:cover}
+@media(max-width:760px){
+ .filmography-table tbody tr{grid-template-columns:22px 90px minmax(0,1fr) 44px;grid-template-rows:auto 20px 22px;align-items:start;gap:5px 10px;min-height:136px;padding:15px 0}
+ .filmography-table .archive-number{grid-column:1;grid-row:1;font-size:11px}
+ .filmography-table .archive-art-cell{grid-column:2;grid-row:1/4;width:90px}
+ .archive-poster-frame{width:90px;height:116px}
+ .filmography-table .archive-title-cell{grid-column:3;grid-row:1;font-size:16px}
+ .filmography-table .archive-title-cell .project-title-cell{display:block}
+ .filmography-table .archive-title-cell .project-watch-mini{position:absolute;right:0;top:28px;width:44px;height:44px}
+ .filmography-table .archive-year{grid-column:3;grid-row:2;font-size:12px}
+ .filmography-table .archive-volume{grid-column:3;grid-row:3;font-size:12px}
+ .studio-offer{grid-template-columns:1fr;gap:15px}
+}
+@media(max-width:370px){.filmography-table tbody tr{grid-template-columns:16px 76px minmax(0,1fr) 40px;gap:5px 8px}.filmography-table .archive-art-cell,.archive-poster-frame{width:76px}.archive-poster-frame{height:104px}.filmography-table .archive-title-cell{font-size:15px}.filmography-table .archive-title-cell .project-watch-mini{width:40px;height:40px}}

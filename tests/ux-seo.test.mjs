@@ -24,7 +24,7 @@ test('home navigation, project covers and book links are usable in exported HTML
     assert.match(html, /books\/#topsy-turvy/);
     assert.match(html, /services\//);
     const covers = [...html.matchAll(/<a\b([^>]*class="featured-poster-link(?: featured-text-cover)?"[^>]*)>/g)];
-    assert.equal(covers.length, 12);
+    assert.equal(covers.length, 16);
     for (const [, attributes] of covers) {
       assert.match(attributes, /href="[^"\s]*\/projects\/[a-z0-9-]+\/"/);
       assert.doesNotMatch(attributes, /target="_blank"/);
@@ -158,7 +158,8 @@ test('localized result counts and optional public contact handle real edge cases
   assert.equal(resultLabel(21, 'ru'), '21 результат');
   assert.equal(resultLabel(0, 'en'), '0 results');
   assert.equal(publicContactEmail(''), '');
-  assert.equal(publicContactEmail(' editor@example.com '), 'editor@example.com');
+  assert.equal(publicContactEmail(' editor@example.com '), '');
   assert.equal(publicContactEmail('editor@example.com?bcc=other@example.com'), '');
   assert.equal(publicContactEmail('invalid-address'), '');
 });
+

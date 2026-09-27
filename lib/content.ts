@@ -68,6 +68,7 @@ export const projects: Project[] = [
   { id: 45, title: { hy: "Օպերացիա Սոս", en: "Operation Sos", ru: "Операция Сос" }, year: "2026", credit: { hy: "16 սերիա", en: "16 episodes", ru: "16 серий" }, kind: "series", episodes: 16, watchUrl: "https://www.armflix.com/operation-sos", watchKind: "platform", seoSlug: "operation-sos" },
   { id: 46, title: { hy: "Se.La.Vi", en: "Se.La.Vi", ru: "Se.La.Vi" }, year: "2026", credit: { hy: "10 մաս", en: "10 parts", ru: "10 частей" }, kind: "series", episodes: 10, featuredRank: 10, poster: "https://i.ytimg.com/vi/CkbtuC2HHi8/maxresdefault.jpg", watchUrl: "https://www.youtube.com/watch?v=CkbtuC2HHi8", watchKind: "youtube", seoSlug: "se-la-vi" },
   { id: 47, title: { hy: "Մի գեղեցիկ օր", en: "Mi Gexecik Or", ru: "Ми Гехецик Ор" }, year: "2026", credit: { hy: "50+ սերիա", en: "50+ episodes", ru: "50+ серий" }, kind: "series", poster: "https://i.ytimg.com/vi/QRCSe3vD3cM/maxresdefault.jpg", watchUrl: "https://www.youtube.com/watch?v=QRCSe3vD3cM", watchKind: "youtube", seoSlug: "mi-gexecik-or" },
+  { id: 48, title: { hy: "Սոս 911", en: "SOS 911", ru: "Сос 911" }, year: "2026", credit: { hy: "16 սերիա", en: "16 episodes", ru: "16 серий" }, kind: "series", episodes: 16, watchUrl: "https://www.youtube.com/watch?v=F0OAWU_esqY", watchKind: "youtube", seoSlug: "sos-911" },
 ];
 
 export const locales: Record<Locale, { short: string; label: string; href: string; hrefLang: string }> = {
@@ -77,3 +78,4 @@ export const locales: Record<Locale, { short: string; label: string; href: strin
 };
 
 export { copy, siteLinks, sourceLinks } from "./profile-content.mjs";
+

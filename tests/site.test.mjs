@@ -17,7 +17,7 @@ test("exports all localized pages with valid structured data", async () => {
     const html = await readFile(page.path, "utf8");
     assert.match(html, new RegExp(`<html[^>]+lang=["']${page.lang}["']`));
     assert.match(html, /<meta[^>]+name=["']description["']/);
-    assert.match(html, /47/);
+    assert.match(html, /48/);
     assert.match(html, /#filmography/);
     assert.match(html, /id="sources"/); // Preserve the existing homepage section anchor.
     assert.match(html, /href="[^\"]*press\//); // Navigation now opens the full media archive.
@@ -67,16 +67,15 @@ test("keeps the approved key-project selection and Summer of ’84 authorship", 
   const selected = html.slice(html.indexOf('id="selected"'), html.indexOf('id="filmography"'));
   const keyProjects = [
     "Էլենի օրագիրը",
+    "Էլենի օրագիրը 2",
     "Թղթե երազանք",
-    "Սիրելի Սահմի",
-    "Հատուկ դասարան",
-    "Կախվածություն",
     "84-ի ամառը",
-    "Բլոկադա",
-    "Կհանդիպենք անտառի տնակում",
-    "Եթե ես կրկին պարեմ",
+    "Սիրելի Սահմի",
     "Se.La.Vi",
-    "Hotel Grand",
+    "Ճերմակ շապիկ",
+    "Բլոկադա",
+    "Հատուկ դասարան",
+    "Հատուկ դասարան 2",
   ];
 
   let previousIndex = -1;
@@ -130,14 +129,14 @@ test("exports repaired project media, links and OKE naming", async () => {
   }
 
   const watchButtons = en.match(/class="project-watch-mini"/g) ?? [];
-  assert.ok(watchButtons.length >= 47, `expected all 47 project watch links, got ${watchButtons.length}`);
+  assert.ok(watchButtons.length >= 48, `expected all 48 project watch links, got ${watchButtons.length}`);
 });
 
 
 test("exports a crawlable dedicated page for every project in all three languages", async () => {
   const localeCodes = ["hy", "en", "ru"];
 
-  assert.equal(seoProjects.length, 47);
+  assert.equal(seoProjects.length, 48);
   assert.ok(seoHubs.some((hub) => hub.slug === "projects"));
 
   for (const locale of localeCodes) {
@@ -159,7 +158,7 @@ test("exports a crawlable dedicated page for every project in all three language
 
     const projectIndex = localizedPath(locale, "projects");
     const indexHtml = await readFile(`dist/client/${projectIndex}/index.html`, "utf8");
-    assert.match(indexHtml, /47/);
+    assert.match(indexHtml, /48/);
   }
 
   const enHome = await readFile("dist/client/en/index.html", "utf8");
@@ -226,3 +225,4 @@ test("distributes all standalone SEO URLs through IndexNow with a GitHub Pages k
   assert.ok(payload.urlList.includes(`${site}/en/services/showrunning/`));
   assert.ok(payload.urlList.includes(`${site}/ru/services/creative-production/`));
 });
+

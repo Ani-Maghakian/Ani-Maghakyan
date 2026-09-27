@@ -16,5 +16,6 @@ export function serviceLinks(locale, basePath, slugs, heading = 'related') {
 
 export function inquiryBrief(locale) {
   const text = serviceCopy[locale];
-  return `<h2>${esc(text.brief)}</h2><ul>${text.briefItems.map((item) => `<li>${esc(item)}</li>`).join('')}</ul><p>${esc(text.scope)}</p>`;
+  return `<h2>${esc(text.brief)}</h2><p>${esc(text.scope)}</p>`;
 }
+

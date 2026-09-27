@@ -143,7 +143,7 @@ function serviceHubPage(locale) {
   const crumbs = breadcrumbs(locale, serviceHub.headings[locale], tail);
   const itemListId = `${canonical}#services`;
   const labels = {
-    hy: { kicker: 'Ծառայություններ', explore: 'Ընտրել աշխատանքի ձևաչափը', proof: 'Փորձի հիմքը', proofText: '47 նախագիծ · 2,300+ նույնականացված սերիա · սերիալ, ֆիլմ, բեմ և մանկական պատմություններ։' },
+    hy: { kicker: 'Ծառայություններ', explore: 'Ընտրել աշխատանքի ձևաչափը', proof: 'Փորձի հիմքը', proofText: '48 նախագիծ · 2,300+ նույնականացված սերիա · սերիալ, ֆիլմ, բեմ և մանկական պատմություններ։' },
     en: { kicker: 'Services', explore: 'Choose the working scope', proof: 'Built on documented work', proofText: '47 projects · 2,300+ identified episodes · television, film, stage and children’s stories.' },
     ru: { kicker: 'Услуги', explore: 'Выберите формат работы', proof: 'Основа — реальная фильмография', proofText: '47 проектов · 2 300+ серий · сериалы, фильмы, театр и детские истории.' },
   }[locale];
@@ -243,3 +243,4 @@ if (existsSync(llmsPath)) {
 }
 
 console.log(`Generated ${serviceTails.length * Object.keys(locales).length} multilingual service-intent SEO pages.`);
+
