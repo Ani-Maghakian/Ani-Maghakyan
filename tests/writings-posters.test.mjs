@@ -83,3 +83,18 @@ test('all 48 archive cards have small decodable posters at their published URLs'
     }
   }
 });
+
+test('selected cards serve bounded WebP files instead of full originals', async () => {
+  const hy = await readPage('hy');
+  const slugs = [...hy.matchAll(/data-selected-project="([a-z0-9-]+)"/g)].map((match) => match[1]);
+  assert.equal(slugs.length, 16);
+  for (const slug of slugs) {
+    const url = `/posters/${slug}-featured-800.webp`;
+    const bytes = await readFile(resolve(root, url.slice(1)));
+    const metadata = await sharp(bytes).metadata();
+    assert.equal(metadata.format, 'webp', slug);
+    assert.ok(metadata.width > 0 && metadata.width <= 800, slug);
+    assert.ok(bytes.length < 300000, slug);
+    for (const code of codes) assert.ok((await readPage(code)).includes(url), `${code}/${slug}`);
+  }
+});

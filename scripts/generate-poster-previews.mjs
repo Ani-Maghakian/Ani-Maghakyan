@@ -25,6 +25,24 @@ for (const [slug, source] of Object.entries(archivePosters)) {
 }
 console.log(`Prepared compact archive artwork for ${Object.keys(archivePosters).length} projects.`);
 
+// Selected cards are 4:3 on phones. A fixed 800px rendition avoids Safari
+// choosing a 1280px+ source at 3x density for each of the 16 cards.
+const featuredSlugs = [
+  'elens-diary', 'elens-diary-2', 'paper-dream', 'summer-of-84',
+  'dear-sahmi', 'se-la-vi', 'white-shirt', 'blockade',
+  'special-class', 'special-class-2', 'hotel-grand', 'hotel-grand-2',
+  'hotel-grand-3', 'addiction', 'forest-cottage', 'if-i-danced-again',
+];
+for (const slug of featuredSlugs) {
+  const source = archivePosters[slug];
+  if (!source) throw new Error(`Missing selected artwork: ${slug}`);
+  await sharp(resolve('public', source.slice(1)))
+    .resize({ width: 800, withoutEnlargement: true })
+    .webp({ quality: 78, effort: 5 })
+    .toFile(resolve('public', 'posters', `${slug}-featured-800.webp`));
+}
+console.log(`Prepared selected artwork for ${featuredSlugs.length} cards.`);
+
 for (const [key, original] of Object.entries(siteImages)) {
   for (const preview of siteImagePreviews(key)) {
     await sharp(resolve('public', original.src.slice(1)))

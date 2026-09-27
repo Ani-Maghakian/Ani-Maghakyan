@@ -24,10 +24,12 @@ for (const locale of ['hy', 'en', 'ru']) {
       for (const slug of selected) {
         const card = doc.querySelector(`[data-selected-project="${slug}"]`);
         assert.equal(card.querySelector('.featured-text-cover'), null);
-        assert.equal(card.querySelector('img').getAttribute('src'), `${basePath}${originalProjectPosters[slug].src}`);
-        assert.ok(card.querySelector('img').getAttribute('srcset'));
+        assert.equal(card.querySelector('img').getAttribute('src'), `${basePath}/posters/${slug}-featured-800.webp`);
+        assert.equal(card.querySelector('img').getAttribute('loading'), 'eager');
+        assert.equal(card.querySelector('img').getAttribute('fetchpriority'), 'low');
+        assert.equal(card.querySelector('.featured-poster-backdrop img').getAttribute('src'), `${basePath}/posters/${slug}-archive-320.webp`);
       }
-      assert.ok(doc.querySelector('[data-selected-project="dear-sahmi"] img').getAttribute('src').includes('dear-sahmi-original.jpg'));
+      assert.ok(originalProjectPosters['dear-sahmi'].src.includes('dear-sahmi-original.jpg'));
       const languageLinks = [...doc.querySelectorAll('.mobile-language-options a')];
       assert.equal(languageLinks.length, 3);
       assert.deepEqual(languageLinks.map((a) => new URL(a.href).pathname), ['/', '/en/', '/ru/'].map((path) => `${basePath}${path}`));

@@ -13,7 +13,7 @@ import {
 import { basePath } from "@/lib/seo";
 import { interfaceCopy, sectionLinks, resultLabel, publicContactEmail, homeHero } from "@/lib/site-copy.mjs";
 import { siteImages, siteImagePreviews, siteImageSrcSet } from "@/lib/site-images.mjs";
-import { originalProjectPosters, posterNotes, posterPreviews, posterSrcSet } from "@/lib/project-posters.mjs";
+import { originalProjectPosters, posterNotes } from "@/lib/project-posters.mjs";
 import { writings, writingCopy } from "@/lib/writings.mjs";
 import { services } from "@/lib/services.mjs";
 import { books } from "@/lib/books.mjs";
@@ -274,17 +274,19 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
             {featured.map((project, index) => {
               const internalHref = projectPageHref(locale, project.seoSlug) ?? `#project-${project.id}`;
               const originalPoster = originalProjectPosters[project.seoSlug as keyof typeof originalProjectPosters];
-              const posterSrc = posterSource(originalPoster?.src ?? (project.featuredArtworkReady === false ? undefined : project.poster));
+              const posterSrc = originalPoster
+                ? `${basePath}/posters/${project.seoSlug}-featured-800.webp`
+                : posterSource(project.featuredArtworkReady === false ? undefined : project.poster);
               return (
                 <article className={`featured-card tone-${(index % 4) + 1}`} data-selected-project={project.seoSlug} key={project.id}>
                   {posterSrc && (
                     <a className="featured-poster-link" href={internalHref} data-track="view_project" data-project={project.seoSlug} aria-label={`${ui.details}: ${project.title[locale]}`}>
                       <span className="poster-fallback" aria-hidden="true">{project.title[locale]}</span>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img className="featured-poster" src={posterSrc} srcSet={originalPoster ? posterSrcSet(project.seoSlug, basePath) : undefined} sizes={originalPoster ? "(max-width: 440px) calc(100vw - 36px), (max-width: 1150px) 46vw, 360px" : undefined} alt={`${project.title[locale]} — ${project.year}`} loading="lazy" decoding="async" width={originalPoster?.width ?? 640} height={originalPoster?.height ?? 400} />
+                      <img className="featured-poster" src={posterSrc} alt={`${project.title[locale]} — ${project.year}`} loading="eager" fetchPriority="low" decoding="async" width={originalPoster?.width ?? 640} height={originalPoster?.height ?? 400} />
                       <span className="featured-poster-backdrop" aria-hidden="true">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={originalPoster ? posterSource(posterPreviews(project.seoSlug)[0].src)! : posterSrc} alt="" loading="lazy" decoding="async" width={originalPoster?.width ?? 640} height={originalPoster?.height ?? 400} />
+                        <img src={originalPoster ? `${basePath}/posters/${project.seoSlug}-archive-320.webp` : posterSrc} alt="" loading="eager" fetchPriority="low" decoding="async" width={originalPoster?.width ?? 640} height={originalPoster?.height ?? 400} />
                       </span>
                       <span className="featured-play" aria-hidden="true"><ArrowUpRight className="ui-icon" /></span>
                     </a>
