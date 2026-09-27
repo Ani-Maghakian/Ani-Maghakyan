@@ -7,6 +7,7 @@ import test from 'node:test';
 import { localizedPath } from '../scripts/seo-page-data.mjs';
 import { writings } from '../lib/writings.mjs';
 import { originalProjectPosters, posterPreviews } from '../lib/project-posters.mjs';
+import { archivePosters } from '../lib/archive-posters.mjs';
 
 const root = resolve('dist/client');
 const codes = ['hy', 'en', 'ru'];
@@ -67,3 +68,18 @@ test('all supplied posters are complete files and appear on all localized projec
   }
 });
 
+test('all 48 archive cards have small decodable posters at their published URLs', async () => {
+  assert.equal(Object.keys(archivePosters).length, 48);
+  for (const slug of Object.keys(archivePosters)) {
+    const url = `/posters/${slug}-archive-320.webp`;
+    const bytes = await readFile(resolve(root, url.slice(1)));
+    const metadata = await sharp(bytes).metadata();
+    assert.equal(metadata.format, 'webp', slug);
+    assert.ok(metadata.width > 0 && metadata.width <= 320, slug);
+    assert.ok(bytes.length < 120000, slug);
+    for (const code of codes) {
+      const html = await readPage(code);
+      assert.ok(html.includes(url), `${code}/${slug}: missing archive poster`);
+    }
+  }
+});

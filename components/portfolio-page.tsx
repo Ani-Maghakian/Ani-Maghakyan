@@ -14,7 +14,6 @@ import { basePath } from "@/lib/seo";
 import { interfaceCopy, sectionLinks, resultLabel, publicContactEmail, homeHero } from "@/lib/site-copy.mjs";
 import { siteImages, siteImagePreviews, siteImageSrcSet } from "@/lib/site-images.mjs";
 import { originalProjectPosters, posterNotes, posterPreviews, posterSrcSet } from "@/lib/project-posters.mjs";
-import { archivePosters } from "@/lib/archive-posters.mjs";
 import { writings, writingCopy } from "@/lib/writings.mjs";
 import { services } from "@/lib/services.mjs";
 import { books } from "@/lib/books.mjs";
@@ -324,7 +323,7 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
         </section>
 
         <section className="studio-offer section-frame" id="studio-offer" aria-label={locale === 'hy' ? 'Ինչ ենք անում' : locale === 'ru' ? 'Что мы делаем' : 'What we do'}>
-          <h2>{locale === 'hy' ? 'Գաղափարից մինչև պատմություն՝ տարբեր ձևաչափերի համար։' : locale === 'ru' ? 'От идеи до истории для разных форматов.' : 'From idea to story, across formats.'}</h2>
+          <h2>{locale === 'hy' ? 'Գաղափարից մինչև պատմություն՝ տարբեր ձևաչափերի համար։' : locale === 'ru' ? 'От идеи до сценария для разных форматов.' : 'From idea to screenplay, across formats.'}</h2>
           <p>{locale === 'hy' ? 'Պատմության մշակում · սցենարագրություն · շոուռանինգ · ստեղծագործական պրոդյուսինգ' : locale === 'ru' ? 'Разработка истории · сценарий · шоураннинг · творческое продюсирование' : 'Story development · screenwriting · showrunning · creative production'}</p>
         </section>
 
@@ -366,9 +365,9 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
                       <td className="archive-art-cell">
                         <span className="archive-poster-frame">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img className="archive-poster-backdrop" src={`${basePath}${archivePosters[project.seoSlug as keyof typeof archivePosters]}`} alt="" aria-hidden="true" loading="lazy" decoding="async" />
+                          <img className="archive-poster-backdrop" src={`${basePath}/posters/${project.seoSlug}-archive-320.webp`} alt="" aria-hidden="true" loading="eager" fetchPriority="low" decoding="async" />
                           {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img className="archive-poster" src={`${basePath}${archivePosters[project.seoSlug as keyof typeof archivePosters]}`} alt="" loading="lazy" decoding="async" />
+                          <img className="archive-poster" src={`${basePath}/posters/${project.seoSlug}-archive-320.webp`} alt="" loading="eager" fetchPriority="low" decoding="async" />
                         </span>
                       </td>
                       <th className="archive-title-cell" data-label={t.table.project} scope="row">
@@ -485,4 +484,3 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
     </div>
   );
 }
-
