@@ -5,7 +5,7 @@ import { JSDOM, VirtualConsole } from 'jsdom';
 import { originalProjectPosters } from '../lib/project-posters.mjs';
 import { writings } from '../lib/writings.mjs';
 
-const selected = ['elens-diary', 'paper-dream', 'dear-sahmi', 'special-class', 'addiction', 'summer-of-84', 'blockade', 'forest-cottage', 'if-i-danced-again', 'se-la-vi', 'hotel-grand', 'white-shirt'];
+const selected = ['elens-diary', 'elens-diary-2', 'paper-dream', 'summer-of-84', 'dear-sahmi', 'se-la-vi', 'white-shirt', 'blockade', 'special-class', 'special-class-2', 'hotel-grand', 'hotel-grand-2', 'hotel-grand-3', 'addiction', 'forest-cottage', 'if-i-danced-again'];
 const interaction = await readFile('public/home-interactions.js', 'utf8');
 
 for (const locale of ['hy', 'en', 'ru']) {
@@ -49,7 +49,7 @@ for (const locale of ['hy', 'en', 'ru']) {
       assert.equal(rows().length, 0);
       assert.equal(doc.querySelector('[data-empty-state]').hidden, false);
       doc.querySelector('[data-clear-search]').click();
-      assert.equal(rows().length, 47);
+      assert.equal(rows().length, 48);
       assert.equal(doc.activeElement, input);
       assert.equal(doc.querySelector('[data-clear-search]').hidden, true);
       doc.querySelector('[data-filter="film"]').click();

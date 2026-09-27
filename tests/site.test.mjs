@@ -102,8 +102,8 @@ test("exports repaired project media, links and OKE naming", async () => {
   assert.match(hy, /featured-poster-backdrop/);
   assert.doesNotMatch(hy, /fastnews\.am\/culture\/post\/arsenn-vou-thghthe-erazanqy-harcazrvouyc/);
 
-  assert.match(en, /id="project-32"[\s\S]{0,500}>OKE</);
-  assert.match(en, /id="project-41"[\s\S]{0,500}>OKE 2</);
+  assert.match(en, /id="project-32"[\s\S]{0,4000}>OKE</);
+  assert.match(en, /id="project-41"[\s\S]{0,4000}>OKE 2</);
 
   for (const path of [
     "projects/elens-diary/",

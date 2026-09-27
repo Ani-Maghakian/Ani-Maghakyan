@@ -144,8 +144,8 @@ function serviceHubPage(locale) {
   const itemListId = `${canonical}#services`;
   const labels = {
     hy: { kicker: 'Ծառայություններ', explore: 'Ընտրել աշխատանքի ձևաչափը', proof: 'Փորձի հիմքը', proofText: '48 նախագիծ · 2,300+ նույնականացված սերիա · սերիալ, ֆիլմ, բեմ և մանկական պատմություններ։' },
-    en: { kicker: 'Services', explore: 'Choose the working scope', proof: 'Built on documented work', proofText: '47 projects · 2,300+ identified episodes · television, film, stage and children’s stories.' },
-    ru: { kicker: 'Услуги', explore: 'Выберите формат работы', proof: 'Основа — реальная фильмография', proofText: '47 проектов · 2 300+ серий · сериалы, фильмы, театр и детские истории.' },
+    en: { kicker: 'Services', explore: 'Choose the working scope', proof: 'Built on documented work', proofText: '48 projects · 2,300+ identified episodes · television, film, stage and children’s stories.' },
+    ru: { kicker: 'Услуги', explore: 'Выберите формат работы', proof: 'Основа — реальная фильмография', proofText: '48 проектов · 2 300+ серий · сериалы, фильмы, театр и детские истории.' },
   }[locale];
   const cards = services.map((service) => `<a href="${esc(pageHref(locale, `services/${service.slug}`))}"><strong>${esc(service.names[locale])}</strong><small>${esc(service.descriptions[locale])}</small></a>`).join('');
   const body = `<main id="main-content">${crumbs.html}<section class="hero single"><div><p class="kicker">${esc(labels.kicker)}</p><h1>${esc(serviceHub.headings[locale])}</h1><p class="dek">${esc(serviceHub.descriptions[locale])}</p></div></section><section class="content"><div class="prose"><p>${esc(serviceHub.intros[locale])}</p><h2>${esc(labels.explore)}</h2><div class="project-grid all">${cards}</div><h2>${esc(labels.proof)}</h2><p>${esc(labels.proofText)}</p><div class="cta"><a href="${esc(pageHref(locale, 'projects'))}">${esc(interfaceCopy[locale].work)}</a><a class="secondary" href="${esc(pageHref(locale, 'work-with-ani'))}">${esc(interfaceCopy[locale].collaborate)}</a></div></div></section></main>`;
