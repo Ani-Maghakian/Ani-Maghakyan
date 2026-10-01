@@ -35,7 +35,7 @@ function navLinks(locale, tail) {
   return sectionLinks.map((item) => `<a href="${esc(pageHref(locale, item.slug))}"${tail === item.slug ? ' aria-current="page"' : ''}>${esc(item.labels[locale])}</a>`).join('');
 }
 function personNode() {
-  return { '@type': 'Person', '@id': personId, name: 'Ani Maghakyan', alternateName: ['Անի Մաղաքյան', 'Ани Магакян', 'Ani Maghakian'], url: `${siteUrl}/`, jobTitle: ['Screenwriter', 'Showrunner', 'Producer', 'Author'], sameAs: [siteLinks.imdb, siteLinks.personalInstagram, siteLinks.kinopoisk, siteLinks.elcinema] };
+  return { '@type': 'Person', '@id': personId, name: 'Ani Maghakyan', alternateName: ['Անի Մաղաքյան', 'Ани Магакян', 'Ani Maghakian'], url: `${siteUrl}/`, image: `${siteUrl}/ani-3180-web.jpg`, jobTitle: ['Screenwriter', 'Showrunner', 'Producer', 'Author'], sameAs: [siteLinks.imdb, siteLinks.personalInstagram, siteLinks.kinopoisk, siteLinks.elcinema, siteLinks.wikipedia] };
 }
 function breadcrumbs(locale, title, tail, isProject = false) {
   const items = [{ name: interfaceCopy[locale].home, tail: '' }];

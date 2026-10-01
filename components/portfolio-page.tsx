@@ -367,9 +367,9 @@ export function PortfolioPage({ locale }: { locale: Locale }) {
                       <td className="archive-art-cell">
                         <span className="archive-poster-frame">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img className="archive-poster-backdrop" src={`${basePath}/posters/${project.seoSlug}-archive-320.webp`} alt="" aria-hidden="true" loading="eager" fetchPriority="low" decoding="async" />
+                          <img className="archive-poster-backdrop" src={`${basePath}/posters/${project.seoSlug}-archive-320.webp`} alt="" aria-hidden="true" loading="lazy" fetchPriority="low" decoding="async" />
                           {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img className="archive-poster" src={`${basePath}/posters/${project.seoSlug}-archive-320.webp`} alt="" loading="eager" fetchPriority="low" decoding="async" />
+                          <img className="archive-poster" src={`${basePath}/posters/${project.seoSlug}-archive-320.webp`} alt="" loading="lazy" fetchPriority="low" decoding="async" />
                         </span>
                       </td>
                       <th className="archive-title-cell" data-label={t.table.project} scope="row">
