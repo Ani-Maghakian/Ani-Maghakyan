@@ -1,4 +1,4 @@
-import { updatedIso } from "../lib/site-copy.mjs";
+import { pageUpdatedIso } from "../lib/site-copy.mjs";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
@@ -36,7 +36,7 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 ${urls.map(({ loc, priority }) => `  <url>
     <loc>${loc}</loc>
-    <lastmod>${updatedIso}</lastmod>
+    <lastmod>${pageUpdatedIso()}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>${priority}</priority>
     <xhtml:link rel="alternate" hreflang="hy-AM" href="${siteUrl}/" />
