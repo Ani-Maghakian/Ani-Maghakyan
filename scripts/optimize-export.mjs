@@ -80,6 +80,10 @@ function optimizeHomepage(html) {
   let result = stripHydrationRuntime(html);
   result = addStaticInteractionHooks(result);
   const additions = [];
+  // Discover the fonts used throughout the homepage before below-fold artwork.
+  for (const index of [0, 1, 2, 3]) {
+    additions.push(`<link rel="preload" href="${basePath}/fonts/portfolio-${index}.woff" as="font" type="font/woff" crossorigin>`);
+  }
   if (!/rel=["']preconnect["'][^>]+i\.ytimg\.com/i.test(result)) {
     additions.push('<link rel="preconnect" href="https://i.ytimg.com" crossorigin>');
   }
@@ -87,7 +91,7 @@ function optimizeHomepage(html) {
   result = result.replace('</head>', `${additions.join('\n')}\n</head>`);
   return result.replace(
     '</body>',
-    `<script src="${homeInteractionSrc}" defer></script><script src="${basePath}/design-interactions.js" defer></script>\n</body>`,
+    `<script src="${homeInteractionSrc}" fetchpriority="high" defer></script><script src="${basePath}/design-interactions.js" fetchpriority="high" defer></script>\n</body>`,
   );
 }
 
