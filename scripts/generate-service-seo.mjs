@@ -36,8 +36,9 @@ function personNode() {
     name: 'Ani Maghakyan',
     alternateName: ['Անի Մաղաքյան', 'Ани Магакян', 'Ani Maghakian'],
     url: `${siteUrl}/`,
+    image: `${siteUrl}/ani-3180-web.jpg`,
     jobTitle: ['Screenwriter', 'Showrunner', 'Producer', 'Author'],
-    sameAs: [siteLinks.imdb, siteLinks.personalInstagram, siteLinks.kinopoisk, siteLinks.elcinema],
+    sameAs: [siteLinks.imdb, siteLinks.personalInstagram, siteLinks.kinopoisk, siteLinks.elcinema, siteLinks.wikipedia],
   };
 }
 
@@ -243,4 +244,3 @@ if (existsSync(llmsPath)) {
 }
 
 console.log(`Generated ${serviceTails.length * Object.keys(locales).length} multilingual service-intent SEO pages.`);
-

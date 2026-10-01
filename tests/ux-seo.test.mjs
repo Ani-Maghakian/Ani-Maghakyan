@@ -40,7 +40,7 @@ test('every sitemap URL has a unique canonical, translated navigation and valid 
   assert.equal(new Set(urls).size, expectedCount);
   const base = new URL(urls[0]);
   const dates = new Map([...sitemap.matchAll(/<url>\s*<loc>(.*?)<\/loc>\s*<lastmod>(.*?)<\/lastmod>/g)].map((match) => [match[1], match[2]]));
-  assert.equal(new Set(dates.values()).size, 2, 'an unchanged page keeps its earlier content date');
+  assert.equal(new Set(dates.values()).size, 3, 'homepage metadata changes preserve the earlier dates of unchanged pages');
   for (const url of urls) {
     const relative = new URL(url).pathname.slice(base.pathname.length);
     const tail = relative.replace(/^(en|ru)\//, '').replace(/\/$/, '');
@@ -76,6 +76,8 @@ test('service-intent pages expose visible copy, FAQ schema and one consistent pr
       const person = nodes.find((node) => node['@type'] === 'Person');
       assert.equal(serviceNode.provider['@id'], homePerson['@id']);
       assert.equal(person['@id'], homePerson['@id']);
+      assert.deepEqual(person.sameAs, homePerson.sameAs, 'service and homepage profiles identify the same person');
+      assert.equal(person.image, homePerson.image, 'service and homepage profiles share the official portrait');
       assert.equal(faq.mainEntity.length, service.faqs[code].length);
       assert.equal(serviceNode.subjectOf.length, service.related.length);
     }
@@ -147,7 +149,15 @@ test('book and press hubs contain their own content and consistent book editions
       if (media.dateLabel) assert.ok(entry.textContent.includes(media.dateLabel[code]));
     }
     assert.doesNotMatch(press, /class="project-grid/);
-    for (const hub of hubs) assert.match(await readPage(code, hub.slug), /BreadcrumbList/);
+    for (const hub of hubs) {
+      const html = await readPage(code, hub.slug);
+      assert.match(html, /BreadcrumbList/);
+      if (hub.slug === 'about') {
+        const profile = graph(html).find((node) => node['@type'] === 'ProfilePage');
+        assert.match(profile.dateModified, /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2})$/, 'Google ProfilePage requires a datetime with a time zone');
+        assert.ok(Number.isFinite(Date.parse(profile.dateModified)));
+      }
+    }
   }
 });
 
@@ -162,4 +172,3 @@ test('localized result counts and optional public contact handle real edge cases
   assert.equal(publicContactEmail('editor@example.com?bcc=other@example.com'), '');
   assert.equal(publicContactEmail('invalid-address'), '');
 });
-

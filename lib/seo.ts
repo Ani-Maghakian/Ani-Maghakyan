@@ -1,4 +1,4 @@
-import { homeHero } from "./site-copy.mjs";
+import { homeSeoUpdatedIso } from "./site-copy.mjs";
 import { books, bookSchema } from "./books.mjs";
 import type { Metadata } from "next";
 import {
@@ -7,7 +7,6 @@ import {
   projects,
   siteLinks,
   sourceLinks,
-  updatedIso,
   type Locale,
 } from "@/lib/content";
 
@@ -15,15 +14,15 @@ export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "
 export const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 const descriptions: Record<Locale, string> = {
-  hy: `${homeHero.hy.intro} ${homeHero.hy.tagline}`,
-  en: `${homeHero.en.intro} ${homeHero.en.tagline}`,
-  ru: `${homeHero.ru.intro} ${homeHero.ru.tagline}`,
+  hy: "Անի Մաղաքյան՝ սցենարիստ, գրող և Maghakian Scripts-ի հիմնադիր։ Սերիալներ, ֆիլմեր, գրքեր և սցենարական աշխատանք՝ գաղափարից մինչև պատրաստ սցենար։",
+  en: "Ani Maghakyan, Armenian screenwriter, author and founder of Maghakian Scripts. Explore her biography, films, series, books and screenwriting services.",
+  ru: "Ани Магакян — армянский сценарист, писатель и основатель Maghakian Scripts. Биография, фильмы, сериалы, книги и работа над сценариями.",
 };
 
 const titles: Record<Locale, string> = {
-  hy: "Maghakian Scripts — սցենարական ստուդիա | Անի Մաղաքյան",
-  en: "Maghakian Scripts — Screenwriting Studio | Ani Maghakyan",
-  ru: "Maghakian Scripts — сценарная студия | Ани Магакян",
+  hy: "Անի Մաղաքյան — սցենարիստ | Maghakian Scripts",
+  en: "Ani Maghakyan — Screenwriter | Maghakian Scripts",
+  ru: "Ани Магакян — сценарист | Maghakian Scripts",
 };
 
 const languageTags: Record<Locale, string> = {
@@ -198,7 +197,7 @@ export function structuredData(locale: Locale) {
         url: pageUrl,
         name: titles[locale],
         description: descriptions[locale],
-        dateModified: `${updatedIso}T00:00:00Z`,
+        dateModified: `${homeSeoUpdatedIso}T00:00:00Z`,
         inLanguage: languageTags[locale],
         ...(websiteId ? { isPartOf: { "@id": websiteId } } : {}),
         mainEntity: orgId ? { "@id": orgId } : { "@type": "Organization", name: "Maghakian Scripts" },

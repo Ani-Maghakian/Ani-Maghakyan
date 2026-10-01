@@ -254,7 +254,7 @@ function hubPage(hub, locale) {
   const displayTitle = tail === 'press' ? { hy: 'Հարցազրույցներ և մամուլ', en: 'Interviews & press', ru: 'Интервью и пресса' }[locale] : title;
   const introduction = tail === 'press' ? { hy: 'Զրույցներ Անիի հետ, նրա վարած հարցազրույցներն ու աշխատանքների արձագանքները։', en: 'Conversations with Ani, interviews she conducted and coverage of her work.', ru: 'Беседы с Ани, её интервью с другими авторами и публикации о её работах.' }[locale] : description;
   const nodes = [
-    { '@type': tail === 'about' ? 'ProfilePage' : tail === 'work-with-ani' ? 'ContactPage' : 'CollectionPage', '@id': `${canonical}#page`, url: canonical, name: title, description, inLanguage: locales[locale].lang, dateModified: pageUpdatedIso(tail), isPartOf: { '@id': `${siteUrl}/#website` }, about: { '@id': personId }, breadcrumb: { '@id': `${canonical}#breadcrumbs` }, ...(tail === 'about' ? {mainEntity:{'@id':personId}} : {}) },
+    { '@type': tail === 'about' ? 'ProfilePage' : tail === 'work-with-ani' ? 'ContactPage' : 'CollectionPage', '@id': `${canonical}#page`, url: canonical, name: title, description, inLanguage: locales[locale].lang, dateModified: `${pageUpdatedIso(tail)}T00:00:00Z`, isPartOf: { '@id': `${siteUrl}/#website` }, about: { '@id': personId }, breadcrumb: { '@id': `${canonical}#breadcrumbs` }, ...(tail === 'about' ? {mainEntity:{'@id':personId}} : {}) },
     personNode(), crumbs.node,
   ];
   let article = '';
