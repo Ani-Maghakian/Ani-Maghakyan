@@ -76,6 +76,8 @@ test('service-intent pages expose visible copy, FAQ schema and one consistent pr
       const person = nodes.find((node) => node['@type'] === 'Person');
       assert.equal(serviceNode.provider['@id'], homePerson['@id']);
       assert.equal(person['@id'], homePerson['@id']);
+      assert.deepEqual(person.sameAs, homePerson.sameAs, 'service and homepage profiles identify the same person');
+      assert.equal(person.image, homePerson.image, 'service and homepage profiles share the official portrait');
       assert.equal(faq.mainEntity.length, service.faqs[code].length);
       assert.equal(serviceNode.subjectOf.length, service.related.length);
     }
