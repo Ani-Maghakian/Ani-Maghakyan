@@ -40,7 +40,7 @@ test('every sitemap URL has a unique canonical, translated navigation and valid 
   assert.equal(new Set(urls).size, expectedCount);
   const base = new URL(urls[0]);
   const dates = new Map([...sitemap.matchAll(/<url>\s*<loc>(.*?)<\/loc>\s*<lastmod>(.*?)<\/lastmod>/g)].map((match) => [match[1], match[2]]));
-  assert.equal(new Set(dates.values()).size, 2, 'an unchanged page keeps its earlier content date');
+  assert.equal(new Set(dates.values()).size, 3, 'homepage metadata changes preserve the earlier dates of unchanged pages');
   for (const url of urls) {
     const relative = new URL(url).pathname.slice(base.pathname.length);
     const tail = relative.replace(/^(en|ru)\//, '').replace(/\/$/, '');
@@ -162,4 +162,3 @@ test('localized result counts and optional public contact handle real edge cases
   assert.equal(publicContactEmail('editor@example.com?bcc=other@example.com'), '');
   assert.equal(publicContactEmail('invalid-address'), '');
 });
-
