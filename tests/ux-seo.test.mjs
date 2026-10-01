@@ -149,7 +149,15 @@ test('book and press hubs contain their own content and consistent book editions
       if (media.dateLabel) assert.ok(entry.textContent.includes(media.dateLabel[code]));
     }
     assert.doesNotMatch(press, /class="project-grid/);
-    for (const hub of hubs) assert.match(await readPage(code, hub.slug), /BreadcrumbList/);
+    for (const hub of hubs) {
+      const html = await readPage(code, hub.slug);
+      assert.match(html, /BreadcrumbList/);
+      if (hub.slug === 'about') {
+        const profile = graph(html).find((node) => node['@type'] === 'ProfilePage');
+        assert.match(profile.dateModified, /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2})$/, 'Google ProfilePage requires a datetime with a time zone');
+        assert.ok(Number.isFinite(Date.parse(profile.dateModified)));
+      }
+    }
   }
 });
 
