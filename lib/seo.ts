@@ -169,7 +169,7 @@ export function structuredData(locale: Locale) {
         ],
         url: siteUrl ? `${siteUrl}/` : pageUrl,
         ...(profileId ? { mainEntityOfPage: { "@id": profileId } } : {}),
-        sameAs: [siteLinks.imdb, siteLinks.personalInstagram, siteLinks.kinopoisk, siteLinks.elcinema],
+        sameAs: [siteLinks.imdb, siteLinks.personalInstagram, siteLinks.kinopoisk, siteLinks.elcinema, siteLinks.wikipedia],
         subjectOf: sourceLinks.slice(1).map((source) => ({
           "@type": "CreativeWork",
           name: `${source.label}: ${source.note[locale]}`,
