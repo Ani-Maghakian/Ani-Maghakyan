@@ -11,6 +11,15 @@ const canonical = home.window.document.querySelector('link[rel="canonical"]')?.h
 const [owner = '', repository = ''] = (process.env.GITHUB_REPOSITORY ?? '').split('/');
 const inferredBase = process.env.GITHUB_ACTIONS === 'true' && repository && repository !== `${owner}.github.io` ? `/${repository}` : '';
 const base = canonical ? new URL(canonical).pathname.replace(/\/$/, '') : (process.env.SITE_BASE_PATH ?? inferredBase);
+// Only the legacy GitHub Pages deployment enables migration redirects.
+// Netlify and ordinary builds keep serving the complete content without redirects.
+const redirectOrigin = process.env.SITE_REDIRECT_ORIGIN || '';
+if (redirectOrigin) {
+  const target = new URL(redirectOrigin);
+  if (process.env.GITHUB_ACTIONS !== 'true' || target.protocol !== 'https:' || target.origin !== redirectOrigin) {
+    throw new Error('SITE_REDIRECT_ORIGIN must be an HTTPS origin in a GitHub Actions build.');
+  }
+}
 home.window.close();
 
 for (const [name, size] of [['favicon-32.png', 32], ['apple-touch-icon.png', 180], ['icon-192.png', 192], ['icon-512.png', 512]]) {
@@ -74,6 +83,18 @@ async function walk(dir) {
     const charset = set('meta[charset]', 'meta', { charset: 'utf-8' });
     const viewport = meta('viewport', 'width=device-width, initial-scale=1');
     head.prepend(charset, viewport, ...head.querySelectorAll('title'));
+    if (redirectOrigin) {
+      const destination = new URL(head.querySelector('link[rel="canonical"]').href);
+      if (destination.origin !== redirectOrigin) {
+        throw new Error(`Migration canonical does not use ${redirectOrigin}: ${path}`);
+      }
+      // Instant meta refresh is Google's permanent-redirect fallback on static hosts.
+      const refresh = set('meta[http-equiv="refresh"]', 'meta', { 'http-equiv': 'refresh', content: `0; url=${destination.href}` });
+      const script = set('script[data-site-migration]', 'script', { 'data-site-migration': '' });
+      const destinationJson = JSON.stringify(destination.href).replaceAll('<', '\\u003c');
+      script.textContent = `(() => { const target = new URL(${destinationJson}); if (location.origin === target.origin) return; target.search = location.search; target.hash = location.hash; location.replace(target.href); })();`;
+      head.children[2].after(refresh, script);
+    }
     // Only replace head: preserve body markup and existing interaction contracts.
     await writeFile(path, html.replace(/<head\b[^>]*>[\s\S]*?<\/head>/i, () => head.outerHTML));
     dom.window.close();

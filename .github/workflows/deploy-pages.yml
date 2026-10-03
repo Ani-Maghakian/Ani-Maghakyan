@@ -40,6 +40,7 @@ jobs:
           SITE_BASE_PATH: ${{ steps.pages.outputs.base_path }}
           CONTACT_EMAIL: ${{ vars.CONTACT_EMAIL }}
           SITE_URL: ${{ vars.SITE_URL }}
+          SITE_REDIRECT_ORIGIN: https://www.maghakianscripts.com
           GOOGLE_SITE_VERIFICATION: ${{ vars.GOOGLE_SITE_VERIFICATION }}
           BING_SITE_VERIFICATION: ${{ vars.BING_SITE_VERIFICATION }}
           YANDEX_SITE_VERIFICATION: ${{ vars.YANDEX_SITE_VERIFICATION }}
