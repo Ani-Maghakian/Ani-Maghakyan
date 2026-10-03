@@ -37,7 +37,7 @@ jobs:
       - name: Build static site
         run: npm run build
         env:
-          SITE_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          SITE_BASE_PATH: ""
           CONTACT_EMAIL: ${{ vars.CONTACT_EMAIL }}
           SITE_URL: ${{ vars.SITE_URL }}
           SITE_REDIRECT_ORIGIN: https://www.maghakianscripts.com
