@@ -1,0 +1,35 @@
+name: Diagnose Pages HTTPS
+
+on:
+  push:
+    paths:
+      - ".github/workflows/diagnose-pages-https.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Read Pages certificate state
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/pages" --jq '{cname, status, html_url, https_enforced, https_certificate, protected_domain_state}'
+      - name: Check DNS from GitHub runner
+        run: |
+          date -u
+          for resolver in "" "@8.8.8.8" "@1.1.1.1" "@a.ns.name.am"; do
+            printf '\nResolver: %s\n' "${resolver:-system}"
+            dig $resolver www.maghakianscripts.com A +noall +answer +time=4 +tries=1
+            dig $resolver www.maghakianscripts.com CNAME +noall +answer +time=4 +tries=1
+            dig $resolver maghakianscripts.com A +noall +answer +time=4 +tries=1
+          done
+      - name: Check HTTP and certificate
+        run: |
+          curl -sSI --connect-timeout 5 --max-time 15 http://www.maghakianscripts.com/
+          curl -sSI --connect-timeout 5 --max-time 15 https://www.maghakianscripts.com/
