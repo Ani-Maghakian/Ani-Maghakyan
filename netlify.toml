@@ -1,0 +1,10 @@
+[build]
+  command = "npm run build"
+  publish = "dist/client"
+
+[build.environment]
+  NODE_VERSION = "22"
+  SITE_URL = "https://www.maghakianscripts.com"
+  SITE_BASE_PATH = ""
+  CONTACT_EMAIL = "maghakianscripts@gmail.com"
+  NETLIFY_NEXT_PLUGIN_SKIP = "true"

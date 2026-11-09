@@ -46,3 +46,5 @@ next-env.d.ts
 /public/posters/*-display-*.webp
 /public/ani-portrait-display-*.webp
 /public/landscape/*-display-*.webp
+
+.netlify/

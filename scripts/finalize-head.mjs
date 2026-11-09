@@ -50,6 +50,12 @@ async function walk(dir) {
     const dom = new JSDOM(html);
     const doc = dom.window.document;
     const head = doc.head;
+    head.querySelectorAll('script[data-ga4-tracking]').forEach(node => node.remove());
+    const analytics = doc.createElement('script');
+    analytics.src = `${base}/analytics.js`;
+    analytics.defer = true;
+    analytics.setAttribute('data-ga4-tracking', 'G-G9C0EQTK8K');
+    head.append(analytics);
     function set(selector, tag, attributes) {
       head.querySelectorAll(selector).forEach(node => node.remove());
       const node = doc.createElement(tag);
