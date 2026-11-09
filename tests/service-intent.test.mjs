@@ -75,7 +75,11 @@ test('service inquiry, deliverables and FAQ content work in static HTML and matc
     for (const service of services) {
       const html = await readPage(locale, `services/${service.slug}`);
       const visible = main(html);
-      assert.doesNotMatch(visible, /mailto:/);
+      // Production may expose the existing public business address. No other
+      // recipient or visitor-supplied mail subject/body belongs in these links.
+      for (const [, href] of visible.matchAll(/href="(mailto:[^"]*)"/g)) {
+        assert.equal(href, 'mailto:maghakianscripts@gmail.com');
+      }
       assert.ok(visible.includes('id="project-brief"'));
       assert.ok(visible.includes(esc(serviceCopy[locale].brief)));
       assert.ok(visible.includes(esc(serviceCopy[locale].scope)));

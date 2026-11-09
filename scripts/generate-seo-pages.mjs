@@ -7,6 +7,7 @@ import { copy, siteLinks } from '../lib/profile-content.mjs';
 import { books, bookSchema } from '../lib/books.mjs';
 import { mediaItems } from '../lib/media-archive.mjs';
 import { projectStories, projectSummary, relatedProjects } from '../lib/project-editorial.mjs';
+import { projectAnswers, answerLabels } from '../lib/project-answers.mjs';
 import { posterNotes, originalProjectPosters, posterSrcSet } from '../lib/project-posters.mjs';
 import { writings, writingCopy, writingBlogUrl, writingDate } from '../lib/writings.mjs';
 import { services } from '../lib/services.mjs';
@@ -196,7 +197,10 @@ function projectPage(project, locale) {
   const scope = isDiary ? { hy:'2 եթերաշրջան · 421 սերիա (197 + 224)', en:'2 seasons · 421 episodes (197 + 224)', ru:'2 сезона · 421 серия (197 + 224)' }[locale] : project.credit[locale];
   const format = copy[locale].filters[project.kind];
   const facts = [[ui.year, project.year], [ui.type, format], [ui.volume, scope], ...(story?.broadcaster ? [[ui.broadcaster, story.broadcaster]] : []), ...(knownRole ? [[ui.role, knownRole]] : [])];
-  const sourceItems = [...project.sources, ...(story ? [story.source] : [])];
+  const answer = projectAnswers[project.slug];
+  const labels = answerLabels[locale];
+  const answerBlock = answer ? `<section class="project-answers" aria-labelledby="project-answers-title"><h2 id="project-answers-title">${esc(labels.title)}</h2><h3>${esc(labels.volume)}</h3><p>${esc(answer.volume[locale])}</p><h3>${esc(labels.writer)}</h3><p>${esc(answer.writer[locale])}</p><h3>${esc(labels.watch)}</h3><p><a data-track="watch_project" data-project="${esc(project.slug)}" href="${esc(answer.url || project.watchUrl)}" target="_blank" rel="noopener noreferrer">${esc(answer.platform)}</a></p><p class="credit-note">${esc(labels.note)}</p></section>` : '';
+  const sourceItems = [...project.sources, ...(story ? [story.source] : []), ...(answer?.evidence ? [answer.evidence] : [])];
   const seriesId = `${absoluteUrl(locale, 'projects/elens-diary')}#work`;
   const workNode = {
     '@type': isDiary2 ? 'TVSeason' : project.type, '@id': `${canonical}#work`, url: canonical, name: title,
@@ -210,6 +214,7 @@ function projectPage(project, locale) {
       { '@type': 'TVSeason', '@id': `${absoluteUrl(locale, 'projects/elens-diary-2')}#work`, seasonNumber: 2, numberOfEpisodes: 224, partOfSeries: { '@id': seriesId } },
     ] } : {}),
     ...(isDiary2 ? { seasonNumber: 2, partOfSeries: { '@id': seriesId } } : {}),
+    ...(answer?.seasons ? { numberOfSeasons: answer.seasons } : {}),
     ...(project.slug === 'summer-of-84' ? { creator: { '@id': personId }, producer: { '@id': personId } } : {}),
   };
   const nodes = [
@@ -219,7 +224,7 @@ function projectPage(project, locale) {
   const watch = project.watchUrl ? `<a data-track="watch_project" data-project="${project.slug}" href="${esc(project.watchUrl)}" target="_blank" rel="noopener noreferrer">${esc(locales[locale].watchLabel)}</a>` : '';
   const body = `<main id="main-content">${crumbs.html}<section class="hero"><div><p class="kicker">${esc(format)} · ${esc(project.year)}</p><h1>${esc(title)}</h1><p class="dek">${esc(description)}</p><div class="cta">${watch}<a class="secondary" data-track="view_contact" data-project="${esc(project.slug)}" data-source="project-hero" href="${esc(pageHref(locale, 'work-with-ani'))}?project=${encodeURIComponent(project.slug)}">${esc(ui.collaborate)}</a></div><p class="aliases">${esc(uniqueTitles(project).join(' · '))}</p></div>
 <figure class="hero-media${originalProjectPosters[project.slug] ? ' original-poster' : ''}"><span class="media-fallback" aria-hidden="true">${esc(title)}</span><img src="${esc(projectMediaSrc(project))}"${responsivePoster} alt="${esc(`${title} — ${project.year}`)}" width="${originalProjectPosters[project.slug]?.width ?? 640}" height="${originalProjectPosters[project.slug]?.height ?? 400}" loading="eager" decoding="async">${originalProjectPosters[project.slug] ? `<figcaption>${posterNotes[project.slug]?.[locale] ? `${esc(posterNotes[project.slug][locale])} · ` : ''}<a href="${esc(projectMediaSrc(project))}" target="_blank" rel="noopener noreferrer">${esc({hy:'Պաստառը՝ ամբողջ չափով',en:'View the full poster',ru:'Открыть афишу в полном размере'}[locale])}</a></figcaption>` : ''}</figure></section>
-<section class="content"><article class="prose"><h2>${esc(ui.details)}</h2><dl class="meta">${facts.map(([label,value]) => `<div><dt>${esc(label)}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl>
+<section class="content"><article class="prose">${answerBlock}<h2>${esc(ui.details)}</h2><dl class="meta">${facts.map(([label,value]) => `<div><dt>${esc(label)}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl>
 ${isDiary ? `<h2>${esc(ui.story)}</h2><p>${esc(synopsis)}</p><h2>${esc(ui.credit)}</h2><p>${esc(project.summaries[locale])}</p>` : ''}
 ${isDiary ? `<p id="season-1" class="credit-note">${esc({hy:'1-ին եթերաշրջան՝ 197 սերիա։ 2-րդ եթերաշրջան՝ 224 սերիա։ Ընդամենը՝ 421 սերիա՝ ըստ հեղինակային ֆիլմագրության։',en:'Season 1: 197 episodes. Season 2: 224 episodes. Total: 421 episodes in the author filmography.',ru:'Сезон 1 — 197 серий. Сезон 2 — 224 серии. Всего — 421 серия по авторской фильмографии.'}[locale])}</p>` : ''}
 ${story?.note ? `<p class="credit-note">${esc(story.note[locale])}</p>` : ''}
