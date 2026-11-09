@@ -10,7 +10,7 @@ import { projectStories, projectSummary, relatedProjects } from '../lib/project-
 import { posterNotes, originalProjectPosters, posterSrcSet } from '../lib/project-posters.mjs';
 import { writings, writingCopy, writingBlogUrl, writingDate } from '../lib/writings.mjs';
 import { services } from '../lib/services.mjs';
-import { serviceLinks, inquiryBrief } from './service-fragments.mjs';
+import { serviceLinks, inquiryBrief, projectInquiry, bookPurchaseLinks } from './service-fragments.mjs';
 
 const [owner = '', repositoryName = ''] = (process.env.GITHUB_REPOSITORY ?? '').split('/');
 const isUserOrOrgSite = Boolean(owner) && repositoryName === `${owner}.github.io`;
@@ -120,7 +120,7 @@ function bookCard(book, locale, eager = false) {
     ...(book.isbn ? [['ISBN', book.isbn]] : []),
   ];
   const figure = cover ? `<figure class="book-cover"><div class="book-cover-stage"><img src="${esc(cover.src.startsWith('/') ? `${basePath}${cover.src}` : cover.src)}" width="${cover.width}" height="${cover.height}" alt="${esc(`${book.titles[locale]} — ${labels.cover}`)}" loading="${eager ? 'eager' : 'lazy'}"${eager ? ' fetchpriority="high"' : ''} decoding="async"></div>${cover.source ? `<figcaption><a href="${esc(cover.source)}" target="_blank" rel="noopener noreferrer">${esc(labels.coverSource)}${cover.credit ? ` · ${esc(cover.credit)}` : ''}</a></figcaption>` : ''}</figure>` : '';
-  return `<article class="book-card${cover ? '' : ' book-card-without-cover'}" id="${esc(book.slug)}">${figure}<div class="book-details"><p class="kicker">${esc(book.year)} <span aria-hidden="true">·</span> ${esc(book.format[locale])}</p><h2><a href="${pageHref(locale, `books/${book.slug}`)}">${esc(book.titles[locale])}</a></h2><p class="book-description">${esc(book.descriptions[locale])}</p>${facts.length ? `<dl class="book-facts">${facts.map(([label, value]) => `<div><dt>${esc(label)}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl>` : ''}${book.editionNote ? `<p class="edition-note">${esc(book.editionNote[locale])}</p>` : ''}${sourceItems.length ? `<div class="book-sources"><h3>${esc(labels.sources)}</h3><ul>${sourceItems.map((source) => `<li><a href="${esc(source.url)}" target="_blank" rel="noopener noreferrer">${esc(source.label)} <span aria-hidden="true">↗</span></a></li>`).join('')}</ul></div>` : ''}</div></article>`;
+  return `<article class="book-card${cover ? '' : ' book-card-without-cover'}" id="${esc(book.slug)}">${figure}<div class="book-details"><p class="kicker">${esc(book.year)} <span aria-hidden="true">·</span> ${esc(book.format[locale])}</p><h2><a href="${pageHref(locale, `books/${book.slug}`)}">${esc(book.titles[locale])}</a></h2><p class="book-description">${esc(book.descriptions[locale])}</p>${facts.length ? `<dl class="book-facts">${facts.map(([label, value]) => `<div><dt>${esc(label)}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl>` : ''}${bookPurchaseLinks(book, locale)}${book.editionNote ? `<p class="edition-note">${esc(book.editionNote[locale])}</p>` : ''}${sourceItems.length ? `<div class="book-sources"><h3>${esc(labels.sources)}</h3><ul>${sourceItems.map((source) => `<li><a href="${esc(source.url)}" target="_blank" rel="noopener noreferrer">${esc(source.label)} <span aria-hidden="true">↗</span></a></li>`).join('')}</ul></div>` : ''}</div></article>`;
 }
 
 function mediaHref(item) {
@@ -217,13 +217,14 @@ function projectPage(project, locale) {
     workNode, crumbs.node, personNode(),
   ];
   const watch = project.watchUrl ? `<a data-track="watch_project" data-project="${project.slug}" href="${esc(project.watchUrl)}" target="_blank" rel="noopener noreferrer">${esc(locales[locale].watchLabel)}</a>` : '';
-  const body = `<main id="main-content">${crumbs.html}<section class="hero"><div><p class="kicker">${esc(format)} · ${esc(project.year)}</p><h1>${esc(title)}</h1><p class="dek">${esc(description)}</p><div class="cta">${watch}<a class="secondary" href="${esc(pageHref(locale, 'work-with-ani'))}">${esc(ui.collaborate)}</a></div><p class="aliases">${esc(uniqueTitles(project).join(' · '))}</p></div>
+  const body = `<main id="main-content">${crumbs.html}<section class="hero"><div><p class="kicker">${esc(format)} · ${esc(project.year)}</p><h1>${esc(title)}</h1><p class="dek">${esc(description)}</p><div class="cta">${watch}<a class="secondary" data-track="view_contact" data-project="${esc(project.slug)}" data-source="project-hero" href="${esc(pageHref(locale, 'work-with-ani'))}?project=${encodeURIComponent(project.slug)}">${esc(ui.collaborate)}</a></div><p class="aliases">${esc(uniqueTitles(project).join(' · '))}</p></div>
 <figure class="hero-media${originalProjectPosters[project.slug] ? ' original-poster' : ''}"><span class="media-fallback" aria-hidden="true">${esc(title)}</span><img src="${esc(projectMediaSrc(project))}"${responsivePoster} alt="${esc(`${title} — ${project.year}`)}" width="${originalProjectPosters[project.slug]?.width ?? 640}" height="${originalProjectPosters[project.slug]?.height ?? 400}" loading="eager" decoding="async">${originalProjectPosters[project.slug] ? `<figcaption>${posterNotes[project.slug]?.[locale] ? `${esc(posterNotes[project.slug][locale])} · ` : ''}<a href="${esc(projectMediaSrc(project))}" target="_blank" rel="noopener noreferrer">${esc({hy:'Պաստառը՝ ամբողջ չափով',en:'View the full poster',ru:'Открыть афишу в полном размере'}[locale])}</a></figcaption>` : ''}</figure></section>
 <section class="content"><article class="prose"><h2>${esc(ui.details)}</h2><dl class="meta">${facts.map(([label,value]) => `<div><dt>${esc(label)}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl>
 ${isDiary ? `<h2>${esc(ui.story)}</h2><p>${esc(synopsis)}</p><h2>${esc(ui.credit)}</h2><p>${esc(project.summaries[locale])}</p>` : ''}
 ${isDiary ? `<p id="season-1" class="credit-note">${esc({hy:'1-ին եթերաշրջան՝ 197 սերիա։ 2-րդ եթերաշրջան՝ 224 սերիա։ Ընդամենը՝ 421 սերիա՝ ըստ հեղինակային ֆիլմագրության։',en:'Season 1: 197 episodes. Season 2: 224 episodes. Total: 421 episodes in the author filmography.',ru:'Сезон 1 — 197 серий. Сезон 2 — 224 серии. Всего — 421 серия по авторской фильмографии.'}[locale])}</p>` : ''}
 ${story?.note ? `<p class="credit-note">${esc(story.note[locale])}</p>` : ''}
 ${story ? `<p class="source-ref"><a href="${esc(story.source.url)}" target="_blank" rel="noopener noreferrer">${esc(story.source.label)}</a></p>` : ''}
+${projectInquiry(locale, basePath, project)}
 ${parts.length ? `<section class="related"><h2>${esc(ui.season)}</h2>${cardGrid(parts, locale)}</section>` : ''}
 ${related.length ? `<section class="related"><h2>${esc(ui.related)}</h2>${cardGrid(related, locale)}</section>` : ''}
 ${serviceLinks(locale, basePath, services.filter((service) => service.related.includes(project.slug)).map((service) => service.slug))}

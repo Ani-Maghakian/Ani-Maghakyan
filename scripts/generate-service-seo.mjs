@@ -5,6 +5,7 @@ import { serviceHub, services, serviceCopy } from '../lib/services.mjs';
 import { interfaceCopy, publicContactEmail, sectionLinks, pageUpdatedIso } from '../lib/site-copy.mjs';
 import { copy, siteLinks } from '../lib/profile-content.mjs';
 import { serviceLinks, inquiryBrief } from './service-fragments.mjs';
+import { conversionCopy } from '../lib/conversion-copy.mjs';
 
 const [owner = '', repositoryName = ''] = (process.env.GITHUB_REPOSITORY ?? '').split('/');
 const isUserOrOrgSite = Boolean(owner) && repositoryName === `${owner}.github.io`;
@@ -111,7 +112,7 @@ function projectCards(service, locale) {
     en: 'Relevant work',
     ru: 'Связанные работы',
   };
-  return `<section class="related"><h2>${esc(labels[locale])}</h2><div class="related-grid">${selected.map((project) => {
+  return `<section class="related" id="relevant-work"><h2>${esc(labels[locale])}</h2><div class="related-grid">${selected.map((project) => {
     // This link opens the complete series, not just the first season.
     const scope = project.slug === 'elens-diary'
       ? { hy: '2 եթերաշրջան · 421 սերիա', en: '2 seasons · 421 episodes', ru: '2 сезона · 421 серия' }[locale]
@@ -177,7 +178,7 @@ function servicePage(service, locale) {
     ru: { kicker: 'Услуга' },
   }[locale];
   const sections = service.sections[locale].map(([heading, items]) => `<section class="prose"><h2>${esc(heading)}</h2><ul>${items.map((item) => `<li>${esc(item)}</li>`).join('')}</ul></section>`).join('');
-  const body = `<main id="main-content">${crumbs.html}<section class="hero single"><div><p class="kicker">${esc(labels.kicker)}</p><h1>${esc(service.headings[locale])}</h1><p class="dek">${esc(service.descriptions[locale])}</p><div class="cta"><a href="#project-brief">${esc(serviceCopy[locale].discuss)}</a></div></div></section><section class="content"><div><article class="prose"><p>${esc(service.leads[locale])}</p></article>${sections}${projectCards(service, locale)}${serviceLinks(locale, basePath, service.next, "next")}${faq.html}<section class="prose" id="project-brief">${inquiryBrief(locale)}${contactCta(locale)}</section></div></section></main>`;
+  const body = `<main id="main-content">${crumbs.html}<section class="hero single"><div><p class="kicker">${esc(labels.kicker)}</p><h1>${esc(service.headings[locale])}</h1><p class="dek">${esc(service.descriptions[locale])}</p><p class="credit-note">${esc(conversionCopy[locale].proof)}</p><div class="cta"><a data-track="view_contact" data-service="${esc(service.slug)}" data-source="service" href="${esc(pageHref(locale, 'work-with-ani'))}?service=${encodeURIComponent(service.slug)}">${esc(serviceCopy[locale].discuss)}</a><a class="secondary" href="#relevant-work">${esc(conversionCopy[locale].portfolio)}</a></div></div></section><section class="content"><div><article class="prose"><p>${esc(service.leads[locale])}</p></article>${sections}${projectCards(service, locale)}${serviceLinks(locale, basePath, service.next, "next")}${faq.html}<section class="prose" id="project-brief">${inquiryBrief(locale)}${contactCta(locale)}</section></div></section></main>`;
   const serviceId = `${canonical}#service`;
   const nodes = [
     {
