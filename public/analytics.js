@@ -15,6 +15,13 @@
   script.async = true;
   script.src = 'https://www.googletagmanager.com/gtag/js?id=' + measurementId;
   document.head.append(script);
+  document.addEventListener('business-inquiry:submitted', () => {
+    gtag('event', 'generate_lead', {
+      page_path: location.pathname,
+      form_name: 'business-inquiry',
+      transport_type: 'beacon',
+    });
+  });
   document.addEventListener('click', (event) => {
     const link = event.target.closest?.('a[data-track]');
     if (!link) return;

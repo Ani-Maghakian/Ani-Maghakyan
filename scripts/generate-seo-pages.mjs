@@ -12,7 +12,8 @@ import { projectUpdates } from '../lib/project-updates.mjs';
 import { posterNotes, originalProjectPosters, posterSrcSet } from '../lib/project-posters.mjs';
 import { writings, writingCopy, writingBlogUrl, writingDate } from '../lib/writings.mjs';
 import { services } from '../lib/services.mjs';
-import { serviceLinks, inquiryBrief, projectInquiry, bookPurchaseLinks } from './service-fragments.mjs';
+import { businessForm } from './business-form.mjs';
+import { serviceLinks, projectInquiry, bookPurchaseLinks } from './service-fragments.mjs';
 
 const [owner = '', repositoryName = ''] = (process.env.GITHUB_REPOSITORY ?? '').split('/');
 const isUserOrOrgSite = Boolean(owner) && repositoryName === `${owner}.github.io`;
@@ -167,7 +168,7 @@ ${Object.keys(locales).map((code) => `<link rel="alternate" hreflang="${locales[
 <meta property="og:description" content="${esc(description)}"><meta property="og:url" content="${esc(canonical)}"><meta property="og:site_name" content="Ani Maghakyan">
 <meta property="og:locale" content="${{hy:'hy_AM',en:'en_US',ru:'ru_RU'}[locale]}"><meta property="og:image" content="${esc(socialImage)}"><meta property="og:image:alt" content="${esc(socialImageAlt)}">${socialWidth && socialHeight ? `<meta property="og:image:width" content="${socialWidth}"><meta property="og:image:height" content="${socialHeight}">` : ''}
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(seoTitle)}"><meta name="twitter:description" content="${esc(description)}"><meta name="twitter:image" content="${esc(socialImage)}"><meta name="twitter:image:alt" content="${esc(socialImageAlt)}"><link rel="icon" href="${basePath}/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="${basePath}/site-theme.css">${(tail.startsWith('books') || tail === 'press') ? `<link rel="stylesheet" href="${basePath}/content-archive.css">` : ''}<script src="${basePath}/site-interactions.js" defer></script><script src="${basePath}/design-interactions.js" defer></script>
+<link rel="stylesheet" href="${basePath}/site-theme.css">${(tail.startsWith('books') || tail === 'press') ? `<link rel="stylesheet" href="${basePath}/content-archive.css">` : ''}<script src="${basePath}/site-interactions.js" defer></script>${tail === 'work-with-ani' ? `<script src="${basePath}/business-form.js" defer></script>` : ''}<script src="${basePath}/design-interactions.js" defer></script>
 <script type="application/ld+json">${JSON.stringify(jsonLd).replaceAll('<', '\\u003c')}</script>
 </head><body data-page="${esc(tail)}"><a class="skip-link" href="#main-content">${esc(ui.skip)}</a>
 <header class="masthead"><a class="brand" href="${esc(pageHref(locale))}" aria-label="Maghakian Scripts — Home"><img src="${basePath}/brand/maghakian-scripts-light.svg?v=vector-1" width="1230" height="390" alt="Maghakian Scripts"></a><nav class="topnav" aria-label="${esc(ui.explore)}">${navLinks(locale, tail)}</nav>
@@ -301,7 +302,7 @@ function hubPage(hub, locale) {
     nodes[0].mainEntity = {'@id':`${canonical}#articles`};
     sources = [{label:'IMDb',url:siteLinks.imdb},{label:'KinoPoisk',url:siteLinks.kinopoisk},{label:'elCinema',url:siteLinks.elcinema}];
   } else {
-    article = `<h2>${esc(t.practiceTitle)}</h2><ul>${t.practice.map((item) => `<li>${esc(item)}</li>`).join('')}</ul>${serviceLinks(locale, basePath, services.map((service) => service.slug))}${inquiryBrief(locale)}${contactCta(locale)}<section class="related"><h2>${esc(t.selectedTitle)}</h2>${cardGrid(projects.filter((p) => ['elens-diary','summer-of-84','paper-dream'].includes(p.slug)),locale)}</section>`;
+    article = `<h2>${esc(t.practiceTitle)}</h2><ul>${t.practice.map((item) => `<li>${esc(item)}</li>`).join('')}</ul>${serviceLinks(locale, basePath, services.map((service) => service.slug))}${businessForm(locale, basePath)}${contactCta(locale)}<section class="related"><h2>${esc(t.selectedTitle)}</h2>${cardGrid(projects.filter((p) => ['elens-diary','summer-of-84','paper-dream'].includes(p.slug)),locale)}</section>`;
   }
   const sidebar = tail === 'writings' ? `<aside class="writing-aside"><p class="kicker">${esc(writingCopy[locale].kicker)}</p><p>${esc(writingCopy[locale].intro)}</p><p>${esc(writingCopy[locale].language)}</p><a href="${writingBlogUrl}" target="_blank" rel="noopener noreferrer">${esc(writingCopy[locale].all)}</a><a href="${esc(pageHref(locale, 'books'))}">${esc(sectionLabel(locale, 'books'))}</a></aside>` : tail === 'press' ? `<aside class="archive-profiles" aria-labelledby="profiles-heading"><h2 id="profiles-heading">${esc(archiveCopy[locale].profiles)}</h2><ul>${sources.map((source) => `<li><a href="${esc(source.url)}" target="_blank" rel="noopener noreferrer">${esc(source.label)} <span aria-hidden="true">↗</span></a></li>`).join('')}</ul></aside>` : sourceList(locale, sources);
   const content = tail === 'projects' ? `<section class="index-content">${article}</section>` : (tail.startsWith('books') || tail === 'press') ? `<div class="content-archive ${tail === 'books' ? 'books-archive' : 'press-archive'}">${article}${sidebar}</div>` : `<section class="content"><div class="prose">${article}</div>${sidebar}</section>`;

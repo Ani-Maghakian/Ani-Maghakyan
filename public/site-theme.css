@@ -173,3 +173,11 @@ body>.masthead{margin-inline:0;width:100%;padding-inline:max(32px,calc((100% - 1
 .interview-video-card:hover .interview-video-play{background:#a33227;transform:scale(1.06)}
 .interview-video-card:focus-visible{outline:3px solid #e0bd87;outline-offset:5px}
 @media(prefers-reduced-motion:reduce){.interview-video-play{transition:none}.interview-video-card:hover .interview-video-play{transform:none}}
+
+/* Production inquiries: policy remains visible above all input fields. */
+.business-inquiry{margin:2.5rem 0;padding:clamp(1rem,3vw,2rem);border:1px solid #656052;border-radius:16px;background:#111310}
+.business-inquiry h2{margin-top:0}.materials-policy{padding:1rem 1.2rem;border-left:3px solid #c9ad73;background:#1b1b15;margin-bottom:1.5rem}.materials-policy p{margin:0}
+.business-inquiry form{display:grid;gap:1.2rem}.business-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+.business-inquiry label{display:grid;gap:.5rem;color:#f0eee5;font-size:1rem}.business-inquiry input:not([type=checkbox]),.business-inquiry select,.business-inquiry textarea{width:100%;min-width:0;box-sizing:border-box;border:1px solid #777568;border-radius:8px;padding:.8rem;background:#090a09;color:#f0eee5;font:inherit}.business-inquiry textarea{resize:vertical}.business-inquiry textarea::placeholder{color:#aaa99f;opacity:1}.business-inquiry :is(input,select,textarea,button):focus-visible{outline:2px solid #e4c88d;outline-offset:3px}
+.business-inquiry .policy-consent{display:flex;align-items:flex-start;gap:.8rem}.policy-consent input{width:1.2rem;height:1.2rem;flex:none;margin-top:.2rem;accent-color:#c9ad73}.business-inquiry button{justify-self:start;border:0;border-radius:8px;padding:.9rem 1.3rem;background:#dec48e;color:#17180f;font:inherit;font-weight:700;cursor:pointer}.business-inquiry button:disabled{opacity:.65;cursor:default}.form-privacy{font-size:.88rem;color:#b8b8ac}.form-status:empty{display:none}.form-status{padding:1rem;border:1px solid #777568;border-radius:8px}.business-inquiry [hidden]{display:none!important}
+@media(max-width:640px){.business-form-grid{grid-template-columns:1fr}.business-inquiry button{width:100%}}
