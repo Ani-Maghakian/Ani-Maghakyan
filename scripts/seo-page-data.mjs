@@ -2581,9 +2581,9 @@ export const projects = [
       "ru": "Ми Гехецик Ор"
     },
     "credit": {
-      "hy": "50+ սերիա",
-      "en": "50+ episodes",
-      "ru": "50+ серий"
+      "hy": "2-րդ եթերաշրջանը հաստատված է",
+      "en": "Season 2 confirmed",
+      "ru": "Второй сезон подтверждён"
     },
     "episodes": null,
     "poster": "https://i.ytimg.com/vi/QRCSe3vD3cM/maxresdefault.jpg",
@@ -2595,9 +2595,9 @@ export const projects = [
       "ru": "Сценарист"
     },
     "summaries": {
-      "hy": "«Մի գեղեցիկ օր»-ը 2026 թվականի ընթացիկ հեռուստասերիալ է։ Oragir News-ի 2026 թվականի հարցազրույցը Անի Մաղաքյանին ներկայացնում է որպես «Էլենի օրագիրը» և «Մի գեղեցիկ օր» սերիալների սցենարիստ, իսկ SHANT TV-ի պաշտոնական ալիքը հրապարակում է սերիաների և անոնսների ընթացիկ թողարկումները։",
-      "en": "Mi Gexecik Or is an ongoing 2026 television series. A 2026 Oragir News interview identifies Ani Maghakyan as the screenwriter of both Elen’s Diary and Mi Gexecik Or, while SHANT TV’s verified official channel publishes the current episodes and series announcements.",
-      "ru": "«Մի գեղեցիկ օր / Mi Gexecik Or» — текущий телесериал 2026 года. В интервью Oragir News 2026 года Ани Магакян представлена как сценарист «Дневника Элен» и «Մի գեղեցիկ օր», а официальный верифицированный канал SHANT TV публикует текущие серии и анонсы проекта."
+      "hy": "«Մի գեղեցիկ օր»-ի 2-րդ եթերաշրջանը հաստատված է։ Շանթ TV-ի՝ 2026-11-09 հարցազրույցում սցենարիստ Անի Մաղաքյանը հայտարարում է, որ սերիալը 120-րդ սերիայով չի ավարտվում և շարունակվում է առանց դադարի։",
+      "en": "Mi Gexecik Or season 2 is confirmed. In the SHANT TV interview of 9 November 2026, screenwriter Ani Maghakyan announces that the series does not end at episode 120 and continues without a break.",
+      "ru": "Второй сезон «Մի գեղեցիկ օր / Mi Gexecik Or» подтверждён. В интервью SHANT TV от 9 ноября 2026 года сценарист Ани Магакян объявляет: сериал не заканчивается на 120-й серии и продолжается без перерыва."
     },
     "facts": {
       "hy": [

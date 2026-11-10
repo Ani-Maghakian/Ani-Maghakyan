@@ -8,6 +8,7 @@ import { books, bookSchema } from '../lib/books.mjs';
 import { mediaItems } from '../lib/media-archive.mjs';
 import { projectStories, projectSummary, relatedProjects } from '../lib/project-editorial.mjs';
 import { projectAnswers, answerLabels } from '../lib/project-answers.mjs';
+import { projectUpdates } from '../lib/project-updates.mjs';
 import { posterNotes, originalProjectPosters, posterSrcSet } from '../lib/project-posters.mjs';
 import { writings, writingCopy, writingBlogUrl, writingDate } from '../lib/writings.mjs';
 import { services } from '../lib/services.mjs';
@@ -198,9 +199,13 @@ function projectPage(project, locale) {
   const format = copy[locale].filters[project.kind];
   const facts = [[ui.year, project.year], [ui.type, format], [ui.volume, scope], ...(story?.broadcaster ? [[ui.broadcaster, story.broadcaster]] : []), ...(knownRole ? [[ui.role, knownRole]] : [])];
   const answer = projectAnswers[project.slug];
+  const update = projectUpdates[project.slug];
+  const updateCopy = update?.[locale];
+  const updateBlock = update ? `<aside class="project-update" aria-labelledby="project-update-title"><p class="kicker"><time datetime="${esc(update.date)}">${esc(update.date)}</time> · ${esc(update.source.label)}</p><h2 id="project-update-title">${esc(updateCopy.headline)}</h2><p>${esc(updateCopy.announcement)}</p><a href="${esc(update.source.url)}" target="_blank" rel="noopener noreferrer">${esc(updateCopy.watch)}</a></aside>` : '';
+  const interviewBlock = update ? `<section class="project-interview" aria-labelledby="project-interview-title"><h2 id="project-interview-title">${esc(updateCopy.interviewTitle)}</h2><iframe width="560" height="315" style="width:100%;height:auto;aspect-ratio:16/9;border:0" src="https://www.youtube-nocookie.com/embed/${esc(update.videoId)}" title="${esc(updateCopy.interviewTitle)}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe><p><a href="${esc(update.source.url)}" target="_blank" rel="noopener noreferrer">${esc(updateCopy.watch)}</a> · <time datetime="${esc(update.date)}">${esc(update.date)}</time></p><h3>${esc(updateCopy.charactersTitle)}</h3><p>${esc(updateCopy.characters)}</p><p>${esc(updateCopy.themes)}</p></section>` : '';
   const labels = answerLabels[locale];
   const answerBlock = answer ? `<section class="project-answers" aria-labelledby="project-answers-title"><h2 id="project-answers-title">${esc(labels.title)}</h2><h3>${esc(labels.volume)}</h3><p>${esc(answer.volume[locale])}</p><h3>${esc(labels.writer)}</h3><p>${esc(answer.writer[locale])}</p><h3>${esc(labels.watch)}</h3><p><a data-track="watch_project" data-project="${esc(project.slug)}" href="${esc(answer.url || project.watchUrl)}" target="_blank" rel="noopener noreferrer">${esc(answer.platform)}</a></p><p class="credit-note">${esc(labels.note)}</p></section>` : '';
-  const sourceItems = [...project.sources, ...(story ? [story.source] : []), ...(answer?.evidence ? [answer.evidence] : [])];
+  const sourceItems = [...project.sources, ...(story ? [story.source] : []), ...(answer?.evidence ? [answer.evidence] : []), ...(update ? [update.source] : [])];
   const seriesId = `${absoluteUrl(locale, 'projects/elens-diary')}#work`;
   const workNode = {
     '@type': isDiary2 ? 'TVSeason' : project.type, '@id': `${canonical}#work`, url: canonical, name: title,
@@ -215,16 +220,18 @@ function projectPage(project, locale) {
     ] } : {}),
     ...(isDiary2 ? { seasonNumber: 2, partOfSeries: { '@id': seriesId } } : {}),
     ...(answer?.seasons ? { numberOfSeasons: answer.seasons } : {}),
+    ...(update ? { subjectOf: { '@id': `${canonical}#interview` } } : {}),
     ...(project.slug === 'summer-of-84' ? { creator: { '@id': personId }, producer: { '@id': personId } } : {}),
   };
   const nodes = [
     { '@type': 'WebPage', '@id': `${canonical}#webpage`, url: canonical, name: seoTitle, description, inLanguage: locales[locale].lang, dateModified: pageUpdatedIso(tail), mainEntity: { '@id': `${canonical}#work` }, isPartOf: { '@id': `${siteUrl}/#website` }, breadcrumb: { '@id': `${canonical}#breadcrumbs` } },
     workNode, crumbs.node, personNode(),
+    ...(update ? [{ '@type': 'VideoObject', '@id': `${canonical}#interview`, name: updateCopy.interviewTitle, description: updateCopy.announcement, uploadDate: update.date, thumbnailUrl: `https://i.ytimg.com/vi/${update.videoId}/hqdefault.jpg`, embedUrl: `https://www.youtube-nocookie.com/embed/${update.videoId}`, url: update.source.url, inLanguage: 'hy', about: { '@id': `${canonical}#work` } }] : []),
   ];
   const watch = project.watchUrl ? `<a data-track="watch_project" data-project="${project.slug}" href="${esc(project.watchUrl)}" target="_blank" rel="noopener noreferrer">${esc(locales[locale].watchLabel)}</a>` : '';
-  const body = `<main id="main-content">${crumbs.html}<section class="hero"><div><p class="kicker">${esc(format)} · ${esc(project.year)}</p><h1>${esc(title)}</h1><p class="dek">${esc(description)}</p><div class="cta">${watch}<a class="secondary" data-track="view_contact" data-project="${esc(project.slug)}" data-source="project-hero" href="${esc(pageHref(locale, 'work-with-ani'))}?project=${encodeURIComponent(project.slug)}">${esc(ui.collaborate)}</a></div><p class="aliases">${esc(uniqueTitles(project).join(' · '))}</p></div>
+  const body = `<main id="main-content">${crumbs.html}<section class="hero"><div><p class="kicker">${esc(format)} · ${esc(project.year)}</p><h1>${esc(title)}</h1>${updateBlock}<p class="dek">${esc(description)}</p><div class="cta">${watch}<a class="secondary" data-track="view_contact" data-project="${esc(project.slug)}" data-source="project-hero" href="${esc(pageHref(locale, 'work-with-ani'))}?project=${encodeURIComponent(project.slug)}">${esc(ui.collaborate)}</a></div><p class="aliases">${esc(uniqueTitles(project).join(' · '))}</p></div>
 <figure class="hero-media${originalProjectPosters[project.slug] ? ' original-poster' : ''}"><span class="media-fallback" aria-hidden="true">${esc(title)}</span><img src="${esc(projectMediaSrc(project))}"${responsivePoster} alt="${esc(`${title} — ${project.year}`)}" width="${originalProjectPosters[project.slug]?.width ?? 640}" height="${originalProjectPosters[project.slug]?.height ?? 400}" loading="eager" decoding="async">${originalProjectPosters[project.slug] ? `<figcaption>${posterNotes[project.slug]?.[locale] ? `${esc(posterNotes[project.slug][locale])} · ` : ''}<a href="${esc(projectMediaSrc(project))}" target="_blank" rel="noopener noreferrer">${esc({hy:'Պաստառը՝ ամբողջ չափով',en:'View the full poster',ru:'Открыть афишу в полном размере'}[locale])}</a></figcaption>` : ''}</figure></section>
-<section class="content"><article class="prose">${answerBlock}<h2>${esc(ui.details)}</h2><dl class="meta">${facts.map(([label,value]) => `<div><dt>${esc(label)}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl>
+<section class="content"><article class="prose">${answerBlock}${interviewBlock}<h2>${esc(ui.details)}</h2><dl class="meta">${facts.map(([label,value]) => `<div><dt>${esc(label)}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl>
 ${isDiary ? `<h2>${esc(ui.story)}</h2><p>${esc(synopsis)}</p><h2>${esc(ui.credit)}</h2><p>${esc(project.summaries[locale])}</p>` : ''}
 ${isDiary ? `<p id="season-1" class="credit-note">${esc({hy:'1-ին եթերաշրջան՝ 197 սերիա։ 2-րդ եթերաշրջան՝ 224 սերիա։ Ընդամենը՝ 421 սերիա՝ ըստ հեղինակային ֆիլմագրության։',en:'Season 1: 197 episodes. Season 2: 224 episodes. Total: 421 episodes in the author filmography.',ru:'Сезон 1 — 197 серий. Сезон 2 — 224 серии. Всего — 421 серия по авторской фильмографии.'}[locale])}</p>` : ''}
 ${story?.note ? `<p class="credit-note">${esc(story.note[locale])}</p>` : ''}

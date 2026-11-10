@@ -1,6 +1,7 @@
 import { services, serviceCopy } from '../lib/services.mjs';
 import { localizedPath } from './seo-page-data.mjs';
 import { conversionCopy } from '../lib/conversion-copy.mjs';
+import { projectUpdates } from '../lib/project-updates.mjs';
 
 const esc = (value) => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 
@@ -23,7 +24,9 @@ export function inquiryBrief(locale) {
 export function projectInquiry(locale, basePath, project) {
   const text = conversionCopy[locale];
   const href = `${basePath}/${localizedPath(locale, 'work-with-ani')}/?project=${encodeURIComponent(project.slug)}`;
-  return `<section class="related project-inquiry" aria-labelledby="project-inquiry-heading"><h2 id="project-inquiry-heading">${esc(text.projectHeading)}</h2><p>${esc(['series', 'film'].includes(project.kind) ? text.projectText : text.stageText)}</p><div class="cta"><a data-track="view_contact" data-project="${esc(project.slug)}" data-source="project" href="${esc(href)}">${esc(text.projectCta)}</a></div></section>`;
+  const update = projectUpdates[project.slug];
+  const description = update?.[locale].b2b || (['series', 'film'].includes(project.kind) ? text.projectText : text.stageText);
+  return `<section class="related project-inquiry" aria-labelledby="project-inquiry-heading"><h2 id="project-inquiry-heading">${esc(text.projectHeading)}</h2><p>${esc(description)}</p>${update ? `<p class="source-ref"><a href="${esc(update.source.url)}" target="_blank" rel="noopener noreferrer">${esc(update.source.label)} · ${esc(update.date)}</a></p>` : ''}<div class="cta"><a data-track="view_contact" data-project="${esc(project.slug)}" data-source="project" href="${esc(href)}">${esc(text.projectCta)}</a></div></section>`;
 }
 
 export function bookPurchaseLinks(book, locale) {
