@@ -163,3 +163,13 @@ body>.masthead{margin-inline:0;width:100%;padding-inline:max(32px,calc((100% - 1
  .studio-offer{grid-template-columns:1fr;gap:15px}
 }
 @media(max-width:370px){.filmography-table tbody tr{grid-template-columns:16px 76px minmax(0,1fr) 40px;gap:5px 8px}.filmography-table .archive-art-cell,.archive-poster-frame{width:76px}.archive-poster-frame{height:104px}.filmography-table .archive-title-cell{font-size:15px}.filmography-table .archive-title-cell .project-watch-mini{width:40px;height:40px}}
+
+/* Official interviews open on YouTube when the broadcaster disables embedding. */
+.interview-video-card{display:block;overflow:hidden;margin:24px 0 12px;border:1px solid #ffffff30;border-radius:16px;background:#181d1c;color:var(--text,#eee);text-decoration:none!important}
+.interview-video-preview{position:relative;display:block;aspect-ratio:16/9;overflow:hidden;background:#242829}
+.interview-video-preview img{display:block;width:100%;height:100%;object-fit:cover}
+.interview-video-play{position:absolute;inset:0;display:grid;place-content:center;margin:auto;width:76px;height:76px;border:1px solid #fff8;border-radius:50%;background:#101615df;color:#fff;box-shadow:0 6px 28px #0006;transition:background .18s ease,transform .18s ease}
+.interview-video-caption{display:block;padding:18px 22px;font-size:clamp(16px,2vw,20px);line-height:1.5;font-weight:500}
+.interview-video-card:hover .interview-video-play{background:#a33227;transform:scale(1.06)}
+.interview-video-card:focus-visible{outline:3px solid #e0bd87;outline-offset:5px}
+@media(prefers-reduced-motion:reduce){.interview-video-play{transition:none}.interview-video-card:hover .interview-video-play{transform:none}}
