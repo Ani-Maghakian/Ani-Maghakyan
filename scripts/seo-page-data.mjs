@@ -2699,9 +2699,9 @@ export const hubs = [
       "ru": "Ани Магакян: интервью и публикации"
     },
     "descriptions": {
-      "hy": "Հարցազրույցներ Անի Մաղաքյանի հետ, նրա վարած հարցազրույցներն ու հեղինակային հրապարակումները։ Գրքեր, սցենարական աշխատանք և մամուլի անդրադարձներ՝ սկզբնաղբյուրների հղումներով։",
-      "en": "Interviews with Ani Maghakyan, interviews she conducted and her journalism. Explore her books, screenwriting and press coverage with links to the original sources.",
-      "ru": "Интервью с Ани Магакян, беседы, которые она провела, и её журналистские работы. Книги, сценарное творчество и публикации со ссылками на первоисточники."
+      "hy": "Անի Մաղաքյանի հարցազրույցները՝ ներառյալ SHANT TV-ի 2026 թ. «Մի գեղեցիկ օր»-ի երկրորդ եթերաշրջանի մասին զրույցը, նրա լրագրողական աշխատանքներն ու մամուլի հրապարակումները՝ սկզբնաղբյուրներով։",
+      "en": "Interviews with Armenian screenwriter Ani Maghakyan, including her November 2026 SHANT TV conversation on Mi Gexecik Or season two, plus her journalism and verified press coverage.",
+      "ru": "Интервью армянского сценариста Ани Магакян, включая беседу с SHANT TV в ноябре 2026 года о втором сезоне «Ми Гехецик Ор», а также её журналистские работы и публикации."
     },
     "sources": [
       {
