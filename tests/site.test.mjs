@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
-import { updatedIso } from "../lib/site-copy.mjs";
+import { pageUpdatedIso } from "../lib/site-copy.mjs";
 import { buildIndexNowPayload } from "../scripts/submit-indexnow.mjs";
 import { projects as seoProjects, hubs as seoHubs, localizedPath } from "../scripts/seo-page-data.mjs";
 import { allIndexableSeoTails, buildSeoIndexNowPayload, collectSeoUrls } from "../scripts/submit-indexnow-seo.mjs";
@@ -54,7 +54,7 @@ test("exports crawl and sharing assets", async () => {
   }
 
   const sitemap = await readFile("dist/client/sitemap.xml", "utf8");
-  assert.ok(sitemap.includes(`<lastmod>${updatedIso}</lastmod>`));
+  assert.ok(sitemap.includes(`<lastmod>${pageUpdatedIso('press')}</lastmod>`), 'Press modification date follows the latest verified interview');
   assert.match(sitemap, /xmlns:image=/);
   assert.match(sitemap, /ani-3180-web\.jpg/);
 

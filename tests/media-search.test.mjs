@@ -38,6 +38,9 @@ for (const locale of ['hy', 'en', 'ru']) {
         assert.equal(visibleGroups().length, 1);
         assert.equal(visibleGroups()[0].getAttribute('aria-labelledby'), 'journalism');
       }
+      search('SHANT Lifestyle');
+      assert.deepEqual(visible().map((entry) => entry.id), ['shant-mi-gexecik-or-season-two-2026'], 'verified November interview is discoverable in all three languages');
+      assert.equal(visible()[0].querySelector('time')?.getAttribute('datetime'), '2026-11-09');
       search('Armenpress');
       assert.deepEqual(visible().map((entry) => entry.id), ['taknuvra-bestseller-december-2025'], 'publication names are searchable');
       search(mediaItems.find((item) => item.id === 'captives-newsam-2023').summaries[locale]);
